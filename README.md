@@ -30,20 +30,24 @@ implementation:
 To sum up,
 
 #### When to use this project
- - You need to hash plain byte sequences, memory blocks or "flat" objects
- - You like zero-allocation and pretty good performance (at Java scale)
- - You need hashing to be agile in questions related to byte ordering
+ - You need to hash plain byte sequences, memory blocks or "flat" objects.
+ - You like zero-allocation and pretty good performance (at Java scale).
+ - You need hashing to be agile in questions related to byte ordering.
 
 #### When *not* to use:
  - You need to hash POJOs whose actual data is scattered in memory between managed objects.
    There is no simple way to hash, for example, instances of such class:
-```java
-class Person {
-    String givenName, surName;
-    int salary;
-}
-```
-using the API provided by this project.
+
+   ```java
+    class Person {
+        String givenName, surName;
+        int salary;
+    }
+   ```
+   using the API provided by this project.
+ - You need to byte sequences of unknown length, for the simpliest example, `Iterator<Byte>`.
+ - You need to transform the byte sequence (e. g. encode or decode it with a specific coding),
+   and hash the resulting byte sequence on the way without dumping it to memory.
 
 ## Quick start
 
