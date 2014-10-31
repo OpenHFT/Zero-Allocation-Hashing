@@ -46,7 +46,7 @@ To sum up,
    ```
    using the API provided by this project.
  - You need to hash byte sequences of beforehand unknown length, for the simpliest example,
- - `Iterator<Byte>`.
+   `Iterator<Byte>`.
  - You need to transform the byte sequence (e. g. encode or decode it with a specific coding),
    and hash the resulting byte sequence on the way without dumping it to memory.
 
