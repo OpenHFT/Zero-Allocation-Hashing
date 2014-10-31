@@ -1,5 +1,5 @@
 # Zero-allocation Hashing
-![travis status](https://travis-ci.org/OpenHFT/zero-allocation-hashing.svg)
+[![Build Status](https://travis-ci.org/OpenHFT/zero-allocation-hashing.svg?branch=master)](https://travis-ci.org/OpenHFT/zero-allocation-hashing)
 
 This project provides API for hashing any sequences of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 licence.
