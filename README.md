@@ -65,7 +65,7 @@ Or Maven:
 
 In Java:
 ```java
-long hash = LongHashFunctions.city_1_1().hashChars("hello");
+long hash = LongHashFunction.city_1_1().hashChars("hello");
 ```
 
 See **[JavaDocs](http://openhft.github.io/zero-allocation-hashing/apidocs/)** for more information.
