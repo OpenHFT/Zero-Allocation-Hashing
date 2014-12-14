@@ -156,7 +156,7 @@ public class LongHashFunctionTest {
                 assertNotEquals("string wrong order", eh, f.hashChars(s2));
 
                 assertEquals("string wrong order fixed", eh,
-                        f.hash(s2, Accesses.toCharSequence(nonNativeOrder()), 0, len));
+                        f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len));
 
                 bb.order(nativeOrder()).clear();
             }

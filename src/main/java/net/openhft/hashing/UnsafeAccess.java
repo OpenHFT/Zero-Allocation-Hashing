@@ -23,8 +23,8 @@ import java.nio.ByteOrder;
 
 import static net.openhft.hashing.Primitives.*;
 
-enum UnsafeAccess implements Access<Object> {
-    INSTANCE;
+final class UnsafeAccess extends Access<Object> {
+    public static final UnsafeAccess INSTANCE = new UnsafeAccess();
 
     static final Unsafe UNSAFE;
     static final long BYTE_BASE;
@@ -47,6 +47,8 @@ enum UnsafeAccess implements Access<Object> {
             throw new AssertionError(e);
         }
     }
+
+    private UnsafeAccess() {}
 
     @Override
     public long getLong(Object input, long offset) {

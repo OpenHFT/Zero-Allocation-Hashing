@@ -21,7 +21,7 @@ import java.nio.ByteOrder;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
-abstract class CharSequenceAccess implements Access<CharSequence> {
+abstract class CharSequenceAccess extends Access<CharSequence> {
 
     public static CharSequenceAccess charSequenceAccess(ByteOrder order) {
         return order == LITTLE_ENDIAN ?

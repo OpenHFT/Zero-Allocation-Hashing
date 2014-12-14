@@ -227,7 +227,7 @@ public abstract class LongHashFunction implements Serializable {
      * Returns the hash code for the specified subsequence of the given byte array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read bytes from
      * @param off index of the first byte in the subsequence to hash
@@ -256,7 +256,7 @@ public abstract class LongHashFunction implements Serializable {
      * {@code ByteBuffer}.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@link Accesses#toByteBuffer()}.
+     * using {@link Access#toByteBuffer()}.
      *
      * @param input the buffer to read bytes from
      * @param off index of the first byte in the subsequence to hash
@@ -274,7 +274,7 @@ public abstract class LongHashFunction implements Serializable {
      * Returns the hash code of bytes of the wild memory from the given address. Use with caution.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param address the address of the first byte to hash
      * @param len length of the byte sequence to hash
@@ -296,7 +296,7 @@ public abstract class LongHashFunction implements Serializable {
      * of the given {@code char} array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read data from
      * @param off index of the first {@code char} in the subsequence to hash
@@ -323,7 +323,7 @@ public abstract class LongHashFunction implements Serializable {
      * underlying {@code char} array.
      *
      * <p>Default implementation could either delegate to {@link #hash(Object, Access, long, long)}
-     * using {@link Accesses#toNativeCharSequence()}, or to {@link #hashChars(char[], int, int)}.
+     * using {@link Access#toNativeCharSequence()}, or to {@link #hashChars(char[], int, int)}.
      *
      * @param input the string which bytes to hash
      * @param off index of the first {@code char} in the subsequence to hash
@@ -350,7 +350,7 @@ public abstract class LongHashFunction implements Serializable {
      * {@code StringBuilder}'s underlying {@code char} array.
      *
      * <p>Default implementation could either delegate to {@link #hash(Object, Access, long, long)}
-     * using {@link Accesses#toNativeCharSequence()}, or to {@link #hashChars(char[], int, int)}.
+     * using {@link Access#toNativeCharSequence()}, or to {@link #hashChars(char[], int, int)}.
      *
      * @param input the string builder which bytes to hash
      * @param off index of the first {@code char} in the subsequence to hash
@@ -385,7 +385,7 @@ public abstract class LongHashFunction implements Serializable {
      * of the given {@code short} array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read data from
      * @param off index of the first {@code short} in the subsequence to hash
@@ -412,7 +412,7 @@ public abstract class LongHashFunction implements Serializable {
      * of the given {@code int} array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read data from
      * @param off index of the first {@code int} in the subsequence to hash
@@ -439,7 +439,7 @@ public abstract class LongHashFunction implements Serializable {
      * of the given {@code long} array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
-     * using {@linkplain Accesses#unsafe() unsafe} {@code Access}.
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read data from
      * @param off index of the first {@code long} in the subsequence to hash
