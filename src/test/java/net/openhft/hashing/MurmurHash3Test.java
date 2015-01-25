@@ -22,7 +22,7 @@ import com.google.common.hash.Hashing;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class MurmurHash3Test {
 
@@ -38,7 +38,7 @@ public class MurmurHash3Test {
 
     private void testMurmur(LongHashFunction tested, HashFunction referenceFromGuava) {
         byte[] testData = new byte[1024];
-        ThreadLocalRandom.current().nextBytes(testData);
+        new Random().nextBytes(testData);
         for (int i = 0; i < testData.length; i++) {
             byte[] data = Arrays.copyOf(testData, i);
             LongHashFunctionTest.test(tested, data, referenceFromGuava.hashBytes(data).asLong());
