@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+import static java.nio.ByteOrder.nativeOrder;
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
 import static net.openhft.hashing.UnsafeAccess.*;
 
@@ -66,6 +68,7 @@ import static net.openhft.hashing.UnsafeAccess.*;
 public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
+    static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
     /**
      * Returns a hash function implementing
      * <a href="https://code.google.com/p/cityhash/source/browse/trunk/src/city.cc?r=10">
@@ -106,6 +109,32 @@ public abstract class LongHashFunction implements Serializable {
      */
     public static LongHashFunction city_1_1(long seed0, long seed1) {
         return CityHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
+    }
+
+    /**
+     * Returns a hash function implementing
+     * <a href="https://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp">MurmurHash3
+     * algorithm</a> without seed values. This implementation produce equal results for equal input
+     * on platforms with different {@link ByteOrder}, but is slower on big-endian platforms than on
+     * little-endian.
+     *
+     * @see #murmur_3(long)
+     */
+    public static LongHashFunction murmur_3() {
+        return MurmurHash_3.asLongHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing
+     * <a href="https://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp">MurmurHash3
+     * algorithm</a> with the given seed value. This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #murmur_3()
+     */
+    public static LongHashFunction murmur_3(long seed) {
+        return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
 
     private static StringHash stringHash;

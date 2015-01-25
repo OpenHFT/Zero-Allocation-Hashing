@@ -19,7 +19,7 @@ package net.openhft.hashing;
 import static java.lang.Long.reverseBytes;
 import static java.lang.Long.rotateRight;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static java.nio.ByteOrder.nativeOrder;
+import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
 
 /**
  * Adapted from the C++ CityHash implementation from Google at
@@ -28,7 +28,6 @@ import static java.nio.ByteOrder.nativeOrder;
 class CityHash_1_1 {
     private static final CityHash_1_1 INSTANCE = new CityHash_1_1();
 
-    private static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
     private static final CityHash_1_1 NATIVE_CITY = NATIVE_LITTLE_ENDIAN ?
             CityHash_1_1.INSTANCE : BigEndian.INSTANCE;
 
