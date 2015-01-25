@@ -34,6 +34,7 @@ public class LongHashFunctionTest {
     public static void test(LongHashFunction f, byte[] data, long eh) {
         int len = data.length;
         testVoid(f, eh, len);
+        testBoolean(f, len);
         ByteBuffer bb = ByteBuffer.wrap(data).order(nativeOrder());
         testPrimitives(f, eh, len, bb);
         testArrays(f, data, eh, len, bb);
@@ -45,6 +46,17 @@ public class LongHashFunctionTest {
     private static void testVoid(LongHashFunction f, long eh, int len) {
         if (len == 0)
             assertEquals("void", eh, f.hashVoid());
+    }
+    
+    public static void testBoolean(LongHashFunction f, int len) {
+        if (len != 1)
+            return;
+        for (boolean b : new boolean[] {true, false}) {
+            boolean[] a = {b};
+            long single = f.hashBoolean(b);
+            assertEquals(single, f.hashBooleans(a));
+            assertEquals(single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
+        }
     }
 
     private static void testPrimitives(LongHashFunction f, long eh, int len, ByteBuffer bb) {

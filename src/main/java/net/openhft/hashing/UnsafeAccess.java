@@ -27,6 +27,7 @@ final class UnsafeAccess extends Access<Object> {
     public static final UnsafeAccess INSTANCE = new UnsafeAccess();
 
     static final Unsafe UNSAFE;
+    static final long BOOLEAN_BASE;
     static final long BYTE_BASE;
     static final long CHAR_BASE;
     static final long SHORT_BASE;
@@ -38,6 +39,7 @@ final class UnsafeAccess extends Access<Object> {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
             UNSAFE = (Unsafe) theUnsafe.get(null);
+            BOOLEAN_BASE = UNSAFE.arrayBaseOffset(boolean[].class);
             BYTE_BASE = UNSAFE.arrayBaseOffset(byte[].class);
             CHAR_BASE = UNSAFE.arrayBaseOffset(char[].class);
             SHORT_BASE = UNSAFE.arrayBaseOffset(short[].class);

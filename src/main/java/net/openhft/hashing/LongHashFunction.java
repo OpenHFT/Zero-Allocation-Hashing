@@ -69,6 +69,9 @@ public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
     static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
+    static final byte TRUE_BYTE_VALUE = UNSAFE.getByte(new boolean[] {true}, BOOLEAN_BASE);
+    static final byte FALSE_BYTE_VALUE = UNSAFE.getByte(new boolean[] {false}, BOOLEAN_BASE);
+
     /**
      * Returns a hash function implementing
      * <a href="https://code.google.com/p/cityhash/source/browse/trunk/src/city.cc?r=10">
@@ -246,20 +249,54 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
-     * Shortcut for {@code #hashBytes(byte[], int, int) hashBytes(input, 0, input.length)}.
+     * Shortcut for {@link #hashBooleans(boolean[]) hashBooleans(new boolean[] &#123;input&#125;)}.
+     * Note that this is not necessarily equal to {@code hashByte(input ? (byte) 1 : (byte) 0)},
+     * because booleans could be stored differently in this JVM.
+     */
+    public long hashBoolean(boolean input) {
+        return hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE);
+    }
+
+    /**
+     * Shortcut for {@link #hashBooleans(boolean[], int, int) hashBooleans(input, 0, input.length)}.
+     */
+    public long hashBooleans(@NotNull boolean[] input) {
+        return hashBooleans(input, 0, input.length);
+    }
+
+    /**
+     * Returns the hash code for the specified subsequence of the given {@code boolean} array.
+     *
+     * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
+     * using {@linkplain Access#unsafe() unsafe} {@code Access}.
+     *
+     * @param input the array to read data from
+     * @param off index of the first {@code boolean} in the subsequence to hash
+     * @param len length of the subsequence to hash
+     * @return hash code for the specified subsequence
+     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * or {@code len < 0}
+     */
+    public long hashBooleans(@NotNull boolean[] input, int off, int len) {
+        checkArrayOffs(input.length, off, len);
+        return unsafeHash(input, BOOLEAN_BASE + off, len);
+    }
+
+    /**
+     * Shortcut for {@link #hashBytes(byte[], int, int) hashBytes(input, 0, input.length)}.
      */
     public long hashBytes(@NotNull byte[] input) {
         return hashBytes(input, 0, input.length);
     }
 
     /**
-     * Returns the hash code for the specified subsequence of the given byte array.
+     * Returns the hash code for the specified subsequence of the given {@code byte} array.
      *
      * <p>Default implementation delegates to {@link #hash(Object, Access, long, long)} method
      * using {@linkplain Access#unsafe() unsafe} {@code Access}.
      *
      * @param input the array to read bytes from
-     * @param off index of the first byte in the subsequence to hash
+     * @param off index of the first {@code byte} in the subsequence to hash
      * @param len length of the subsequence to hash
      * @return hash code for the specified subsequence
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
@@ -288,7 +325,7 @@ public abstract class LongHashFunction implements Serializable {
      * using {@link Access#toByteBuffer()}.
      *
      * @param input the buffer to read bytes from
-     * @param off index of the first byte in the subsequence to hash
+     * @param off index of the first {@code byte} in the subsequence to hash
      * @param len length of the subsequence to hash
      * @return hash code for the specified subsequence
      * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.capacity()}
