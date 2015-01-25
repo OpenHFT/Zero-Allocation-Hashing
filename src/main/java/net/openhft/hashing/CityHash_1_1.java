@@ -291,16 +291,22 @@ class CityHash_1_1 {
 
         @Override
         public long hashShort(short input) {
-            int unsignedInput = Primitives.unsignedShort(NATIVE_CITY.toLittleEndian(input));
-            int firstByte = Primitives.unsignedByte(unsignedInput);
-            int secondByte = unsignedInput >> 8;
-            long hash = hash1To3Bytes(2, firstByte, secondByte, secondByte);
-            return finalize(hash);
+            return hashChar((char) input);
         }
+
+        private static final int FIRST_SHORT_BYTE_SHIFT = NATIVE_LITTLE_ENDIAN ? 0 : 8;
+        // JIT could probably optimize & -1 to no-op
+        private static final int FIRST_SHORT_BYTE_MASK = NATIVE_LITTLE_ENDIAN ? 0xFF : -1;
+        private static final int SECOND_SHORT_BYTE_SHIFT = 8 - FIRST_SHORT_BYTE_SHIFT;
+        private static final int SECOND_SHORT_BYTE_MASK = NATIVE_LITTLE_ENDIAN ? -1 : 0xFF;
 
         @Override
         public long hashChar(char input) {
-            return hashShort((short) input);
+            int unsignedInput = (int) input;
+            int firstByte = (unsignedInput >> FIRST_SHORT_BYTE_SHIFT) & FIRST_SHORT_BYTE_MASK;
+            int secondByte = (unsignedInput >> SECOND_SHORT_BYTE_SHIFT) & SECOND_SHORT_BYTE_MASK;
+            long hash = hash1To3Bytes(2, firstByte, secondByte, secondByte);
+            return finalize(hash);
         }
 
         @Override
