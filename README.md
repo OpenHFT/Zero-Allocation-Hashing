@@ -58,7 +58,7 @@ To sum up,
 Gradle:
 ```groovy
 dependencies {
-    compile 'net.openhft:zero-allocation-hashing:0.1'
+    compile 'net.openhft:zero-allocation-hashing:0.2'
 }
 ```
 
@@ -67,7 +67,7 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
 </dependency>
 ```
 
