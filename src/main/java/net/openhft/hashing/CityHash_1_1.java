@@ -313,7 +313,7 @@ class CityHash_1_1 {
 
         @Override
         public long hashVoid() {
-            return finalize(K2);
+            return K2;
         }
 
         @Override
@@ -340,10 +340,17 @@ class CityHash_1_1 {
         private static final long serialVersionUID = 0L;
 
         private final long seed0, seed1;
+        private transient long voidHash;
 
         private AsLongHashFunctionSeeded(long seed0, long seed1) {
             this.seed0 = seed0;
             this.seed1 = seed1;
+            voidHash = finalize(K2);
+        }
+
+        @Override
+        public long hashVoid() {
+            return voidHash;
         }
 
         @Override
