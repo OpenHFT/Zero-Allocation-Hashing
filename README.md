@@ -1,7 +1,7 @@
 # Zero-allocation Hashing
-[![Build Status](https://travis-ci.org/OpenHFT/zero-allocation-hashing.svg?branch=master)](https://travis-ci.org/OpenHFT/zero-allocation-hashing)
+[![Build Status](https://travis-ci.org/OpenHFT/Zero-Allocation-Hashing.svg?branch=master)](https://travis-ci.org/OpenHFT/Zero-Allocation-Hashing)
 
-This project provides the API ([JavaDocs](http://openhft.github.io/zero-allocation-hashing/apidocs/))
+This project provides the API ([JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/))
 for hashing any sequences of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 licence.
 
@@ -76,8 +76,8 @@ In Java:
 long hash = LongHashFunction.city_1_1().hashChars("hello");
 ```
 
-See **[JavaDocs](http://openhft.github.io/zero-allocation-hashing/apidocs/)** for more information.
+See **[JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/)** for more information.
 
 ## Contributions are most welcome!
 
-See the list of [open issues](https://github.com/OpenHFT/zero-allocation-hashing/issues).
+See the list of [open issues](https://github.com/OpenHFT/Zero-Allocation-Hashing/issues).
