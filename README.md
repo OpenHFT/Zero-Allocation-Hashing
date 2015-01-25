@@ -24,7 +24,7 @@ implementations:
    On my developer machine, it performs on the
    speed of **6.7 GB/sec** with **11 ns bootstrap** for sequences of any length.
  - **[MurmurHash3](https://code.google.com/p/smhasher/wiki/MurmurHash3)**.
-   On my machine it hashes **3.9 GB of bytes/sec** with **15 ns bootstrap**.
+   On my machine it hashes **3.9 GB/sec** with **15 ns bootstrap**.
 
 
 These implementations are thoroughly, I believe, tested with JDK 6, 7 and 8, but only
