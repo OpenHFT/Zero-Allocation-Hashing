@@ -139,6 +139,11 @@ public abstract class Access<T> {
     }
 
     /**
+     * Constructor for use in subclasses.
+     */
+    protected Access() {}
+
+    /**
      * Reads {@code [offset, offset + 7]} bytes of the byte sequence represented by the given
      * {@code input} as a single {@code long} value.
      *

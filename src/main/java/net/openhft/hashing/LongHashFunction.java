@@ -405,7 +405,7 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
-     * Shortcut for {@link #hashChars(StringBuilder, int, int) hashChars(input, 0. input.length())}.
+     * Shortcut for {@link #hashChars(StringBuilder, int, int) hashChars(input, 0, input.length())}.
      */
     public long hashChars(@NotNull StringBuilder input) {
         return hashNativeChars(input);
