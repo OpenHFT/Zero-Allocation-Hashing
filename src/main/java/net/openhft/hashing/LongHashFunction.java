@@ -140,6 +140,30 @@ public abstract class LongHashFunction implements Serializable {
         return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
 
+    /**
+     * Returns a hash function implementing
+     * <a href="https://code.google.com/p/xxhash/source/browse/trunk/xxhash.c">xxHash
+     * algorithm</a> without seed value (0 is used as default seed value).
+     * This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     */
+    public static LongHashFunction xxHash() {
+        return XxHash.asLongHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing
+     * <a href="https://code.google.com/p/xxhash/source/browse/trunk/xxhash.c">xxHash
+     * algorithm</a> with the given seed value. This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     * @see #xxHash()
+     */
+    public static LongHashFunction xxHash(long seed) {
+        return XxHash.asLongHashFunctionWithSeed(seed);
+    }
+
     private static StringHash stringHash;
     static  {
         try {
