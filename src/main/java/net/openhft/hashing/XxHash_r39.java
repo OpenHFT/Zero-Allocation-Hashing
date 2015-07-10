@@ -1,16 +1,33 @@
+/*
+ * Copyright 2015 Higher Frequency Trading http://www.higherfrequencytrading.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package net.openhft.hashing;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
 
 /**
- * Adapted version of xxHash implementation from https://code.google.com/p/xxhash/source/browse/trunk/xxhash.c
+ * Adapted version of xxHash implementation from https://github.com/Cyan4973/xxHash/releases/tag/r39, which
+ * is fully compatible with r40 though.
  * This implementation provides endian-independant hash values, but it's slower on big-endian platforms.
  */
-class XxHash {
-    private static final XxHash INSTANCE = new XxHash();
-    private static final XxHash NATIVE_XX = NATIVE_LITTLE_ENDIAN ?
-        XxHash.INSTANCE : BigEndian.INSTANCE;
+class XxHash_r39 {
+    private static final XxHash_r39 INSTANCE = new XxHash_r39();
+    private static final XxHash_r39 NATIVE_XX = NATIVE_LITTLE_ENDIAN ?
+        XxHash_r39.INSTANCE : BigEndian.INSTANCE;
 
     // Primes if treated as unsigned
     private static final long P1 = -7046029288634856825L;
@@ -19,7 +36,7 @@ class XxHash {
     private static final long P4 = -8796714831421723037L;
     private static final long P5 = 2870177450012600261L;
 
-    private XxHash() {}
+    private XxHash_r39() {}
 
     <T> long fetch64(Access<T> access, T in, long off) {
         return access.getLong(in, off);
@@ -149,7 +166,7 @@ class XxHash {
         return hash;
     }
 
-    private static class BigEndian extends XxHash {
+    private static class BigEndian extends XxHash_r39 {
         private static final BigEndian INSTANCE = new BigEndian();
 
         private BigEndian() {}
@@ -207,7 +224,7 @@ class XxHash {
             input *= P1;
             hash ^= input;
             hash = Long.rotateLeft(hash, 27) * P1 + P4;
-            return XxHash.finalize(hash);
+            return XxHash_r39.finalize(hash);
         }
 
         @Override
@@ -216,7 +233,7 @@ class XxHash {
             long hash = seed() + P5 + 4;
             hash ^= input * P1;
             hash = Long.rotateLeft(hash, 23) * P2 + P3;
-            return XxHash.finalize(hash);
+            return XxHash_r39.finalize(hash);
         }
 
         @Override
@@ -227,7 +244,7 @@ class XxHash {
             hash = Long.rotateLeft(hash, 11) * P1;
             hash ^= (input >> 8 & 0xFF) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
-            return XxHash.finalize(hash);
+            return XxHash_r39.finalize(hash);
         }
 
         @Override
@@ -240,19 +257,19 @@ class XxHash {
             long hash = seed() + P5 + 1;
             hash ^= input * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
-            return XxHash.finalize(hash);
+            return XxHash_r39.finalize(hash);
         }
 
         @Override
         public long hashVoid() {
-            return XxHash.finalize(P5);
+            return XxHash_r39.finalize(P5);
         }
 
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long seed = seed();
             if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return XxHash.INSTANCE.xxHash64(seed, input, access, off, len);
+                return XxHash_r39.INSTANCE.xxHash64(seed, input, access, off, len);
             } else {
                 return BigEndian.INSTANCE.xxHash64(seed, input, access, off, len);
             }
@@ -269,7 +286,7 @@ class XxHash {
 
         private AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;
-            voidHash = XxHash.finalize(seed + P5);
+            voidHash = XxHash_r39.finalize(seed + P5);
         }
 
         @Override

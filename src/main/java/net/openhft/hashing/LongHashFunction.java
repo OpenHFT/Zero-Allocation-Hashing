@@ -142,26 +142,32 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/xxhash/source/browse/trunk/xxhash.c">xxHash
-     * algorithm</a> without seed value (0 is used as default seed value).
+     * <a href="https://github.com/Cyan4973/xxHash/releases/tag/r39">xxHash
+     * algorithm, release 39</a> without seed value (0 is used as default seed value).
      * This implementation produce equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
+     * <p>Note: implementation is fully compatible with r40</p>
+     *
+     * @see #xxHash_r39(long)
      */
-    public static LongHashFunction xxHash() {
-        return XxHash.asLongHashFunctionWithoutSeed();
+    public static LongHashFunction xxHash_r39() {
+        return XxHash_r39.asLongHashFunctionWithoutSeed();
     }
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/xxhash/source/browse/trunk/xxhash.c">xxHash
-     * algorithm</a> with the given seed value. This implementation produce equal results for equal
+     * <a href="https://github.com/Cyan4973/xxHash/releases/tag/r39">xxHash
+     * algorithm, release 39</a> with the given seed value.
+     * This implementation produce equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
-     * @see #xxHash()
+     * <p>Note: implementation is fully compatible with r40</p>
+     *
+     * @see #xxHash_r39()
      */
-    public static LongHashFunction xxHash(long seed) {
-        return XxHash.asLongHashFunctionWithSeed(seed);
+    public static LongHashFunction xxHash_r39(long seed) {
+        return XxHash_r39.asLongHashFunctionWithSeed(seed);
     }
 
     private static StringHash stringHash;
