@@ -147,11 +147,12 @@ public abstract class LongHashFunction implements Serializable {
      * This implementation produce equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
-     * <p>Note: implementation is fully compatible with r40</p>
      *
-     * @see #xxHash_r39(long)
+     * <p>Note: implementation is fully compatible with r40
+     *
+     * @see #xx_r39(long)
      */
-    public static LongHashFunction xxHash_r39() {
+    public static LongHashFunction xx_r39() {
         return XxHash_r39.asLongHashFunctionWithoutSeed();
     }
 
@@ -162,11 +163,12 @@ public abstract class LongHashFunction implements Serializable {
      * This implementation produce equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
-     * <p>Note: implementation is fully compatible with r40</p>
      *
-     * @see #xxHash_r39()
+     * <p>Note: implementation is fully compatible with r40
+     *
+     * @see #xx_r39()
      */
-    public static LongHashFunction xxHash_r39(long seed) {
+    public static LongHashFunction xx_r39(long seed) {
         return XxHash_r39.asLongHashFunctionWithSeed(seed);
     }
 
