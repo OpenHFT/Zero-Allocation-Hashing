@@ -15,20 +15,28 @@ but allowing the hash function implementation be platform-endianness-agnostic. O
 it allows to "fool" the existing implementation, even sealed for one byte order, feeding data
 in different byte order and obtain consistent results, only moderately compromising performance.
 
-Currently only `long`-valued hash function interface is defined, with two shipped
+Currently only `long`-valued hash function interface is defined, with three shipped
 implementations:
+ - **[xxHash](https://github.com/Cyan4973/xxHash), r39** (latest; r40 is C language-specific
+   maintenance release).
+
  - **[CityHash](https://code.google.com/p/cityhash/), version 1.1**
-   (latest; 1.1.1 is C++ language-specific fixing release). This implementation is thought
-   to be independent from native byte order.
+   (latest; 1.1.1 is C++ language-specific maintenance release).
 
-   On my developer machine, it performs on the
-   speed of **6.7 GB/sec** with **11 ns bootstrap** for sequences of any length.
  - **[MurmurHash3](https://code.google.com/p/smhasher/wiki/MurmurHash3)**.
-   On my machine it hashes **3.9 GB/sec** with **15 ns bootstrap**.
 
+These implementations are thought to be independent from the native byte order. They are thoroughly
+tested with JDK 6, 7 and 8, but only on little-endian platform.
 
-These implementations are thoroughly, I believe, tested with JDK 6, 7 and 8, but only
-on little-endian platform.
+#### Performance
+
+Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
+
+Algorithm  | Speed, GB/s | Bootstrap, ns
+-----------|-------------|--------------
+xxHash     | 9.5         | 6
+CityHash   | 7.0         | 7
+MurmurHash | 5.3         | 12
 
 To sum up,
 
@@ -58,7 +66,7 @@ To sum up,
 Gradle:
 ```groovy
 dependencies {
-    compile 'net.openhft:zero-allocation-hashing:0.2'
+    compile 'net.openhft:zero-allocation-hashing:0.3'
 }
 ```
 
@@ -67,13 +75,13 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.2</version>
+  <version>0.3</version>
 </dependency>
 ```
 
 In Java:
 ```java
-long hash = LongHashFunction.city_1_1().hashChars("hello");
+long hash = LongHashFunction.xx_r39().hashChars("hello");
 ```
 
 See **[JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/)** for more information.
