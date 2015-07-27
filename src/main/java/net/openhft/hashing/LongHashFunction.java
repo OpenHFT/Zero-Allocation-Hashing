@@ -176,8 +176,13 @@ public abstract class LongHashFunction implements Serializable {
     static  {
         try {
             if (System.getProperty("java.vm.name").contains("HotSpot")) {
-                if (System.getProperty("java.version").compareTo("1.7.0_06") >= 0) {
-                    stringHash = ModernHotSpotStringHash.INSTANCE;
+                String javaVersion = System.getProperty("java.version");
+                if (javaVersion.compareTo("1.7.0_06") >= 0) {
+                    if (javaVersion.compareTo("1.9") >= 0) {
+                        stringHash = UnknownJvmStringHash.INSTANCE;
+                    } else {
+                        stringHash = ModernHotSpotStringHash.INSTANCE;
+                    }
                 } else {
                     stringHash = HotSpotPrior7u6StringHash.INSTANCE;
                 }
