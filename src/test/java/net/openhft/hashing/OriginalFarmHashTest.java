@@ -47,21 +47,21 @@ public class OriginalFarmHashTest {
     static final int c1 = 0xcc9e2d51;
 
     static long createSeed(int offset, int salt) {
-        int h = salt & 0xffffffff;
+        int h = salt;
         h = h * c1;
         h ^= (h >>> 17);
         h = h * c1;
         h ^= (h >>> 17);
         h = h * c1;
         h ^= (h >>> 17);
-        h += offset & 0xffffffff;
+        h += offset;
         h = h * c1;
         h ^= (h >>> 17);
         h = h * c1;
         h ^= (h >>> 17);
         h = h * c1;
         h ^= (h >>> 17);
-        return Integer.toUnsignedLong(h);
+        return h & 0xFFFFFFFFL;
     }
 
     static long SEED(int offset) {
