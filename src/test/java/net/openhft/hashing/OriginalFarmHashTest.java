@@ -19,7 +19,7 @@ package net.openhft.hashing;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 
 import static net.openhft.hashing.CityAndFarmHash_1_1.K0;
 import static org.junit.Assert.assertEquals;
@@ -134,6 +134,19 @@ public class OriginalFarmHashTest {
     }
 
 
+    @Test
+    public void testUoGo() {
+        for (Object[] g : GOLDEN_64) {
+            long hash = (Long) g[0];
+            try {
+                byte[] s = ((String)g[1]).getBytes("US-ASCII");
+                Assert.assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     static final Object[][] GOLDEN_64 = {
             {0xb3454265b6df75e3L, "a"},
             {0xaa8d6e5242ada51eL, "ab"},
@@ -166,15 +179,6 @@ public class OriginalFarmHashTest {
             {0x8fe4429d157f60f5L, "The fugacity of a constituent in a mixture of gases at a given temperature is proportional to its mole fraction.  Lewis-Randall Rule"},
             {0x5a0a6efd52e84e2aL, "How can you write a big system without C++?  -Paul Glick"},
     };
-
-    @Test
-    public void testUoGo() {
-        for (Object[] g : GOLDEN_64) {
-            long hash = (Long) g[0];
-            byte[] s = ((String)g[1]).getBytes(StandardCharsets.US_ASCII);
-            Assert.assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
-        }
-    }
 
     static final long[] NA_EXPECTED = {
             1140953930L, 861465670L,
