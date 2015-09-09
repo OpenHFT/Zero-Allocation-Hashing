@@ -83,7 +83,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long, long)
      */
     public static LongHashFunction city_1_1() {
-        return CityHash_1_1.asLongHashFunctionWithoutSeed();
+        return CityAndFarmHash_1_1.asLongHashFunctionWithoutSeed();
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long, long)
      */
     public static LongHashFunction city_1_1(long seed) {
-        return CityHash_1_1.asLongHashFunctionWithSeed(seed);
+        return CityAndFarmHash_1_1.asLongHashFunctionWithSeed(seed);
     }
 
     /**
@@ -111,7 +111,106 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long)
      */
     public static LongHashFunction city_1_1(long seed0, long seed1) {
-        return CityHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
+        return CityAndFarmHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
+     * farmhashna algorithm</a>, without seed values. This implementation produce equal results for
+     * equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
+     * platforms than on little-endian.
+     *
+     * <p>{@code farmhashna} was introduced in FarmHash 1.0. For inputs shorter than 32 bytes it's
+     * output is equivalent to {@link #city_1_1()} output.
+     *
+     * @see #farmNa(long)
+     * @see #farmNa(long, long)
+     */
+    public static LongHashFunction farmNa() {
+        return CityAndFarmHash_1_1.naWithoutSeeds();
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
+     * farmhashna algorithm</a>, using the given seed value. This implementation produce equal
+     * results for equal input on platforms with different {@link ByteOrder}, but is slower on
+     * big-endian platforms than on little-endian.
+     *
+     * <p>{@code farmhashna} was introduced in FarmHash 1.0. For inputs shorter than 32 bytes it's
+     * output is equivalent to {@link #city_1_1(long)} output.
+     *
+     * @see #farmNa()
+     * @see #farmNa(long, long)
+     */
+    public static LongHashFunction farmNa(long seed) {
+        return CityAndFarmHash_1_1.naWithSeed(seed);
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
+     * farmhashna algorithm</a>, using the two given seed values. This implementation produce equal
+     * results for equal input on platforms with different {@link ByteOrder}, but is slower on
+     * big-endian platforms than on little-endian.
+     *
+     * <p>{@code farmhashna} was introduced in FarmHash 1.0. For inputs shorter than 32 bytes it's
+     * output is equivalent to {@link #city_1_1(long, long)} output.
+     *
+     * @see #farmNa()
+     * @see #farmNa(long)
+     */
+    public static LongHashFunction farmNa(long seed0, long seed1) {
+        return CityAndFarmHash_1_1.naWithSeeds(seed0, seed1);
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
+     * farmhashuo algorithm</a> without seed values. This implementation produce equal results for
+     * equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
+     * platforms than on little-endian.
+     *
+     * <p>{@code farmhashuo} was introduced in FarmHash 1.1.
+     *
+     * @see #farmUo(long)
+     * @see #farmUo(long, long)
+     */
+    public static LongHashFunction farmUo() {
+        return CityAndFarmHash_1_1.uoWithoutSeeds();
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
+     * farmhashuo algorithm</a> with the given seed value. This implementation produce equal results
+     * for equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
+     * platforms than on little-endian.
+     *
+     * <p>{@code farmhashuo} was introduced in FarmHash 1.1.
+     *
+     * @see #farmUo()
+     * @see #farmUo(long, long)
+     */
+    public static LongHashFunction farmUo(long seed) {
+        return CityAndFarmHash_1_1.uoWithSeed(seed);
+    }
+
+    /**
+     * Returns a hash function implementing so-called
+     * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
+     * farmhashuo algorithm</a> with the two given seed values. This implementation produce equal
+     * results for equal input on platforms with different {@link ByteOrder}, but is slower on
+     * big-endian platforms than on little-endian.
+     *
+     * <p>{@code farmhashuo} was introduced in FarmHash 1.1.
+     *
+     * @see #farmUo()
+     * @see #farmUo(long)
+     */
+    public static LongHashFunction farmUo(long seed0, long seed1) {
+        return CityAndFarmHash_1_1.uoWithSeeds(seed0, seed1);
     }
 
     /**

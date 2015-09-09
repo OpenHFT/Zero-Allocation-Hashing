@@ -15,10 +15,13 @@ but allowing the hash function implementation be platform-endianness-agnostic. O
 it allows to "fool" the existing implementation, even sealed for one byte order, feeding data
 in different byte order and obtain consistent results, only moderately compromising performance.
 
-Currently only `long`-valued hash function interface is defined, with three shipped
+Currently `long`-valued hash function interface is defined, with a plenty of shipped
 implementations:
  - **[xxHash](https://github.com/Cyan4973/xxHash), r39** (latest; r40 is C language-specific
    maintenance release).
+
+ - Two algorithms from **[FarmHash](https://github.com/google/farmhash)**: `farmhashna` (introduced
+ in FarmHash 1.0) and `farmhashuo` (FarmHash 1.1)
 
  - **[CityHash](https://code.google.com/p/cityhash/), version 1.1**
    (latest; 1.1.1 is C++ language-specific maintenance release).
