@@ -247,7 +247,7 @@ public abstract class LongHashFunction implements Serializable {
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
-     * <p>Note: implementation is fully compatible with r40
+     * <p>Note: implementation is fully compatible with xxHash releases at least up to r42.
      *
      * @see #xx_r39(long)
      */
@@ -263,7 +263,7 @@ public abstract class LongHashFunction implements Serializable {
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
-     * <p>Note: implementation is fully compatible with r40
+     * <p>Note: implementation is fully compatible with xxHash releases at least up to r42.
      *
      * @see #xx_r39()
      */

@@ -17,8 +17,8 @@ in different byte order and obtain consistent results, only moderately compromis
 
 Currently `long`-valued hash function interface is defined, with a plenty of shipped
 implementations:
- - **[xxHash](https://github.com/Cyan4973/xxHash), r39** (latest; r40 is C language-specific
-   maintenance release).
+ - **[xxHash](https://github.com/Cyan4973/xxHash), r39** (latest; r40-r42 are maintenance releases
+ without algorithm changes).
 
  - Two algorithms from **[FarmHash](https://github.com/google/farmhash)**: `farmhashna` (introduced
  in FarmHash 1.0) and `farmhashuo` (FarmHash 1.1)
