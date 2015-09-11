@@ -21,10 +21,10 @@ implementations:
  without algorithm changes).
 
  - Two algorithms from **[FarmHash](https://github.com/google/farmhash)**: `farmhashna` (introduced
- in FarmHash 1.0) and `farmhashuo` (FarmHash 1.1)
+ in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1)
 
- - **[CityHash](https://code.google.com/p/cityhash/), version 1.1**
-   (latest; 1.1.1 is C++ language-specific maintenance release).
+ - **[CityHash](https://code.google.com/p/cityhash/), version 1.1** (latest; 1.1.1 is a C++
+ language-specific maintenance release).
 
  - **[MurmurHash3](https://code.google.com/p/smhasher/wiki/MurmurHash3)**.
 
@@ -35,11 +35,13 @@ tested with JDK 6, 7 and 8, but only on little-endian platform.
 
 Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 
-Algorithm  | Speed, GB/s | Bootstrap, ns
------------|-------------|--------------
-xxHash     | 9.5         | 6
-CityHash   | 7.0         | 7
-MurmurHash | 5.3         | 12
+Algorithm     | Speed, GB/s | Bootstrap, ns
+--------------|-------------|--------------
+xxHash        | 9.5         | 6
+FarmHash `na` | 9.0         | 6
+FarmHash `uo` | 7.2         | 7
+CityHash      | 7.0         | 7
+MurmurHash    | 5.3         | 12
 
 To sum up,
 
