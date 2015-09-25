@@ -17,6 +17,7 @@
 package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
+import sun.nio.ch.DirectBuffer;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -397,7 +398,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashBooleans(boolean[], int, int) hashBooleans(input, 0, input.length)}.
      */
     public long hashBooleans(@NotNull boolean[] input) {
-        return hashBooleans(input, 0, input.length);
+        return unsafeHash(input, BOOLEAN_BASE, input.length);
     }
 
     /**
@@ -422,7 +423,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashBytes(byte[], int, int) hashBytes(input, 0, input.length)}.
      */
     public long hashBytes(@NotNull byte[] input) {
-        return hashBytes(input, 0, input.length);
+        return unsafeHash(input, BYTE_BASE, input.length);
     }
 
     /**
@@ -448,7 +449,7 @@ public abstract class LongHashFunction implements Serializable {
      * hashBytes(input, input.position(), input.remaining())}.
      */
     public long hashBytes(ByteBuffer input) {
-        return hashBytes(input, input.position(), input.remaining());
+        return hashByteBuffer(input, input.position(), input.remaining());
     }
 
     /**
@@ -469,7 +470,17 @@ public abstract class LongHashFunction implements Serializable {
      */
     public long hashBytes(@NotNull ByteBuffer input, int off, int len) {
         checkArrayOffs(input.capacity(), off, len);
-        return hash(input, ByteBufferAccess.INSTANCE, off, len);
+        return hashByteBuffer(input, off, len);
+    }
+
+    private long hashByteBuffer(@NotNull ByteBuffer input, int off, int len) {
+        if (input.hasArray()) {
+            return unsafeHash(input.array(), BYTE_BASE + input.arrayOffset() + off, len);
+        } else if (input instanceof DirectBuffer) {
+            return unsafeHash(null, ((DirectBuffer) input).address() + off, len);
+        } else {
+            return hash(input, ByteBufferAccess.INSTANCE, off, len);
+        }
     }
 
     /**
@@ -490,7 +501,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashChars(char[], int, int) hashChars(input, 0, input.length)}.
      */
     public long hashChars(@NotNull char[] input) {
-        return hashChars(input, 0, input.length);
+        return unsafeHash(input, CHAR_BASE, input.length * 2L);
     }
 
     /**
@@ -563,6 +574,7 @@ public abstract class LongHashFunction implements Serializable {
      * or {@code len < 0}
      */
     public long hashChars(@NotNull StringBuilder input, int off, int len) {
+        checkArrayOffs(input.length(), off, len);
         return hashNativeChars(input, off, len);
     }
 
@@ -571,7 +583,6 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     long hashNativeChars(CharSequence input, int off, int len) {
-        checkArrayOffs(input.length(), off, len);
         return hash(input, nativeCharSequenceAccess(), off * 2L, len * 2L);
     }
 
@@ -579,7 +590,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashShorts(short[], int, int) hashShorts(input, 0, input.length)}.
      */
     public long hashShorts(@NotNull short[] input) {
-        return hashShorts(input, 0, input.length);
+        return unsafeHash(input, SHORT_BASE, input.length * 2L);
     }
 
     /**
@@ -606,7 +617,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashInts(int[], int, int) hashInts(input, 0, input.length)}.
      */
     public long hashInts(@NotNull int[] input) {
-        return hashInts(input, 0, input.length);
+        return unsafeHash(input, INT_BASE, input.length * 4L);
     }
 
     /**
@@ -633,7 +644,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashLongs(long[], int, int) hashLongs(input, 0, input.length)}.
      */
     public long hashLongs(@NotNull long[] input) {
-        return hashLongs(input, 0, input.length);
+        return unsafeHash(input, LONG_BASE, input.length * 8L);
     }
 
     /**
