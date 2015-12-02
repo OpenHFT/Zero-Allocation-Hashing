@@ -38,6 +38,7 @@
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
             <version>12.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- test dependencies -->
