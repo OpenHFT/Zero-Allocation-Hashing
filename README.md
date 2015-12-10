@@ -1,5 +1,6 @@
 # Zero-allocation Hashing
 [![Build Status](https://travis-ci.org/OpenHFT/Zero-Allocation-Hashing.svg?branch=master)](https://travis-ci.org/OpenHFT/Zero-Allocation-Hashing)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing)
 
 This project provides the API ([JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/))
 for hashing any sequences of bytes in Java, including all kinds of
