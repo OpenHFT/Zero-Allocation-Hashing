@@ -207,7 +207,7 @@ class XxHash_r39 {
         public static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
         private static final long serialVersionUID = 0L;
 
-        private Object readResolve() {
+        private static Object readResolve() {
             return SEEDLESS_INSTANCE;
         }
 

@@ -270,7 +270,7 @@ class CityAndFarmHash_1_1 {
         public static final AsLongHashFunction INSTANCE = new AsLongHashFunction();
         private static final long serialVersionUID = 0L;
 
-        private Object readResolve() {
+        private static Object readResolve() {
             return INSTANCE;
         }
 
@@ -628,7 +628,7 @@ class CityAndFarmHash_1_1 {
         public static final Na INSTANCE = new Na();
         private static final long serialVersionUID = 0L;
 
-        private Object readResolve() {
+        private static Object readResolve() {
             return INSTANCE;
         }
 
@@ -683,7 +683,7 @@ class CityAndFarmHash_1_1 {
         public static final Uo INSTANCE = new Uo();
         private static final long serialVersionUID = 0L;
 
-        private Object readResolve() {
+        private static Object readResolve() {
             return INSTANCE;
         }
 
