@@ -231,7 +231,7 @@ class XxHash_r39 {
         public long hashInt(int input) {
             input = NATIVE_XX.toLittleEndian(input);
             long hash = seed() + P5 + 4;
-            hash ^= input * P1;
+            hash ^= Primitives.unsignedInt(input) * P1;
             hash = Long.rotateLeft(hash, 23) * P2 + P3;
             return XxHash_r39.finalize(hash);
         }
@@ -240,9 +240,9 @@ class XxHash_r39 {
         public long hashShort(short input) {
             input = NATIVE_XX.toLittleEndian(input);
             long hash = seed() + P5 + 2;
-            hash ^= (input & 0xFF) * P5;
+            hash ^= Primitives.unsignedByte(input) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
-            hash ^= (input >> 8 & 0xFF) * P5;
+            hash ^= Primitives.unsignedByte(input >> 8) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
             return XxHash_r39.finalize(hash);
         }
@@ -255,7 +255,7 @@ class XxHash_r39 {
         @Override
         public long hashByte(byte input) {
             long hash = seed() + P5 + 1;
-            hash ^= input * P5;
+            hash ^= Primitives.unsignedByte(input) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
             return XxHash_r39.finalize(hash);
         }

@@ -20,6 +20,7 @@ import sun.nio.ch.DirectBuffer;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 import static java.nio.ByteOrder.*;
 import static org.junit.Assert.assertEquals;
@@ -37,6 +38,7 @@ public class LongHashFunctionTest {
         testBoolean(f, len);
         ByteBuffer bb = ByteBuffer.wrap(data).order(nativeOrder());
         testPrimitives(f, eh, len, bb);
+        testNegativePrimitives(f);
         testArrays(f, data, eh, len, bb);
         testByteBuffers(f, eh, len, bb);
         testCharSequences(f, eh, len, bb);
@@ -74,6 +76,16 @@ public class LongHashFunctionTest {
 
         if (len == 8)
             assertEquals("long hash", eh, f.hashLong(bb.getLong(0)));
+    }
+
+    private static void testNegativePrimitives(LongHashFunction f) {
+        byte[] bytes = new byte[8];
+        Arrays.fill(bytes, (byte) -1);
+        assertEquals("byte hash", f.hashBytes(bytes, 0, 1), f.hashByte((byte) -1));
+        assertEquals("short hash", f.hashBytes(bytes, 0, 2), f.hashShort((short) -1));
+        assertEquals("char hash", f.hashBytes(bytes, 0, 2), f.hashChar((char) -1));
+        assertEquals("int hash", f.hashBytes(bytes, 0, 4), f.hashInt(-1));
+        assertEquals("long hash", f.hashBytes(bytes), f.hashLong(-1L));
     }
 
     private static void testArrays(LongHashFunction f, byte[] data, long eh, int len,
