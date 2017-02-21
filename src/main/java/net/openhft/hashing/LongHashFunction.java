@@ -70,8 +70,33 @@ public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
     static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
-    static final byte TRUE_BYTE_VALUE = UNSAFE.getByte(new boolean[] {true}, BOOLEAN_BASE);
-    static final byte FALSE_BYTE_VALUE = UNSAFE.getByte(new boolean[] {false}, BOOLEAN_BASE);
+    static final byte TRUE_BYTE_VALUE;
+    static final byte FALSE_BYTE_VALUE;
+
+    static {
+        byte TRUE, FALSE;
+        try {
+            TRUE = TRUE();
+            FALSE = FALSE();
+        } catch (Throwable t) {
+            t.printStackTrace();
+           
+            // Unsafe in pre-Nougat Android does not have getByte(), fall back to some reasonable value
+            TRUE = 1;
+            FALSE = 0;
+        }
+
+        TRUE_BYTE_VALUE = TRUE;
+        FALSE_BYTE_VALUE = FALSE;
+    }
+
+    private static byte TRUE() {
+        return UNSAFE.getByte(new boolean[] {true}, BOOLEAN_BASE);
+    }
+
+    private static byte FALSE() {
+        return UNSAFE.getByte(new boolean[] {false}, BOOLEAN_BASE);
+    }
 
     /**
      * Returns a hash function implementing
