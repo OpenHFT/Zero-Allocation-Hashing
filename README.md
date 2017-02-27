@@ -18,11 +18,10 @@ in different byte order and obtain consistent results, only moderately compromis
 
 Currently `long`-valued hash function interface is defined, with a plenty of shipped
 implementations:
- - **[xxHash](https://github.com/Cyan4973/xxHash), r39** (latest; r40-r42 are maintenance releases
- without algorithm changes).
+ - **[xxHash](https://github.com/Cyan4973/xxHash)**.
 
  - Two algorithms from **[FarmHash](https://github.com/google/farmhash)**: `farmhashna` (introduced
- in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1)
+ in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1).
 
  - **[CityHash](https://code.google.com/p/cityhash/), version 1.1** (latest; 1.1.1 is a C++
  language-specific maintenance release).
@@ -87,7 +86,7 @@ Or Maven:
 
 In Java:
 ```java
-long hash = LongHashFunction.xx_r39().hashChars("hello");
+long hash = LongHashFunction.xx().hashChars("hello");
 ```
 
 See **[JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/)** for more information.

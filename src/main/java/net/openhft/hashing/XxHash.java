@@ -20,14 +20,13 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
 
 /**
- * Adapted version of xxHash implementation from https://github.com/Cyan4973/xxHash/releases/tag/r39, which
- * is fully compatible with r40 though.
+ * Adapted version of xxHash implementation from https://github.com/Cyan4973/xxHash.
  * This implementation provides endian-independant hash values, but it's slower on big-endian platforms.
  */
-class XxHash_r39 {
-    private static final XxHash_r39 INSTANCE = new XxHash_r39();
-    private static final XxHash_r39 NATIVE_XX = NATIVE_LITTLE_ENDIAN ?
-        XxHash_r39.INSTANCE : BigEndian.INSTANCE;
+class XxHash {
+    private static final XxHash INSTANCE = new XxHash();
+    private static final XxHash NATIVE_XX = NATIVE_LITTLE_ENDIAN ?
+        XxHash.INSTANCE : BigEndian.INSTANCE;
 
     // Primes if treated as unsigned
     private static final long P1 = -7046029288634856825L;
@@ -36,7 +35,7 @@ class XxHash_r39 {
     private static final long P4 = -8796714831421723037L;
     private static final long P5 = 2870177450012600261L;
 
-    private XxHash_r39() {}
+    private XxHash() {}
 
     <T> long fetch64(Access<T> access, T in, long off) {
         return access.getLong(in, off);
@@ -166,7 +165,7 @@ class XxHash_r39 {
         return hash;
     }
 
-    private static class BigEndian extends XxHash_r39 {
+    private static class BigEndian extends XxHash {
         private static final BigEndian INSTANCE = new BigEndian();
 
         private BigEndian() {}
@@ -224,7 +223,7 @@ class XxHash_r39 {
             input *= P1;
             hash ^= input;
             hash = Long.rotateLeft(hash, 27) * P1 + P4;
-            return XxHash_r39.finalize(hash);
+            return XxHash.finalize(hash);
         }
 
         @Override
@@ -233,7 +232,7 @@ class XxHash_r39 {
             long hash = seed() + P5 + 4;
             hash ^= Primitives.unsignedInt(input) * P1;
             hash = Long.rotateLeft(hash, 23) * P2 + P3;
-            return XxHash_r39.finalize(hash);
+            return XxHash.finalize(hash);
         }
 
         @Override
@@ -244,7 +243,7 @@ class XxHash_r39 {
             hash = Long.rotateLeft(hash, 11) * P1;
             hash ^= Primitives.unsignedByte(input >> 8) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
-            return XxHash_r39.finalize(hash);
+            return XxHash.finalize(hash);
         }
 
         @Override
@@ -257,19 +256,19 @@ class XxHash_r39 {
             long hash = seed() + P5 + 1;
             hash ^= Primitives.unsignedByte(input) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
-            return XxHash_r39.finalize(hash);
+            return XxHash.finalize(hash);
         }
 
         @Override
         public long hashVoid() {
-            return XxHash_r39.finalize(P5);
+            return XxHash.finalize(P5);
         }
 
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long seed = seed();
             if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return XxHash_r39.INSTANCE.xxHash64(seed, input, access, off, len);
+                return XxHash.INSTANCE.xxHash64(seed, input, access, off, len);
             } else {
                 return BigEndian.INSTANCE.xxHash64(seed, input, access, off, len);
             }
@@ -286,7 +285,7 @@ class XxHash_r39 {
 
         private AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;
-            voidHash = XxHash_r39.finalize(seed + P5);
+            voidHash = XxHash.finalize(seed + P5);
         }
 
         @Override

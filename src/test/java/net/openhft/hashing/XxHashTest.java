@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class XxHash_r39_Test {
+public class XxHashTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -40,12 +40,12 @@ public class XxHash_r39_Test {
 
     @Test
     public void testCityWithoutSeeds() {
-        test(LongHashFunction.xx_r39(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+        test(LongHashFunction.xx(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
     @Test
     public void testCityWithOneSeed() {
-        test(LongHashFunction.xx_r39(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+        test(LongHashFunction.xx(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
 

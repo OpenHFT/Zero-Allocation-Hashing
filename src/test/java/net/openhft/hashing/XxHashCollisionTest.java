@@ -32,17 +32,17 @@ public class XxHashCollisionTest {
         sequence.putLong(0, 1);
         sequence.putLong(16, 42);
         sequence.putLong(32, 2);
-        long h1 = LongHashFunction.xx_r39().hashBytes(sequence);
+        long h1 = LongHashFunction.xx().hashBytes(sequence);
 
         sequence.putLong(0, 1 + 0xBA79078168D4BAFL);
         sequence.putLong(32, 2 + 0x9C90005B80000000L);
-        long h2 = LongHashFunction.xx_r39().hashBytes(sequence);
+        long h2 = LongHashFunction.xx().hashBytes(sequence);
         assertEquals(h1, h2);
 
         sequence.putLong(0, 1 + 0xBA79078168D4BAFL * 2);
         sequence.putLong(32, 2 + 0x9C90005B80000000L * 2);
 
-        long h3 = LongHashFunction.xx_r39().hashBytes(sequence);
+        long h3 = LongHashFunction.xx().hashBytes(sequence);
         assertEquals(h2, h3);
     }
 }

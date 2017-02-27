@@ -23,8 +23,8 @@
  *     <li>{@code long}-valued functions: see {@link net.openhft.hashing.LongHashFunction}
  *     <ul>
  *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#xx_r39() xxHash r39 without seed} and
- *         {@linkplain net.openhft.hashing.LongHashFunction#xx_r39(long) with a seed}.
+ *         {@linkplain net.openhft.hashing.LongHashFunction#xx() xxHash without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#xx(long) with a seed}.
  *         </li>
  *         <li>
  *         {@linkplain net.openhft.hashing.LongHashFunction#farmUo() FarmHash 1.1 (farmhashuo)
