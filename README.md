@@ -4,7 +4,7 @@
 
 This project provides the API ([JavaDocs](http://openhft.github.io/Zero-Allocation-Hashing/apidocs/))
 for hashing any sequences of bytes in Java, including all kinds of
-primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 licence.
+primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 license.
 
 The key design goal, distinguishing this project from, for example, [Guava hashing](
 http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html):
