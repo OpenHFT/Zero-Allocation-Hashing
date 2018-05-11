@@ -21,15 +21,12 @@ in different byte order and obtain consistent results, only moderately compromis
 
 Currently `long`-valued hash function interface is defined, with a plenty of shipped
 implementations:
- - *https://github.com/Cyan4973/xxHash[xxHash]*.
-
- - Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
+* *https://github.com/Cyan4973/xxHash[xxHash]*.
+*  Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
  in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1).
-
- - *https://code.google.com/p/cityhash/[CityHash], version 1.1* (latest; 1.1.1 is a C++
+* *https://code.google.com/p/cityhash/[CityHash], version 1.1* (latest; 1.1.1 is a C++
  language-specific maintenance release).
-
- - *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
+* *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
 
 These implementations are thought to be independent from the native byte order. They are thoroughly
 tested with JDK 6, 7 and 8, but only on little-endian platform.
@@ -50,14 +47,13 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 To sum up,
 
 ==== When to use this project
- - You need to hash plain byte sequences, memory blocks or "flat" objects.
- - You like zero-allocation and pretty good performance (at Java scale).
- - You need hashing to be agile in questions related to byte ordering.
+ * You need to hash plain byte sequences, memory blocks or "flat" objects.
+ * You like zero-allocation and pretty good performance (at Java scale).
+ * You need hashing to be agile in questions related to byte ordering.
 
 ==== When *not* to use:
- - You need to hash POJOs whose actual data is scattered in memory between managed objects.
+ * You need to hash POJOs whose actual data is scattered in memory between managed objects.
    There is no simple way to hash, for example, instances of such class:
-
 [source, Java]
 ----
     class Person {
@@ -66,9 +62,9 @@ To sum up,
     }
 ----
    using the API provided by this project.
- - You need to hash byte sequences of beforehand unknown length, for the simpliest example,
+ * You need to hash byte sequences of beforehand unknown length, for the simpliest example,
    `Iterator<Byte>`.
- - You need to transform the byte sequence (e. g. encode or decode it with a specific coding),
+ * You need to transform the byte sequence (e. g. encode or decode it with a specific coding),
    and hash the resulting byte sequence on the way without dumping it to memory.
 
 == Quick start
