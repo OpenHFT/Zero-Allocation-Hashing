@@ -10,11 +10,11 @@ for hashing any sequences of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 license.
 
 The key design goal, distinguishing this project from, for example, 
-http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html[Guava hashing]:
-this API ease implementing hashing algorithms which *don't do a single allocation
+http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html[Guava hashing],
+is that this API eases implementing hashing algorithms which *don't do a single allocation
 during hash computation for any input*, and without using `ThreadLocal`.
 
-Also, *the API attemps to be agile enough in byte order treatment*, favoring native access,
+Also, *the API attemps to be agile in byte order treatment*, favoring native access,
 but allowing the hash function implementation be platform-endianness-agnostic. On the other hand,
 it allows to "fool" the existing implementation, even sealed for one byte order, feeding data
 in different byte order and obtain consistent results, only moderately compromising performance.
@@ -57,7 +57,7 @@ To sum up,
 
 ==== When *not* to use:
  * You need to hash POJOs whose actual data is scattered in memory between managed objects.
-   There is no simple way to hash, for example, instances of such class:
+   There is no simple way to hash these using the API provided by this project, for example, classes such as:
 +
 [source, Java]
 ----
@@ -66,8 +66,6 @@ To sum up,
         int salary;
     }
 ----
-+
-   using the API provided by this project.
    
  * You need to hash byte sequences of beforehand unknown length, for the simpliest example,
    `Iterator<Byte>`.
