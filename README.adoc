@@ -21,12 +21,15 @@ in different byte order and obtain consistent results, only moderately compromis
 
 Currently `long`-valued hash function interface is defined, with a plenty of shipped
 implementations:
-* *https://github.com/Cyan4973/xxHash[xxHash]*.
-*  Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
+ - *https://github.com/Cyan4973/xxHash[xxHash]*.
+ 
+ -  Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
  in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1).
-* *https://code.google.com/p/cityhash/[CityHash], version 1.1* (latest; 1.1.1 is a C++
+ 
+ - *https://code.google.com/p/cityhash/[CityHash], version 1.1* (latest; 1.1.1 is a C++
  language-specific maintenance release).
-* *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
+
+- *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
 
 These implementations are thought to be independent from the native byte order. They are thoroughly
 tested with JDK 6, 7 and 8, but only on little-endian platform.
@@ -54,6 +57,7 @@ To sum up,
 ==== When *not* to use:
  * You need to hash POJOs whose actual data is scattered in memory between managed objects.
    There is no simple way to hash, for example, instances of such class:
++
 [source, Java]
 ----
     class Person {
@@ -61,6 +65,7 @@ To sum up,
         int salary;
     }
 ----
++
    using the API provided by this project.
  * You need to hash byte sequences of beforehand unknown length, for the simpliest example,
    `Iterator<Byte>`.
