@@ -1,25 +1,24 @@
-== Zero-allocation Hashing
+== Zero-Allocation Hashing
 
-== Version 
+==== Version 
 [#image-maven]
 [caption="", link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
 image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[]
 
-This project provides an API (http://openhft.github.io/Zero-Allocation-Hashing/apidocs/[JavaDocs])
-for hashing any sequences of bytes in Java, including all kinds of
-primitive arrays, buffers, `CharSequence`s and more. Java 6+. Apache 2.0 license.
+=== Overview
+This project provides a Java API for hashing any sequences of bytes in Java, including all kinds of
+primitive arrays, buffers, `CharSequence`s and more. 
 
-The key design goal, distinguishing this project from, for example, 
+Written for Java 6+ under Apache 2.0 license.
+
+The key difference compared to other similar projects, e.g. 
 http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html[Guava hashing],
-is that this API eases implementing hashing algorithms which *don't do a single allocation
-during hash computation for any input*, and without using `ThreadLocal`.
+is that this has no object allocations during the hash computation and does not use `ThreadLocal`.
 
-Also, *the API attemps to be agile in byte order treatment*, favoring native access,
-but allowing the hash function implementation be platform-endianness-agnostic. On the other hand,
-it allows to "fool" the existing implementation, even sealed for one byte order, feeding data
-in different byte order and obtain consistent results, only moderately compromising performance.
+The implementation utilises native access where possible, but is also platform-endianness-agnostic. This provides consistent results 
+whatever the byte order, while only moderately affecting performance.
 
-Currently `long`-valued hash function interface is defined, with a plenty of shipped
+Currently `long`-valued hash function interface is defined, with the following
 implementations:
 
  - *https://github.com/Cyan4973/xxHash[xxHash]*.
@@ -32,8 +31,7 @@ implementations:
 
 - *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
 
-These implementations are thought to be independent from the native byte order. They are thoroughly
-tested with JDK 6, 7 and 8, but only on little-endian platform.
+These are thoroughly tested with JDK 6, 7 and 8, on little-endian platform.  However they are believed to be independent from the native byte order. 
 
 ==== Performance
 
@@ -50,14 +48,14 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 
 To sum up,
 
-==== When to use this project
+==== When to use Zero-Allocation Hashing
  * You need to hash plain byte sequences, memory blocks or "flat" objects.
- * You like zero-allocation and pretty good performance (at Java scale).
- * You need hashing to be agile in questions related to byte ordering.
+ * You want zero-allocation and good performance (at Java scale).
+ * You need hashing to be agile with regards to byte ordering.
 
-==== When *not* to use:
+==== When _not_ to use Zero-Allocation Hashing
  * You need to hash POJOs whose actual data is scattered in memory between managed objects.
-   There is no simple way to hash these using the API provided by this project, for example, classes such as:
+   There is no simple way to hash these using this project, for example, classes such as:
 +
 [source, Java]
 ----
@@ -67,11 +65,14 @@ To sum up,
     }
 ----
    
- * You need to hash byte sequences of beforehand unknown length, for the simpliest example,
+ * You need to hash byte sequences of unknown length, for the simpliest example,
    `Iterator<Byte>`.
    
- * You need to transform the byte sequence (e. g. encode or decode it with a specific coding),
+ * You need to transform the byte sequence (e.g. encode or decode it with a specific coding),
    and hash the resulting byte sequence on the way without dumping it to memory.
+
+==== Java Doc
+See http://openhft.github.io/Zero-Allocation-Hashing/apidocs/
 
 == Quick start
 
