@@ -23,6 +23,10 @@
  *     <li>{@code long}-valued functions: see {@link net.openhft.hashing.LongHashFunction}
  *     <ul>
  *         <li>
+ *         {@linkplain net.openhft.hashing.LongHashFunction#metro() metroHash without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
+ *         </li>
+ *         <li>
  *         {@linkplain net.openhft.hashing.LongHashFunction#xx() xxHash without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#xx(long) with a seed}.
  *         </li>
