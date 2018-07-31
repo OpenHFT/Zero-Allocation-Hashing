@@ -307,6 +307,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing the 64 bit version of
      * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> with a given seed value.
+     * This implementation uses the initialization vector for metrohash64_2.
      * This implementation produce equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
