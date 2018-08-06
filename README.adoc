@@ -31,6 +31,8 @@ implementations:
 
 - *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
 
+- *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
+
 These are thoroughly tested with JDK 6, 7 and 8, on little-endian platform.  However they are believed to be independent from the native byte order. 
 
 ==== Performance

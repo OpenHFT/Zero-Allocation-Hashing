@@ -290,6 +290,34 @@ public abstract class LongHashFunction implements Serializable {
         return XxHash.asLongHashFunctionWithSeed(seed);
     }
 
+    /**
+     * Returns a hash function implementing the 64 bit version of
+     * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash64 algorithm</a> without a seed value (0 is used
+     * as default seed value).
+     * This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #metro(long)
+     */
+    public static LongHashFunction metro() {
+        return MetroHash.asLongHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing the 64 bit version of
+     * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> with a given seed value.
+     * This implementation uses the initialization vector for metrohash64_2.
+     * This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #metro()
+     */
+    public static LongHashFunction metro(long seed) {
+        return MetroHash.asLongHashFunctionWithSeed(seed);
+    }
+
     private static StringHash stringHash;
     static  {
         try {
