@@ -1,12 +1,5 @@
 language: java
-install:
-  # Download dependencies with JDK 8 because Maven Central supports
-  # TLS 1.2 only but OpenJDK 6 does not.
-  - export ORIGINAL_JAVA_HOME=$JAVA_HOME
-  - jdk_switcher use openjdk8
-  - mvn install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
-  # Restore desired JDK
-  - export JAVA_HOME=$ORIGINAL_JAVA_HOME
+install: mvn install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 addons:
   apt:
     packages:
