@@ -43,7 +43,7 @@ class MetroHash {
     }
 
 
-    public <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
+    <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
         long remaining = length;
 
         long h = (seed + k2) * k0;
@@ -171,7 +171,13 @@ class MetroHash {
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
-        public static final AsLongHashFunction INSTANCE = new AsLongHashFunction();
+        private static final long serialVersionUID = 0L;
+        private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
+        private static final long VOID_HASH = MetroHash.finalize(k2 * k0);
+
+        private Object readResolve() {
+            return SEEDLESS_INSTANCE;
+        }
 
         protected long seed() {
             return 0L;
@@ -223,7 +229,7 @@ class MetroHash {
 
         @Override
         public long hashVoid() {
-            return MetroHash.finalize((seed() + k2) * k0);
+            return VOID_HASH;
         }
 
         @Override
@@ -237,19 +243,21 @@ class MetroHash {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithoutSeed() {
-        return AsLongHashFunction.INSTANCE;
+    static LongHashFunction asLongHashFunctionWithoutSeed() {
+        return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
 
-    public static LongHashFunction asLongHashFunctionWithSeed(long seed) {
+    static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongHashFunctionSeeded(seed);
     }
 
     private static class AsLongHashFunctionSeeded extends AsLongHashFunction {
-        private final long seed;
-        private final long voidHash;
+        private static final long serialVersionUID = 0L;
 
-        public AsLongHashFunctionSeeded(long seed) {
+        private final long seed;
+        private final transient long voidHash;
+
+        AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;
             voidHash = MetroHash.finalize((seed + k2) * k0);
         }

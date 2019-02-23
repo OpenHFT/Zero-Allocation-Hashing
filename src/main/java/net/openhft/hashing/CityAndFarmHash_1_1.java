@@ -28,46 +28,46 @@ import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
 class CityAndFarmHash_1_1 {
     private static final CityAndFarmHash_1_1 INSTANCE = new CityAndFarmHash_1_1();
 
-    static final CityAndFarmHash_1_1 NATIVE_CITY = NATIVE_LITTLE_ENDIAN ?
+    private static final CityAndFarmHash_1_1 NATIVE_CITY = NATIVE_LITTLE_ENDIAN ?
             CityAndFarmHash_1_1.INSTANCE : BigEndian.INSTANCE;
 
     CityAndFarmHash_1_1() {}
 
     static final long K0 = 0xc3a5c85c97cb3127L;
-    static final long K1 = 0xb492b66fbe98f273L;
-    static final long K2 = 0x9ae16a3b2f90404fL;
+    private static final long K1 = 0xb492b66fbe98f273L;
+    private static final long K2 = 0x9ae16a3b2f90404fL;
 
-    static long shiftMix(long val) {
+    private static long shiftMix(long val) {
         return val ^ (val >>> 47);
     }
 
-    static long hashLen16(long u, long v) {
+    private static long hashLen16(long u, long v) {
         return hashLen16(u, v, K_MUL);
     }
 
     private static final long K_MUL = 0x9ddfea08eb382d69L;
 
-    static long hashLen16(long u, long v, long mul) {
+    private static long hashLen16(long u, long v, long mul) {
         long a = shiftMix((u ^ v) * mul);
         return shiftMix((v ^ a) * mul) * mul;
     }
 
-    static long mul(long len) {
+    private static long mul(long len) {
         return K2 + (len << 1);
     }
 
-    static long hash1To3Bytes(int len, int firstByte, int midOrLastByte, int lastByte) {
+    private static long hash1To3Bytes(int len, int firstByte, int midOrLastByte, int lastByte) {
         int y = firstByte + (midOrLastByte << 8);
         int z = len + (lastByte << 2);
         return shiftMix((((long) y) * K2) ^ (((long) z) * K0)) * K2;
     }
 
-    static long hash4To7Bytes(long len, long first4Bytes, long last4Bytes) {
+    private static long hash4To7Bytes(long len, long first4Bytes, long last4Bytes) {
         long mul = mul(len);
         return hashLen16(len + (first4Bytes << 3), last4Bytes, mul);
     }
 
-    static long hash8To16Bytes(long len, long first8Bytes, long last8Bytes) {
+    private static long hash8To16Bytes(long len, long first8Bytes, long last8Bytes) {
         long mul = mul(len);
         long a = first8Bytes + K2;
         long c = rotateRight(last8Bytes, 37) * mul + a;
@@ -91,7 +91,7 @@ class CityAndFarmHash_1_1 {
         return v;
     }
 
-    <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
+    private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
             long a = fetch64(access, in, off);
             long b = fetch64(access, in, off + len - 8L);
@@ -109,7 +109,7 @@ class CityAndFarmHash_1_1 {
         return K2;
     }
 
-    <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
+    private <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = fetch64(access, in, off) * K1;
         long b = fetch64(access, in, off + 8L);
@@ -266,12 +266,12 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    static class AsLongHashFunction extends LongHashFunction {
-        public static final AsLongHashFunction INSTANCE = new AsLongHashFunction();
+    private static class AsLongHashFunction extends LongHashFunction {
         private static final long serialVersionUID = 0L;
+        private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
 
         private Object readResolve() {
-            return INSTANCE;
+            return SEEDLESS_INSTANCE;
         }
 
         @Override
@@ -337,15 +337,15 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithoutSeed() {
-        return AsLongHashFunction.INSTANCE;
+    static LongHashFunction asLongHashFunctionWithoutSeed() {
+        return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
 
     private static class AsLongHashFunctionSeeded extends AsLongHashFunction {
         private static final long serialVersionUID = 0L;
 
         final long seed0, seed1;
-        private transient long voidHash;
+        private final transient long voidHash;
 
         private AsLongHashFunctionSeeded(long seed0, long seed1) {
             this.seed0 = seed0;
@@ -364,11 +364,11 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithSeed(long seed) {
+    static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongHashFunctionSeeded(K2, seed);
     }
 
-    public static LongHashFunction asLongHashFunctionWithTwoSeeds(long seed0, long seed1) {
+    static LongHashFunction asLongHashFunctionWithTwoSeeds(long seed0, long seed1) {
         return new AsLongHashFunctionSeeded(seed0, seed1);
     }
 
@@ -495,11 +495,11 @@ class CityAndFarmHash_1_1 {
                 mul);
     }
 
-    <T> long naHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
+    private <T> long naHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
         return hashLen16(naHash64(access, in, off, len) - seed0, seed1);
     }
 
-    long uoH(long x, long y, long mul, int r) {
+    private long uoH(long x, long y, long mul, int r) {
         long a = (x ^ y) * mul;
         a = shiftMix(a);
         long b = (y ^ a) * mul;
@@ -625,11 +625,11 @@ class CityAndFarmHash_1_1 {
     }
 
     private static class Na extends CityAndFarmHash_1_1.AsLongHashFunction {
-        public static final Na INSTANCE = new Na();
         private static final long serialVersionUID = 0L;
+        private static final Na SEEDLESS_NA = new Na();
 
         private Object readResolve() {
-            return INSTANCE;
+            return SEEDLESS_NA;
         }
 
         @Override
@@ -644,15 +644,15 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction naWithoutSeeds() {
-        return Na.INSTANCE;
+    static LongHashFunction naWithoutSeeds() {
+        return Na.SEEDLESS_NA;
     }
 
     private static class NaSeeded extends Na {
         private static final long serialVersionUID = 0L;
 
-        final long seed0, seed1;
-        private transient long voidHash;
+        private final long seed0, seed1;
+        private final transient long voidHash;
 
         private NaSeeded(long seed0, long seed1) {
             this.seed0 = seed0;
@@ -671,20 +671,20 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction naWithSeed(long seed) {
+    static LongHashFunction naWithSeed(long seed) {
         return new NaSeeded(K2, seed);
     }
 
-    public static LongHashFunction naWithSeeds(long seed0, long seed1) {
+    static LongHashFunction naWithSeeds(long seed0, long seed1) {
         return new NaSeeded(seed0, seed1);
     }
 
     private static final class Uo extends AsLongHashFunction {
-        public static final Uo INSTANCE = new Uo();
         private static final long serialVersionUID = 0L;
+        private static final Uo SEEDLESS_UO = new Uo();
 
         private Object readResolve() {
-            return INSTANCE;
+            return SEEDLESS_UO;
         }
 
         @Override
@@ -698,8 +698,8 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction uoWithoutSeeds() {
-        return Uo.INSTANCE;
+    static LongHashFunction uoWithoutSeeds() {
+        return Uo.SEEDLESS_UO;
     }
 
     private final static class UoWithOneSeed extends AsLongHashFunctionSeeded {
@@ -720,7 +720,7 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction uoWithSeed(long seed) {
+    static LongHashFunction uoWithSeed(long seed) {
         return new UoWithOneSeed(seed);
     }
 
@@ -742,7 +742,7 @@ class CityAndFarmHash_1_1 {
         }
     }
 
-    public static LongHashFunction uoWithSeeds(long seed0, long seed1) {
+    static LongHashFunction uoWithSeeds(long seed0, long seed1) {
         return new UoSeeded(seed0, seed1);
     }
 }

@@ -263,11 +263,11 @@ class MurmurHash_3 {
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
-        public static final AsLongHashFunction INSTANCE = new AsLongHashFunction();
         private static final long serialVersionUID = 0L;
+        private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
 
         private Object readResolve() {
-            return INSTANCE;
+            return SEEDLESS_INSTANCE;
         }
 
         long seed() {
@@ -322,15 +322,15 @@ class MurmurHash_3 {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithoutSeed() {
-        return AsLongHashFunction.INSTANCE;
+    static LongHashFunction asLongHashFunctionWithoutSeed() {
+        return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
 
     private static class AsLongHashFunctionSeeded extends AsLongHashFunction {
         private static final long serialVersionUID = 0L;
 
         private final long seed;
-        private transient long voidHash;
+        private final transient long voidHash;
 
         private AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;
@@ -356,7 +356,7 @@ class MurmurHash_3 {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithSeed(long seed) {
+    static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongHashFunctionSeeded(seed);
     }
 }

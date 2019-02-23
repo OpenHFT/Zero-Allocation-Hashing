@@ -47,7 +47,7 @@ class XxHash {
     }
 
     // int because of unsigned nature of original algorithm
-    <T> int fetch8(Access<T> access, T in, long off) {
+    private <T> int fetch8(Access<T> access, T in, long off) {
         return access.getUnsignedByte(in, off);
     }
 
@@ -63,7 +63,7 @@ class XxHash {
         return v;
     }
 
-    public <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
+    <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
         long hash;
         long remaining = length;
 
@@ -177,7 +177,7 @@ class XxHash {
 
         @Override
         <T> long fetch32(Access<T> access, T in, long off) {
-            return Integer.reverseBytes(access.getInt(in, off)) & 0xFFFFFFFFL;
+            return Primitives.unsignedInt(Integer.reverseBytes(access.getInt(in, off)));
         }
 
         // fetch8 is not overloaded, because endianness doesn't matter for single byte
@@ -198,13 +198,14 @@ class XxHash {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithoutSeed() {
+    static LongHashFunction asLongHashFunctionWithoutSeed() {
         return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
-        public static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
         private static final long serialVersionUID = 0L;
+        static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
+        private static final long VOID_HASH = XxHash.finalize(P5);
 
         private Object readResolve() {
             return SEEDLESS_INSTANCE;
@@ -261,7 +262,7 @@ class XxHash {
 
         @Override
         public long hashVoid() {
-            return XxHash.finalize(P5);
+            return VOID_HASH;
         }
 
         @Override
@@ -275,13 +276,15 @@ class XxHash {
         }
     }
 
-    public static LongHashFunction asLongHashFunctionWithSeed(long seed) {
+    static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongHashFunctionSeeded(seed);
     }
 
     private static class AsLongHashFunctionSeeded extends AsLongHashFunction {
+        private static final long serialVersionUID = 0L;
+
         private final long seed;
-        private final long voidHash;
+        private final transient long voidHash;
 
         private AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;

@@ -23,13 +23,13 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 abstract class CharSequenceAccess extends Access<CharSequence> {
 
-    public static CharSequenceAccess charSequenceAccess(ByteOrder order) {
+    static CharSequenceAccess charSequenceAccess(ByteOrder order) {
         return order == LITTLE_ENDIAN ?
                 LittleEndianCharSequenceAccess.INSTANCE :
                 BigEndianCharSequenceAccess.INSTANCE;
     }
 
-    public static CharSequenceAccess nativeCharSequenceAccess() {
+    static CharSequenceAccess nativeCharSequenceAccess() {
         return charSequenceAccess(ByteOrder.nativeOrder());
     }
 
