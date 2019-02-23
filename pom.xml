@@ -156,5 +156,28 @@
         <tag>master</tag>
     </scm>
 
-
+    <profiles>
+        <profile>
+            <id>old-jdk</id>
+            <activation>
+                <jdk>,1.7]</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <!-- The last version of maven-compiler-plugin that doesn't include
+                             'parameters' flag that is apparently absent on javac 6 and 7 -->
+                        <version>3.6.1</version>
+                        <configuration>
+                            <source>1.6</source>
+                            <target>1.6</target>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
