@@ -20,7 +20,7 @@
     <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.1.17</version>
+        <version>1.1.18</version>
         <relativePath />
     </parent>
 
@@ -33,6 +33,10 @@
     <inceptionYear>2014</inceptionYear>
     <url>https://github.com/OpenHFT/Zero-Allocation-Hashing</url>
     <packaging>bundle</packaging>
+
+    <properties>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+    </properties>
 
     <dependencies>
 
@@ -62,23 +66,14 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <verbose>true</verbose>
                 </configuration>
             </plugin>
@@ -171,19 +166,11 @@
             <activation>
                 <jdk>,1.7]</jdk>
             </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <!-- The last version of maven-compiler-plugin that doesn't include
-                                 'parameters' flag that is apparently absent on javac 6 and 7 -->
-                            <version>3.6.1</version>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
+            <properties>
+                <!-- The last version of maven-compiler-plugin that doesn't include
+                     'parameters' flag that is apparently absent on javac 6 and 7 -->
+                <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+            </properties>
         </profile>
     </profiles>
 </project>

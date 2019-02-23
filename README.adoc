@@ -9,14 +9,15 @@ image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocat
 This project provides a Java API for hashing any sequences of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more. 
 
-Written for Java 6+ under Apache 2.0 license.
+Written for Java 7+ under Apache 2.0 license.
 
 The key difference compared to other similar projects, e.g. 
 http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html[Guava hashing],
 is that this has no object allocations during the hash computation and does not use `ThreadLocal`.
 
-The implementation utilises native access where possible, but is also platform-endianness-agnostic. This provides consistent results 
-whatever the byte order, while only moderately affecting performance.
+The implementation utilises native access where possible, but is also platform-endianness-agnostic.
+This provides consistent results whatever the byte order, while only moderately affecting
+performance.
 
 Currently `long`-valued hash function interface is defined, with the following
 implementations:
@@ -33,7 +34,8 @@ implementations:
 
 - *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
 
-These are thoroughly tested with JDK 6, 7 and 8, on little-endian platform.  However they are believed to be independent from the native byte order. 
+These are thoroughly tested with JDK 7, 8, 9, 10, and 11 on little-endian platform.  However they
+are believed to be independent from the native byte order.
 
 ==== Performance
 
