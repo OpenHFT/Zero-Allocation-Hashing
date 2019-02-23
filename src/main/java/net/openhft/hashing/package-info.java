@@ -51,6 +51,10 @@
  *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3() MurmurHash3 without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3(long) with a seed}.
  *         </li>
+ *         <li>
+ *         {@linkplain net.openhft.hashing.LongHashFunction#metro() MetroHash without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
+ *         </li>
  *     </ul>
  *     </li>
  * </ul>
