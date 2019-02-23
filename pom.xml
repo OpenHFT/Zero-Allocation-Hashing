@@ -20,7 +20,7 @@
     <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.1.2</version>
+        <version>1.1.17</version>
         <relativePath />
     </parent>
 
@@ -28,9 +28,10 @@
     <artifactId>zero-allocation-hashing</artifactId>
     <version>0.9-SNAPSHOT</version>
     <name>Zero-allocation Hashing</name>
-    <description>Zero-allocation, pretty fast implementations
-        of non-cryptographic hash functions for byte sequences or blocks of memory</description>
+    <description>Zero-allocation implementations of fast non-cryptographic hash functions
+        for byte sequences or blocks of memory</description>
     <inceptionYear>2014</inceptionYear>
+    <url>https://github.com/OpenHFT/Zero-Allocation-Hashing</url>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -72,7 +73,34 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.8.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
                     <checkoutDirectory>${project.build.directory}/scmpublish/javadoc
                     </checkoutDirectory>
