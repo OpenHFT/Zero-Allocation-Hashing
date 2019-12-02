@@ -34,6 +34,8 @@ implementations:
 
 - *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
 
+- *https://github.com/wangyi-fudan/wyhash[wyHashV3]*.
+
 These are thoroughly tested with JDK 7, 8, 9, 10, and 11 on little-endian platform.  However they
 are believed to be independent from the native byte order.
 
@@ -48,6 +50,7 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 |FarmHash `uo` |7.2 |7
 |CityHash |7.0 |7
 |MurmurHash |5.3 |12
+|MurmurHash |?? |??
 |===
 
 To sum up,
