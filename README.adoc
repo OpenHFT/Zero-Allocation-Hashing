@@ -50,7 +50,7 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 |FarmHash `uo` |7.2 |7
 |CityHash |7.0 |7
 |MurmurHash |5.3 |12
-|MurmurHash |?? |??
+|WyHash |?? |??
 |===
 
 To sum up,
