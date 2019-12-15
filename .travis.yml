@@ -1,3 +1,4 @@
+dist: trusty
 language: java
 install: mvn install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 addons:
