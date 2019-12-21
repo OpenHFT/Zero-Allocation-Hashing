@@ -81,7 +81,7 @@ To sum up,
    and hash the resulting byte sequence on the way without dumping it to memory.
 
 ==== Java Doc
-See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.9
+See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.10
 
 == Quick start
 
@@ -89,7 +89,7 @@ Gradle:
 [source, groovy]
 ----
 dependencies {
-    compile 'net.openhft:zero-allocation-hashing:0.9'
+    compile 'net.openhft:zero-allocation-hashing:0.10'
 }
 ----
 
@@ -99,7 +99,7 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.9</version>
+  <version>0.10</version>
 </dependency>
 ----
 
@@ -109,7 +109,7 @@ In Java:
 long hash = LongHashFunction.xx().hashChars("hello");
 ----
 
-See *http://openhft.github.io/Zero-Allocation-Hashing/apidocs/[JavaDocs]* for more information.
+See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.10[JavaDocs]* for more information.
 
 == Contributions are most welcome!
 
