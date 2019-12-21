@@ -6,6 +6,8 @@ addons:
     packages:
       - openjdk-7-jdk
 jdk:
+  - openjdk13
+  - openjdk12
   - openjdk11
   - openjdk10
   - openjdk9
