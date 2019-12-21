@@ -18,23 +18,14 @@
  * API for hashing sequential data and zero-allocation, pretty fast implementations
  * of non-cryptographic hash functions.
  *
- * <p>Currently implemented:
+ * <p>Currently implemented (in alphabetical order):
  * <ul>
  *     <li>{@code long}-valued functions: see {@link net.openhft.hashing.LongHashFunction}
  *     <ul>
  *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#metro() metroHash without seed} and
- *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
- *         </li>
- *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#xx() xxHash without seed} and
- *         {@linkplain net.openhft.hashing.LongHashFunction#xx(long) with a seed}.
- *         </li>
- *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#farmUo() FarmHash 1.1 (farmhashuo)
- *         without seed}, {@linkplain net.openhft.hashing.LongHashFunction#farmUo(long) with one
- *         seed} and {@linkplain net.openhft.hashing.LongHashFunction#farmUo(long, long) with
- *         two seeds}.
+ *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1() CityHash 1.1 without seeds},
+ *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1(long) with one seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1(long, long) with two seeds}.
  *         </li>
  *         <li>
  *         {@linkplain net.openhft.hashing.LongHashFunction#farmNa() FarmHash 1.0 (farmhashna)
@@ -43,21 +34,26 @@
  *         two seeds}.
  *         </li>
  *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1() CityHash 1.1 without seeds},
- *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1(long) with one seed} and
- *         {@linkplain net.openhft.hashing.LongHashFunction#city_1_1(long, long) with two seeds}.
- *         </li>
- *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3() MurmurHash3 without seed} and
- *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3(long) with a seed}.
+ *         {@linkplain net.openhft.hashing.LongHashFunction#farmUo() FarmHash 1.1 (farmhashuo)
+ *         without seed}, {@linkplain net.openhft.hashing.LongHashFunction#farmUo(long) with one
+ *         seed} and {@linkplain net.openhft.hashing.LongHashFunction#farmUo(long, long) with
+ *         two seeds}.
  *         </li>
  *         <li>
  *         {@linkplain net.openhft.hashing.LongHashFunction#metro() MetroHash without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
  *         </li>
  *         <li>
- *            {@linkplain net.openhft.hashing.LongHashFunction#wy() WyHash without seed} and
- *            {@linkplain net.openhft.hashing.LongHashFunction#wy(long) with a seed}.
+ *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3() MurmurHash3 without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3(long) with a seed}.
+ *         </li>
+ *         <li>
+ *         {@linkplain net.openhft.hashing.LongHashFunction#wy_3() WyHash v3 without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#wy_3(long) with a seed}.
+ *         </li>
+ *         <li>
+ *         {@linkplain net.openhft.hashing.LongHashFunction#xx() xxHash without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#xx(long) with a seed}.
  *         </li>
  *     </ul>
  *     </li>

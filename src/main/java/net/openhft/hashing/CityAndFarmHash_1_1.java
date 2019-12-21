@@ -23,7 +23,7 @@ import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
 
 /**
  * Adapted from the C++ CityHash implementation from Google at
- * http://code.google.com/p/cityhash/source/browse/trunk/src/city.cc.
+ * https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc.
  */
 class CityAndFarmHash_1_1 {
     private static final CityAndFarmHash_1_1 INSTANCE = new CityAndFarmHash_1_1();

@@ -79,7 +79,8 @@ public abstract class LongHashFunction implements Serializable {
             trueByteValue = trueByteValue();
             falseByteValue = falseByteValue();
         } catch (Throwable t) {
-            // Unsafe in pre-Nougat Android does not have getByte(), fall back to some reasonable value
+            // Unsafe in pre-Nougat Android does not have getByte(), fall back to some reasonable
+            // value
             trueByteValue = 1;
             falseByteValue = 0;
         }
@@ -98,7 +99,7 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/cityhash/source/browse/trunk/src/city.cc?r=10">
+     * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
      * CityHash64 algorithm, version 1.1</a> without seed values. This implementation produce
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
@@ -112,7 +113,7 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/cityhash/source/browse/trunk/src/city.cc?r=10">
+     * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
      * CityHash64 algorithm, version 1.1</a> using the given seed value. This implementation produce
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
@@ -126,7 +127,7 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/cityhash/source/browse/trunk/src/city.cc?r=10">
+     * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
      * CityHash64 algorithm, version 1.1</a> using the two given seed values. This implementation
      * produce equal results for equal input on platforms with different {@link ByteOrder}, but
      * is slower on big-endian platforms than on little-endian.
@@ -141,7 +142,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
-     * farmhashna algorithm</a>, without seed values. This implementation produce equal results for
+     * farmhashna algorithm</a>, without seed values. This implementation produces equal results for
      * equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
      * platforms than on little-endian.
      *
@@ -158,7 +159,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
-     * farmhashna algorithm</a>, using the given seed value. This implementation produce equal
+     * farmhashna algorithm</a>, using the given seed value. This implementation produces equal
      * results for equal input on platforms with different {@link ByteOrder}, but is slower on
      * big-endian platforms than on little-endian.
      *
@@ -175,7 +176,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/a371645d2caa1685541d9963b94751c23b235c72/dev/farmhashna.cc">
-     * farmhashna algorithm</a>, using the two given seed values. This implementation produce equal
+     * farmhashna algorithm</a>, using the two given seed values. This implementation produces equal
      * results for equal input on platforms with different {@link ByteOrder}, but is slower on
      * big-endian platforms than on little-endian.
      *
@@ -192,7 +193,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
-     * farmhashuo algorithm</a> without seed values. This implementation produce equal results for
+     * farmhashuo algorithm</a> without seed values. This implementation produces equal results for
      * equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
      * platforms than on little-endian.
      *
@@ -208,7 +209,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
-     * farmhashuo algorithm</a> with the given seed value. This implementation produce equal results
+     * farmhashuo algorithm</a> with the given seed value. This implementation produces equal results
      * for equal input on platforms with different {@link ByteOrder}, but is slower on big-endian
      * platforms than on little-endian.
      *
@@ -224,7 +225,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing so-called
      * <a href="https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/dev/farmhashuo.cc">
-     * farmhashuo algorithm</a> with the two given seed values. This implementation produce equal
+     * farmhashuo algorithm</a> with the two given seed values. This implementation produces equal
      * results for equal input on platforms with different {@link ByteOrder}, but is slower on
      * big-endian platforms than on little-endian.
      *
@@ -239,8 +240,8 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp">MurmurHash3
-     * algorithm</a> without seed values. This implementation produce equal results for equal input
+     * <a href="https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp">MurmurHash3
+     * algorithm</a> without seed values. This implementation produces equal results for equal input
      * on platforms with different {@link ByteOrder}, but is slower on big-endian platforms than on
      * little-endian.
      *
@@ -252,8 +253,8 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp">MurmurHash3
-     * algorithm</a> with the given seed value. This implementation produce equal results for equal
+     * <a href="https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp">MurmurHash3
+     * algorithm</a> with the given seed value. This implementation produces equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
@@ -264,12 +265,10 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
-     * Returns a hash function implementing
-     * <a href="https://github.com/Cyan4973/xxHash">xxHash algorithm</a> without seed value (0 is used
-     * as default seed value).
-     * This implementation produce equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
+     * Returns a hash function implementing <a href="https://github.com/Cyan4973/xxHash">xxHash
+     * algorithm</a> without a seed value (0 is used as default seed value). This implementation
+     * produces equal results for equal input on platforms with different {@link
+     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
      *
      * @see #xx(long)
      */
@@ -278,9 +277,8 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
-     * Returns a hash function implementing
-     * <a href="https://github.com/Cyan4973/xxHash">xxHash algorithm</a> with the given seed value.
-     * This implementation produce equal results for equal
+     * Returns a hash function implementing <a href="https://github.com/Cyan4973/xxHash">xxHash
+     * algorithm</a> with the given seed value. This implementation produces equal results for equal
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
@@ -292,38 +290,36 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing
-     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash algorithm</a> without seed value (0 is used
-     * as default seed value).
-     * This implementation produce equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
+     * <a href="https://github.com/wangyi-fudan/wyhash/blob/9f68c1b10166a54c17f55b284c21bd455fd0f7e2/wyhash.h">
+     * wyhash algorithm, version 3</a> without a seed value (0 is used as default seed value). This
+     * implementation produces equal results for equal input on platforms with different {@link
+     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
      *
-     * @see #wy(long)
+     * @see #wy_3(long)
      */
-    public static LongHashFunction wy() {
+    public static LongHashFunction wy_3() {
         return WyHash.asLongHashFunctionWithoutSeed();
     }
 
     /**
      * Returns a hash function implementing
-     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash algorithm</a> with the given seed value.
-     * This implementation produce equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
+     * <a href="https://github.com/wangyi-fudan/wyhash/blob/9f68c1b10166a54c17f55b284c21bd455fd0f7e2/wyhash.h">
+     * wyhash algorithm, version 3</a> with the given seed value. This implementation produces equal
+     * results for equal input on platforms with different {@link ByteOrder}, but is slower on
+     * big-endian platforms than on little-endian.
      *
-     * @see #wy()
+     * @see #wy_3()
      */
-    public static LongHashFunction wy(long seed) {
+    public static LongHashFunction wy_3(long seed) {
         return WyHash.asLongHashFunctionWithSeed(seed);
     }
 
     /**
      * Returns a hash function implementing the 64 bit version of
-     * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash64 algorithm</a> without a seed value (0 is used
-     * as default seed value).
-     * This implementation produce equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
+     * <a href="https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> without
+     * a seed value (0 is used as default seed value), with the initialization vector for
+     * metrohash64_2. This implementation produces equal results for equal input on platforms with
+     * different {@link ByteOrder}, but is slower on big-endian platforms than on little-endian.
      *
      * @see #metro(long)
      */
@@ -333,11 +329,10 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Returns a hash function implementing the 64 bit version of
-     * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> with a given seed value.
-     * This implementation uses the initialization vector for metrohash64_2.
-     * This implementation produce equal results for equal
-     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
-     * than on little-endian.
+     * <a href="https://github.com/jandrewrogers/MetroHash">metrohash algorithm</a> with the given
+     * seed value, with the initialization vector for metrohash64_2. This implementation produces
+     * equal results for equal input on platforms with different {@link ByteOrder}, but is slower on
+     * big-endian platforms than on little-endian.
      *
      * @see #metro()
      */

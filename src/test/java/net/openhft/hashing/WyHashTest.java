@@ -23,12 +23,12 @@ public class WyHashTest {
 
     @Test
     public void testWyHashWithoutSeeds() {
-        test(LongHashFunction.wy(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+        test(LongHashFunction.wy_3(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
     @Test
     public void testWyHasWithOneSeed() {
-        test(LongHashFunction.wy(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+        test(LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
 

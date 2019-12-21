@@ -12,7 +12,7 @@ primitive arrays, buffers, `CharSequence`s and more.
 Written for Java 7+ under Apache 2.0 license.
 
 The key difference compared to other similar projects, e.g. 
-http://docs.guava-libraries.googlecode.com/git-history/release/javadoc/com/google/common/hash/package-summary.html[Guava hashing],
+https://guava.dev/releases/28.1-jre/api/docs/com/google/common/hash/package-summary.html[Guava hashing],
 is that this has no object allocations during the hash computation and does not use `ThreadLocal`.
 
 The implementation utilises native access where possible, but is also platform-endianness-agnostic.
@@ -20,21 +20,21 @@ This provides consistent results whatever the byte order, while only moderately 
 performance.
 
 Currently `long`-valued hash function interface is defined, with the following
-implementations:
+implementations (in alphabetical order):
 
- - *https://github.com/Cyan4973/xxHash[xxHash]*.
- 
- -  Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
- in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1).
- 
- - *https://code.google.com/p/cityhash/[CityHash], version 1.1* (latest; 1.1.1 is a C++
+ - *https://github.com/google/cityhash[CityHash], version 1.1* (latest; 1.1.1 is a C++
  language-specific maintenance release).
 
-- *https://code.google.com/p/smhasher/wiki/MurmurHash3[MurmurHash3]*.
+ -  Two algorithms from *https://github.com/google/farmhash[FarmHash]*: `farmhashna` (introduced
+ in FarmHash 1.0) and `farmhashuo` (introduced in FarmHash 1.1).
 
-- *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
+ - *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
 
-- *https://github.com/wangyi-fudan/wyhash[wyHashV3]*.
+ - *https://github.com/aappleby/smhasher/wiki/MurmurHash3[MurmurHash3]*.
+
+ - *https://github.com/Cyan4973/xxHash[xxHash]*.
+
+- *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
 
 These are thoroughly tested with JDK 7, 8, 9, 10, and 11 on little-endian platform.  However they
 are believed to be independent from the native byte order.
@@ -50,7 +50,9 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 |FarmHash `uo` |7.2 |7
 |CityHash |7.0 |7
 |MurmurHash |5.3 |12
-|WyHash |?? |??
+|MetroHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] | https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
+|WyHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
+
 |===
 
 To sum up,

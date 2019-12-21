@@ -59,7 +59,7 @@ public class XxHashTest {
 
 /**
  * Test data is output of the following program with xxHash implementation
- * from https://code.google.com/p/xxhash/
+ * from https://github.com/Cyan4973/xxHash
  *
  * #include "xxhash.c"
  * #include <stdlib.h>
