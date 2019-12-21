@@ -22,7 +22,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import static java.nio.ByteOrder.*;
+import static java.nio.ByteOrder.BIG_ENDIAN;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+import static java.nio.ByteOrder.nativeOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -56,36 +58,48 @@ public class LongHashFunctionTest {
         for (boolean b : new boolean[] {true, false}) {
             boolean[] a = {b};
             long single = f.hashBoolean(b);
-            assertEquals(single, f.hashBooleans(a));
+            long array = f.hashBooleans(a);
+            assertEquals(single, array);
             assertEquals(single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
         }
     }
 
     private static void testPrimitives(LongHashFunction f, long eh, int len, ByteBuffer bb) {
-        if (len == 1)
-            assertEquals("byte hash", eh, f.hashByte(bb.get(0)));
-
-
-        if (len == 2) {
-            assertEquals("short hash", eh, f.hashShort(bb.getShort(0)));
-            assertEquals("char hash", eh, f.hashChar(bb.getChar(0)));
+        long actual;
+        if (len == 1) {
+            actual = f.hashByte(bb.get(0));
+            assertEquals("byte hash", eh, actual);
         }
 
-        if (len == 4)
-            assertEquals("int hash", eh, f.hashInt(bb.getInt(0)));
+        if (len == 2) {
+            actual = f.hashShort(bb.getShort(0));
+            assertEquals("short hash", eh, actual);
+            actual = f.hashChar(bb.getChar(0));
+            assertEquals("char hash", eh, actual);
+        }
 
-        if (len == 8)
-            assertEquals("long hash", eh, f.hashLong(bb.getLong(0)));
+        if (len == 4) {
+            actual = f.hashInt(bb.getInt(0));
+            assertEquals("int hash", eh, actual);
+        }
+        if (len == 8) {
+            actual = f.hashLong(bb.getLong(0));
+            assertEquals("long hash", eh, actual);
+        }
     }
 
     private static void testNegativePrimitives(LongHashFunction f) {
         byte[] bytes = new byte[8];
         Arrays.fill(bytes, (byte) -1);
-        assertEquals("byte hash", f.hashBytes(bytes, 0, 1), f.hashByte((byte) -1));
-        assertEquals("short hash", f.hashBytes(bytes, 0, 2), f.hashShort((short) -1));
-        assertEquals("char hash", f.hashBytes(bytes, 0, 2), f.hashChar((char) -1));
-        assertEquals("int hash", f.hashBytes(bytes, 0, 4), f.hashInt(-1));
-        assertEquals("long hash", f.hashBytes(bytes), f.hashLong(-1L));
+        long oneByteExpected = f.hashBytes(bytes, 0, 1);
+        long twoByteExpected = f.hashBytes(bytes, 0, 2);
+        long fourByteExpected = f.hashBytes(bytes, 0, 4);
+        long eightByteExpected = f.hashBytes(bytes);
+        assertEquals("byte hash", oneByteExpected, f.hashByte((byte) -1));
+        assertEquals("short hash", twoByteExpected, f.hashShort((short) -1));
+        assertEquals("char hash", twoByteExpected, f.hashChar((char) -1));
+        assertEquals("int hash", fourByteExpected, f.hashInt(-1));
+        assertEquals("long hash", eightByteExpected, f.hashLong(-1L));
     }
 
     private static void testArrays(LongHashFunction f, byte[] data, long eh, int len,
@@ -177,10 +191,12 @@ public class LongHashFunctionTest {
                 bb.order(BIG_ENDIAN);
                 String s2 = bb.asCharBuffer().toString();
                 assert s.charAt(0) != bb.getChar(0);
-                assertNotEquals("string wrong order", eh, f.hashChars(s2));
 
-                assertEquals("string wrong order fixed", eh,
-                        f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len));
+                long hashCharsActual = f.hashChars(s2);
+                assertNotEquals("string wrong order", eh, hashCharsActual);
+
+                long toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
+                assertEquals("string wrong order fixed", eh, toCharSequenceActual);
 
                 bb.order(nativeOrder()).clear();
             }

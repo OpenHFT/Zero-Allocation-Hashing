@@ -291,6 +291,33 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
+     * Returns a hash function implementing
+     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash algorithm</a> without seed value (0 is used
+     * as default seed value).
+     * This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #wy(long)
+     */
+    public static LongHashFunction wy() {
+        return WyHash.asLongHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing
+     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash algorithm</a> with the given seed value.
+     * This implementation produce equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #wy()
+     */
+    public static LongHashFunction wy(long seed) {
+        return WyHash.asLongHashFunctionWithSeed(seed);
+    }
+
+    /**
      * Returns a hash function implementing the 64 bit version of
      * <a href = "https://github.com/jandrewrogers/MetroHash">metrohash64 algorithm</a> without a seed value (0 is used
      * as default seed value).

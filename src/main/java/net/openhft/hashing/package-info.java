@@ -55,6 +55,10 @@
  *         {@linkplain net.openhft.hashing.LongHashFunction#metro() MetroHash without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
  *         </li>
+ *         <li>
+ *            {@linkplain net.openhft.hashing.LongHashFunction#wy() WyHash without seed} and
+ *            {@linkplain net.openhft.hashing.LongHashFunction#wy(long) with a seed}.
+ *         </li>
  *     </ul>
  *     </li>
  * </ul>
