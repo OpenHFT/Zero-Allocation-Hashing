@@ -36,8 +36,8 @@ implementations (in alphabetical order):
 
 - *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
 
-These are thoroughly tested with JDK 7, 8, 9, 10, and 11 on little-endian platform.  However they
-are believed to be independent from the native byte order.
+These are thoroughly tested with JDK 7, 8, 9, 10, and 11, 12, and 13 on little-endian platform. However,
+they are believed to be independent from the native byte order.
 
 ==== Performance
 
