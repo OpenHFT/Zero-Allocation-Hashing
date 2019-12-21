@@ -2,7 +2,6 @@ package net.openhft.hashing;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
-import static net.openhft.hashing.UnsafeAccess.BYTE_BASE;
 
 /**
  * Adapted version of WyHash implementation from https://github.com/wangyi-fudan/wyhash
@@ -24,7 +23,7 @@ public class WyHash {
     public static final long _wyp3 = 0x589965cc75374cc3L;
     public static final long _wyp4 = 0x1d8e4e27c47d124fL;
 
-    private long _wymum(long lhs, long rhs) {
+    private static long _wymum(long lhs, long rhs) {
         //The Grade School method of multiplication is a hair faster in Java, primarily used here
         // because the implementation is simpler.
         long lo_lo = (lhs & 0xFFFFFFFFL) * (rhs & 0xFFFFFFFFL);
@@ -221,44 +220,29 @@ public class WyHash {
         @Override
         public long hashLong(long input) {
             input = NATIVE_WY.toLittleEndian(input);
-            int hi = (int)(input & 0xFFFFFFFFL);
-            int lo = (int)((input >>> 32) & 0xFFFFFFFFL);
-            byte[] bytes = new byte[] {
-                (byte)Primitives.unsignedByte(hi),
-                (byte)Primitives.unsignedByte(hi >> 8),
-                (byte)Primitives.unsignedByte(hi >> 16),
-                (byte)Primitives.unsignedByte(hi >> 24),
-                (byte)Primitives.unsignedByte(lo),
-                (byte)Primitives.unsignedByte(lo >> 8),
-                (byte)Primitives.unsignedByte(lo >> 16),
-                (byte)Primitives.unsignedByte(lo >> 24)
-            };
-            return WyHash.INSTANCE.wyHash64(seed(), bytes,
-                                            UnsafeAccess.INSTANCE, BYTE_BASE, bytes.length);
+            long hi = input & 0xFFFFFFFFL;
+            long lo = (input >>> 32) & 0xFFFFFFFFL;
+            return _wymum(_wymum(hi ^ seed() ^ _wyp0,
+                          lo ^ seed() ^ _wyp1)
+                   ^ seed(), 8 ^ _wyp4);
         }
 
         @Override
         public long hashInt(int input) {
             input = NATIVE_WY.toLittleEndian(input);
-            byte[] bytes = new byte[] {
-                (byte)Primitives.unsignedByte(input),
-                (byte)Primitives.unsignedByte(input >> 8),
-                (byte)Primitives.unsignedByte(input >> 16),
-                (byte)Primitives.unsignedByte(input >> 24)
-            };
-            return WyHash.INSTANCE.wyHash64(seed(), bytes,
-                                            UnsafeAccess.INSTANCE, BYTE_BASE, bytes.length);
+            long longInput = (input & 0xFFFFFFFFL);
+            return _wymum(_wymum(longInput ^ seed() ^ _wyp0,
+                                 longInput ^ seed() ^ _wyp1)
+                          ^ seed(), 4 ^ _wyp4);
         }
 
         @Override
         public long hashShort(short input) {
             input = NATIVE_WY.toLittleEndian(input);
-            byte[] hash = new byte[] {
-                (byte)Primitives.unsignedByte(input),
-                (byte)Primitives.unsignedByte(input >> 8)
-            };
-            return WyHash.INSTANCE.wyHash64(seed(), hash,
-                                            UnsafeAccess.INSTANCE, BYTE_BASE, hash.length);
+            long hi = (input >>> 8) & 0xFFL;
+            long wyr3 = hi | hi << 8 | (input & 0xFFL) << 16;
+            return _wymum(_wymum(wyr3 ^ seed() ^ _wyp0,
+                                 seed() ^ _wyp1) ^ seed(), 2 ^ _wyp4);
         }
 
         @Override
@@ -268,9 +252,10 @@ public class WyHash {
 
         @Override
         public long hashByte(final byte input) {
-            byte[] bytes = new byte[]{input};
-            return WyHash.INSTANCE.wyHash64(seed(), bytes,
-                                            UnsafeAccess.INSTANCE, BYTE_BASE, bytes.length);
+            long hi = input & 0xFFL;
+            long wyr3 = hi | hi << 8 | hi << 16;
+            return _wymum(_wymum(wyr3 ^ seed() ^ _wyp0,
+                                 seed() ^ _wyp1) ^ seed(), 1 ^ _wyp4);
         }
 
         @Override
@@ -297,7 +282,6 @@ public class WyHash {
         private static final long serialVersionUID = 0L;
 
         private final long seed;
-        private final transient long voidHash = 0L;
 
         private AsLongHashFunctionSeeded(long seed) {
             this.seed = seed;
@@ -306,11 +290,6 @@ public class WyHash {
         @Override
         public long seed() {
             return seed;
-        }
-
-        @Override
-        public long hashVoid() {
-            return voidHash;
         }
     }
 }
