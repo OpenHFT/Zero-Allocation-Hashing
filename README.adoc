@@ -106,7 +106,7 @@ Or Maven:
 In Java:
 [source, Java]
 ----
-long hash = LongHashFunction.xx().hashChars("hello");
+long hash = LongHashFunction.wy_3().hashChars("hello");
 ----
 
 See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.10[JavaDocs]* for more information.
