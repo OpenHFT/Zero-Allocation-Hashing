@@ -11,7 +11,7 @@ import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
  * platforms.
  * The original C based version is also much faster.
  */
-public class WyHash {
+class WyHash {
     private static final WyHash INSTANCE = new WyHash();
     private static final WyHash NATIVE_WY = NATIVE_LITTLE_ENDIAN ?
         WyHash.INSTANCE : WyHash.BigEndian.INSTANCE;

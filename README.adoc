@@ -32,9 +32,9 @@ implementations (in alphabetical order):
 
  - *https://github.com/aappleby/smhasher/wiki/MurmurHash3[MurmurHash3]*.
 
- - *https://github.com/Cyan4973/xxHash[xxHash]*.
+ - *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
 
-- *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
+ - *https://github.com/Cyan4973/xxHash[xxHash]*.
 
 These are thoroughly tested with JDK 7, 8, 9, 10, and 11, 12, and 13 on little-endian platform. However,
 they are believed to be independent from the native byte order.
