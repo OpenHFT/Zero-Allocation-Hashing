@@ -6,14 +6,14 @@
 image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[]
 
 === Overview
-This project provides a Java API for hashing any sequences of bytes in Java, including all kinds of
+This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more. 
 
 Written for Java 7+ under Apache 2.0 license.
 
 The key difference compared to other similar projects, e.g. 
 https://guava.dev/releases/28.1-jre/api/docs/com/google/common/hash/package-summary.html[Guava hashing],
-is that this has no object allocations during the hash computation and does not use `ThreadLocal`.
+is that this has no object allocation during the hash computation and does not use `ThreadLocal`.
 
 The implementation utilises native access where possible, but is also platform-endianness-agnostic.
 This provides consistent results whatever the byte order, while only moderately affecting
