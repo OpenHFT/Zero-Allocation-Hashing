@@ -79,6 +79,7 @@ public abstract class Access<T> {
      * @param <T> the type of objects to access
      * @return the unsafe memory {@code Access}
      */
+    @SuppressWarnings("unchecked")
     public static <T> Access<T> unsafe() {
         return (Access<T>) UnsafeAccess.INSTANCE;
     }
@@ -112,6 +113,7 @@ public abstract class Access<T> {
      * @return the {@code Access} to {@link CharSequence}s backed by native {@code char} reads
      * @see #toCharSequence(ByteOrder)
      */
+    @SuppressWarnings("unchecked")
     public static <T extends CharSequence> Access<T> toNativeCharSequence() {
         return (Access<T>) CharSequenceAccess.nativeCharSequenceAccess();
     }
@@ -134,6 +136,7 @@ public abstract class Access<T> {
      * @param <T> the {@code CharSequence} subtype to access
      * @see #toNativeCharSequence()
      */
+    @SuppressWarnings("unchecked")
     public static <T extends CharSequence> Access<T> toCharSequence(ByteOrder backingOrder) {
         return (Access<T>) CharSequenceAccess.charSequenceAccess(backingOrder);
     }
