@@ -23,4 +23,9 @@ enum UnknownJvmStringHash implements StringHash {
     public long longHash(String s, LongHashFunction hashFunction, int off, int len) {
         return hashFunction.hashNativeChars(s, off, len);
     }
+
+    @Override
+    public long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result) {
+        return hashFunction.hashNativeChars(s, off, len, result);
+    }
 }

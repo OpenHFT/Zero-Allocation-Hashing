@@ -37,4 +37,10 @@ enum ModernHotSpotStringHash implements StringHash {
         char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
         return hashFunction.hashChars(value, off, len);
     }
+
+    @Override
+    public long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result) {
+        char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
+        return hashFunction.hashChars(value, off, len, result);
+    }
 }
