@@ -42,4 +42,11 @@ enum HotSpotPrior7u6StringHash implements StringHash {
         int offset = UnsafeAccess.UNSAFE.getInt(s, offsetOffset);
         return hashFunction.hashChars(value, offset + off, len);
     }
+
+    @Override
+    public long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result) {
+        char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
+        int offset = UnsafeAccess.UNSAFE.getInt(s, offsetOffset);
+        return hashFunction.hashChars(value, offset + off, len, result);
+    }
 }

@@ -70,8 +70,8 @@ public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
     static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
-    private static final byte TRUE_BYTE_VALUE;
-    private static final byte FALSE_BYTE_VALUE;
+    static final byte TRUE_BYTE_VALUE;
+    static final byte FALSE_BYTE_VALUE;
 
     static {
         byte trueByteValue, falseByteValue;
@@ -248,7 +248,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #murmur_3(long)
      */
     public static LongHashFunction murmur_3() {
-        return MurmurHash_3.asLongHashFunctionWithoutSeed();
+        return MurmurHash_3.asLongTupleHashFunctionWithoutSeed();
     }
 
     /**
@@ -261,7 +261,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #murmur_3()
      */
     public static LongHashFunction murmur_3(long seed) {
-        return MurmurHash_3.asLongHashFunctionWithSeed(seed);
+        return MurmurHash_3.asLongTupleHashFunctionWithSeed(seed);
     }
 
     /**
@@ -340,7 +340,7 @@ public abstract class LongHashFunction implements Serializable {
         return MetroHash.asLongHashFunctionWithSeed(seed);
     }
 
-    private static StringHash stringHash;
+    static StringHash stringHash;
     static  {
         try {
             if (System.getProperty("java.vm.name").contains("HotSpot")) {
@@ -366,7 +366,7 @@ public abstract class LongHashFunction implements Serializable {
         }
     }
 
-    private static void checkArrayOffs(int arrayLength, int off, int len) {
+    static void checkArrayOffs(int arrayLength, int off, int len) {
         if (len < 0 || off < 0 || off + len > arrayLength || off + len < 0)
             throw new IndexOutOfBoundsException();
     }

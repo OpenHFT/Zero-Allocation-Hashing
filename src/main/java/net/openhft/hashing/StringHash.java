@@ -19,4 +19,5 @@ package net.openhft.hashing;
 interface StringHash {
 
     long longHash(String s, LongHashFunction hashFunction, int off, int len);
+    long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result);
 }
