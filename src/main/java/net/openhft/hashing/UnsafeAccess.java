@@ -23,8 +23,11 @@ import java.nio.ByteOrder;
 
 import static net.openhft.hashing.Primitives.*;
 
-final class UnsafeAccess extends Access<Object> {
-    public static final UnsafeAccess INSTANCE = new UnsafeAccess();
+class UnsafeAccess extends Access<Object> {
+    public static final UnsafeAccess INSTANCE;
+    static final UnsafeAccess OLD_INSTANCE = ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN
+                                             ? new OldUnsafeAccessLittleEndian()
+                                             : new OldUnsafeAccessBigEndian();
 
     static final Unsafe UNSAFE;
     static final long BOOLEAN_BASE;
@@ -47,6 +50,15 @@ final class UnsafeAccess extends Access<Object> {
             LONG_BASE = UNSAFE.arrayBaseOffset(long[].class);
         } catch (Exception e) {
             throw new AssertionError(e);
+        }
+
+        UnsafeAccess inst = new UnsafeAccess();
+        try {
+            inst.getByte(new byte[1], BYTE_BASE);
+        } catch (final Throwable e) {
+            inst = OLD_INSTANCE;
+        } finally {
+            INSTANCE = inst;
         }
     }
 
@@ -92,4 +104,27 @@ final class UnsafeAccess extends Access<Object> {
         return ByteOrder.nativeOrder();
     }
 
+    private static class OldUnsafeAccessLittleEndian extends UnsafeAccess {
+        @Override
+        public int getShort(final Object input, final long offset) {
+            return UNSAFE.getInt(input, offset - 2) >> 16;
+        }
+
+        @Override
+        public int getByte(final Object input, final long offset) {
+            return UNSAFE.getInt(input, offset - 3) >> 24;
+        }
+    }
+
+    private static class OldUnsafeAccessBigEndian extends UnsafeAccess {
+        @Override
+        public int getShort(final Object input, final long offset) {
+            return (int)(short)UNSAFE.getInt(input, offset - 2);
+        }
+
+        @Override
+        public int getByte(final Object input, final long offset) {
+            return (int)(byte)UNSAFE.getInt(input, offset - 3);
+        }
+    }
 }
