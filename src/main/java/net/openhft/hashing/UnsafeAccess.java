@@ -119,7 +119,7 @@ class UnsafeAccess extends Access<Object> {
     private static class OldUnsafeAccessBigEndian extends UnsafeAccess {
         @Override
         public int getShort(final Object input, final long offset) {
-            return (int)(short)UNSAFE.getInt(input, offset -2);
+            return (int)(short)UNSAFE.getInt(input, offset - 2);
         }
 
         @Override
