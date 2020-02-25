@@ -17,7 +17,9 @@
 package net.openhft.hashing;
 
 import java.lang.reflect.Field;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 enum ModernHotSpotStringHash implements StringHash {
     INSTANCE;
 
@@ -39,8 +41,9 @@ enum ModernHotSpotStringHash implements StringHash {
     }
 
     @Override
-    public long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result) {
-        char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
-        return hashFunction.hashChars(value, off, len, result);
+    public void hash(final String s, final LongTupleHashFunction hashFunction,
+                    final int off, final int len, final long[] result) {
+        final char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
+        hashFunction.hashChars(value, off, len, result);
     }
 }

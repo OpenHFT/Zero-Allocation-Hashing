@@ -30,15 +30,15 @@ public class MurmurHash3Test {
 
     @Test
     public void testMurmurWithoutSeed() {
-        testMurmur(LongTupleHashFunction.murmur_3(), Hashing.murmur3_128());
+        testMurmur(LongTupleHashFunction.murmur_3(), LongHashFunction.murmur_3(), Hashing.murmur3_128());
     }
 
     @Test
     public void testMurmurWithSeed() {
-        testMurmur(LongTupleHashFunction.murmur_3(42L), Hashing.murmur3_128(42));
+        testMurmur(LongTupleHashFunction.murmur_3(42L), LongHashFunction.murmur_3(42L), Hashing.murmur3_128(42));
     }
 
-    private void testMurmur(LongTupleHashFunction tested, HashFunction referenceFromGuava) {
+    private void testMurmur(LongTupleHashFunction tested, LongHashFunction tested2, HashFunction referenceFromGuava) {
         byte[] testData = new byte[1024];
         for (int i = 0; i < testData.length; i++) {
             testData[i] = (byte) i;
@@ -48,7 +48,10 @@ public class MurmurHash3Test {
             byte[] ehBytes = referenceFromGuava.hashBytes(data).asBytes();
             long[] eh = new long[(ehBytes.length + 7) / 8];
             ByteBuffer.wrap(ehBytes).order(ByteOrder.LITTLE_ENDIAN).asLongBuffer().get(eh);
+
             LongTupleHashFunctionTest.test(tested, data, eh);
+
+            LongHashFunctionTest.test(tested2, data, eh[0]); // test as LongHashFunction
         }
     }
 }

@@ -19,7 +19,7 @@ package net.openhft.hashing;
 import static java.lang.Long.reverseBytes;
 import static java.lang.Long.rotateRight;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
+import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 /**
  * Adapted from the C++ CityHash implementation from Google at
