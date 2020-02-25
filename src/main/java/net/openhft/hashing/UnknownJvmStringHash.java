@@ -16,6 +16,9 @@
 
 package net.openhft.hashing;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 enum UnknownJvmStringHash implements StringHash {
     INSTANCE;
 
@@ -25,7 +28,8 @@ enum UnknownJvmStringHash implements StringHash {
     }
 
     @Override
-    public long longHash(String s, LongTupleHashFunction hashFunction, int off, int len, long[] result) {
-        return hashFunction.hashNativeChars(s, off, len, result);
+    public void hash(final String s, final LongTupleHashFunction hashFunction,
+                    final int off, final int len, final long[] result) {
+        LongTupleHashFunction.hashNativeChars(hashFunction, s, off, len, result);
     }
 }

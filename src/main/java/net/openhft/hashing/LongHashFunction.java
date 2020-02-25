@@ -23,10 +23,10 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
 import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.Util.*;
 
 /**
  * Hash function producing {@code long}-valued result from byte sequences of any length and
@@ -68,34 +68,6 @@ import static net.openhft.hashing.UnsafeAccess.*;
  */
 public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
-
-    static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
-    static final byte TRUE_BYTE_VALUE;
-    static final byte FALSE_BYTE_VALUE;
-
-    static {
-        byte trueByteValue, falseByteValue;
-        try {
-            trueByteValue = trueByteValue();
-            falseByteValue = falseByteValue();
-        } catch (Throwable t) {
-            // Unsafe in pre-Nougat Android does not have getByte(), fall back to some reasonable
-            // value
-            trueByteValue = 1;
-            falseByteValue = 0;
-        }
-
-        TRUE_BYTE_VALUE = trueByteValue;
-        FALSE_BYTE_VALUE = falseByteValue;
-    }
-
-    private static byte trueByteValue() {
-        return UNSAFE.getByte(new boolean[] {true}, BOOLEAN_BASE);
-    }
-
-    private static byte falseByteValue() {
-        return UNSAFE.getByte(new boolean[] {false}, BOOLEAN_BASE);
-    }
 
     /**
      * Returns a hash function implementing
@@ -248,7 +220,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #murmur_3(long)
      */
     public static LongHashFunction murmur_3() {
-        return MurmurHash_3.asLongTupleHashFunctionWithoutSeed();
+        return MurmurHash_3.asLongHashFunctionWithoutSeed();
     }
 
     /**
@@ -261,7 +233,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #murmur_3()
      */
     public static LongHashFunction murmur_3(long seed) {
-        return MurmurHash_3.asLongTupleHashFunctionWithSeed(seed);
+        return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
 
     /**
@@ -338,37 +310,6 @@ public abstract class LongHashFunction implements Serializable {
      */
     public static LongHashFunction metro(long seed) {
         return MetroHash.asLongHashFunctionWithSeed(seed);
-    }
-
-    static StringHash stringHash;
-    static  {
-        try {
-            if (System.getProperty("java.vm.name").contains("HotSpot")) {
-                String javaVersion = System.getProperty("java.version");
-                if (javaVersion.compareTo("1.7.0_06") >= 0) {
-                    if (javaVersion.compareTo("1.9") >= 0) {
-                        stringHash = UnknownJvmStringHash.INSTANCE;
-                    } else {
-                        stringHash = ModernHotSpotStringHash.INSTANCE;
-                    }
-                } else {
-                    stringHash = HotSpotPrior7u6StringHash.INSTANCE;
-                }
-            } else {
-                // try to initialize this version anyway
-                stringHash = HotSpotPrior7u6StringHash.INSTANCE;
-            }
-        } catch (Throwable e) {
-            // ignore
-        } finally {
-            if (stringHash == null)
-                stringHash = UnknownJvmStringHash.INSTANCE;
-        }
-    }
-
-    static void checkArrayOffs(int arrayLength, int off, int len) {
-        if (len < 0 || off < 0 || off + len > arrayLength || off + len < 0)
-            throw new IndexOutOfBoundsException();
     }
 
     /**
@@ -596,7 +537,7 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashChars(String, int, int) hashChars(input, 0, input.length())}.
      */
     public long hashChars(@NotNull String input) {
-        return stringHash.longHash(input, this, 0, input.length());
+        return VALID_STRING_HASH.longHash(input, this, 0, input.length());
     }
 
     /**
@@ -616,7 +557,7 @@ public abstract class LongHashFunction implements Serializable {
      */
     public long hashChars(@NotNull String input, int off, int len) {
         checkArrayOffs(input.length(), off, len);
-        return stringHash.longHash(input, this, off, len);
+        return VALID_STRING_HASH.longHash(input, this, off, len);
     }
 
     /**

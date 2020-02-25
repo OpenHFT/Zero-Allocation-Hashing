@@ -1,24 +1,23 @@
 package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import sun.nio.ch.DirectBuffer;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
 import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.Util.*;
 
-public abstract class LongTupleHashFunction extends LongHashFunction {
+@ParametersAreNonnullByDefault
+public abstract class LongTupleHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
-    public abstract int bits();
-    public long[] newLongTuple() {
-	return new long[(bits() + 63) / 64];
-    }
-    public long highMask() {
-        final int bitsInHighM1 = (bits() - 1) & 63;
-        return ((1L << bitsInHighM1) << 1) - 1;
-    }
+    // Implementations
+    //
 
     /**
      * Returns a hash function implementing
@@ -29,6 +28,7 @@ public abstract class LongTupleHashFunction extends LongHashFunction {
      *
      * @see #murmur_3(long)
      */
+    @NotNull
     public static LongTupleHashFunction murmur_3() {
         return MurmurHash_3.asLongTupleHashFunctionWithoutSeed();
     }
@@ -42,369 +42,329 @@ public abstract class LongTupleHashFunction extends LongHashFunction {
      *
      * @see #murmur_3()
      */
-    public static LongTupleHashFunction murmur_3(long seed) {
+    @NotNull
+    public static LongTupleHashFunction murmur_3(final long seed) {
         return MurmurHash_3.asLongTupleHashFunctionWithSeed(seed);
     }
 
-    public abstract long hashLong(long input, long[] result);
-    public long hashLong(final long input) {
-        return hashLong(input, null);
+    // Public API
+    //
+
+    /**
+     * Returns the number of bits in a result array; a positive multiple of 8.
+     */
+    public abstract int bitsLength();
+
+    /**
+     * Returns an empty result array
+     */
+    @NotNull
+    public long[] newResultArray() {
+        return new long[(bitsLength() + 63) / 64];
     }
-    public long[] hashTupleLong(final long input) {
-        final long[] result = newLongTuple();
+
+    public abstract void hashLong(long input, long[] result);
+    @NotNull
+    public long[] hashLong(final long input) {
+        final long[] result = newResultArray();
         hashLong(input, result);
-	return result;
+        return result;
     }
 
-    public abstract long hashInt(int input, long[] result);
-    public long hashInt(final int input) {
-        return hashInt(input, null);
-    }
-    public long[] hashTupleInt(final int input) {
-        final long[] result = newLongTuple();
+    public abstract void hashInt(int input, long[] result);
+    @NotNull
+    public long[] hashInt(final int input) {
+        final long[] result = newResultArray();
         hashInt(input, result);
-	return result;
+        return result;
     }
 
-    public abstract long hashShort(short input, long[] result);
-    public long hashShort(final short input) {
-        return hashShort(input, null);
-    }
-    public long[] hashTupleShort(final short input) {
-        final long[] result = newLongTuple();
+    public abstract void hashShort(short input, long[] result);
+    @NotNull
+    public long[] hashShort(final short input) {
+        final long[] result = newResultArray();
         hashShort(input, result);
-	return result;
+        return result;
     }
 
-    public abstract long hashChar(char input, long[] result);
-    public long hashChar(final char input) {
-        return hashChar(input, null);
-    }
-    public long[] hashTupleChar(final char input) {
-        final long[] result = newLongTuple();
+    public abstract void hashChar(char input, long[] result);
+    @NotNull
+    public long[] hashChar(final char input) {
+        final long[] result = newResultArray();
         hashChar(input, result);
-	return result;
+        return result;
     }
 
-    public abstract long hashByte(byte input, long[] result);
-    public long hashByte(final byte input) {
-        return hashByte(input, null);
-    }
-    public long[] hashTupleByte(final byte input) {
-        final long[] result = newLongTuple();
+    public abstract void hashByte(byte input, long[] result);
+    @NotNull
+    public long[] hashByte(final byte input) {
+        final long[] result = newResultArray();
         hashByte(input, result);
-	return result;
+        return result;
     }
 
-    public abstract long[] hashTupleVoid();
-    public long hashVoid() {
-        return hashTupleVoid()[0];
+    public abstract void hashVoid(long[] result);
+    @NotNull
+    public long[] hashVoid() {
+        final long[] result = newResultArray();
+        hashVoid(result);
+        return result;
     }
 
-    public abstract <T> long hash(T input, Access<T> access, long off, long len, long[] result);
-    public <T> long hash(final T input, final Access<T> access, final long off, final long len) {
-        return hash(input, access, off, len, null);
-    }
-    public <T> long[] hashTuple(final T input, final Access<T> access, final long off, final long len) {
-        final long[] result = newLongTuple();
+    public abstract <T> void hash(@Nullable T input, Access<T> access, long off, long len, long[] result);
+    @NotNull
+    public <T> long[] hash(@Nullable final T input, final Access<T> access, final long off, final long len) {
+        final long[] result = newResultArray();
         hash(input, access, off, len, result);
-	return result;
+        return result;
     }
 
-    private long unsafeHash(final Object input, final long off, final long len) {
-        return hash(input, UnsafeAccess.INSTANCE, off, len, null);
-    }
-    private long unsafeHash(final Object input, final long off, final long len, long[] result) {
-        return hash(input, UnsafeAccess.INSTANCE, off, len, result);
-    }
-    private long[] unsafeHashTuple(final Object input, final long off, final long len) {
-        final long[] result = newLongTuple();
-        hash(input, UnsafeAccess.INSTANCE, off, len, result);
-	return result;
-    }
-
-    public long hashBoolean(final boolean input, final long[] result) {
-        return hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE, result);
-    }
-    public long hashBoolean(final boolean input) {
-        return hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE, null);
-    }
-    public long[] hashTupleBoolean(final boolean input) {
-        final long[] result = newLongTuple();
+    public void hashBoolean(final boolean input, final long[] result) {
         hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE, result);
-	return result;
+    }
+    @NotNull
+    public long[] hashBoolean(final boolean input) {
+        final long[] result = newResultArray();
+        hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE, result);
+        return result;
     }
 
-    public long hashBooleans(@NotNull final boolean[] input, final long[] result) {
-        return unsafeHash(input, BOOLEAN_BASE, input.length, result);
+    public void hashBooleans(final boolean[] input, final long[] result) {
+        unsafeHash(this, input, BOOLEAN_BASE, input.length, result);
     }
-    public long hashBooleans(@NotNull final boolean[] input) {
-        return unsafeHash(input, BOOLEAN_BASE, input.length, null);
-    }
-    public long[] hashTupleBooleans(@NotNull final boolean[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, BOOLEAN_BASE, input.length, result);
-	return result;
+    @NotNull
+    public long[] hashBooleans(final boolean[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, BOOLEAN_BASE, input.length, result);
+        return result;
     }
 
-    public long hashBooleans(@NotNull final boolean[] input, final int off, final int len, final long[] result) {
+    public void hashBooleans(final boolean[] input, final int off, final int len, final long[] result) {
         checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, BOOLEAN_BASE + off, len, result);
+        unsafeHash(this, input, BOOLEAN_BASE + off, len, result);
     }
-    public long hashBooleans(@NotNull final boolean[] input, final int off, final int len) {
+    @NotNull
+    public long[] hashBooleans(final boolean[] input, final int off, final int len) {
         checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, BOOLEAN_BASE + off, len, null);
-    }
-    public long[] hashTupleBooleans(@NotNull final boolean[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, BOOLEAN_BASE + off, len, result);
-	return result;
+        final long[] result = newResultArray();
+        unsafeHash(this, input, BOOLEAN_BASE + off, len, result);
+        return result;
     }
 
-    public long hashBytes(@NotNull final byte[] input, final long[] result) {
-        return unsafeHash(input, BYTE_BASE, input.length, result);
+    public void hashBytes(final byte[] input, final long[] result) {
+        unsafeHash(this, input, BYTE_BASE, input.length, result);
     }
-    public long hashBytes(@NotNull final byte[] input) {
-        return unsafeHash(input, BYTE_BASE, input.length, null);
-    }
-    public long[] hashTupleBytes(@NotNull final byte[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, BYTE_BASE, input.length, result);
-	return result;
+    @NotNull
+    public long[] hashBytes(final byte[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, BYTE_BASE, input.length, result);
+        return result;
     }
 
-    public long hashBytes(@NotNull final byte[] input, final int off, final int len, final long[] result) {
+    public void hashBytes(final byte[] input, final int off, final int len, final long[] result) {
         checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, BYTE_BASE + off, len, result);
+        unsafeHash(this, input, BYTE_BASE + off, len, result);
     }
-    public long hashBytes(@NotNull final byte[] input, final int off, final int len) {
+    @NotNull
+    public long[] hashBytes(final byte[] input, final int off, final int len) {
         checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, BYTE_BASE + off, len, null);
-    }
-    public long[] hashTupleBytes(@NotNull final byte[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, BYTE_BASE + off, len, result);
-	return result;
+        final long[] result = newResultArray();
+        unsafeHash(this, input, BYTE_BASE + off, len, result);
+        return result;
     }
 
-    public long hashBytes(final ByteBuffer input, final long[] result) {
-        return hashByteBuffer(input, input.position(), input.remaining(), result);
+    public void hashBytes(final ByteBuffer input, final long[] result) {
+        hashByteBuffer(this, input, input.position(), input.remaining(), result);
     }
-    public long hashBytes(final ByteBuffer input) {
-        return hashByteBuffer(input, input.position(), input.remaining(), null);
-    }
-    public long[] hashTupleBytes(final ByteBuffer input) {
-        final long[] result = newLongTuple();
-        hashByteBuffer(input, input.position(), input.remaining(), result);
-	return result;
+    @NotNull
+    public long[] hashBytes(final ByteBuffer input) {
+        final long[] result = newResultArray();
+        hashByteBuffer(this, input, input.position(), input.remaining(), result);
+        return result;
     }
 
-    public long hashBytes(@NotNull final ByteBuffer input, final int off, final int len, final long[] result) {
+    public void hashBytes(final ByteBuffer input, final int off, final int len, final long[] result) {
         checkArrayOffs(input.capacity(), off, len);
-        return hashByteBuffer(input, off, len, result);
+        hashByteBuffer(this, input, off, len, result);
     }
-    public long hashBytes(@NotNull final ByteBuffer input, final int off, final int len) {
+    @NotNull
+    public long[] hashBytes(final ByteBuffer input, final int off, final int len) {
         checkArrayOffs(input.capacity(), off, len);
-        return hashByteBuffer(input, off, len, null);
-    }
-    public long[] hashTupleBytes(@NotNull final ByteBuffer input, final int off, final int len) {
-        checkArrayOffs(input.capacity(), off, len);
-        final long[] result = newLongTuple();
-        hashByteBuffer(input, off, len, result);
-	return result;
+        final long[] result = newResultArray();
+        hashByteBuffer(this, input, off, len, result);
+        return result;
     }
 
-    private long hashByteBuffer(@NotNull final ByteBuffer input, final int off, final int len, final long[] result) {
+    public void hashMemory(final long address, final long len, final long[] result) {
+        unsafeHash(this, null, address, len, result);
+    }
+    @NotNull
+    public long[] hashMemory(final long address, final long len) {
+        final long[] result = newResultArray();
+        unsafeHash(this, null, address, len, result);
+        return result;
+    }
+
+    public void hashChars(final char[] input, final long[] result) {
+        unsafeHash(this, input, CHAR_BASE, input.length * 2L, result);
+    }
+    @NotNull
+    public long[] hashChars(final char[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, CHAR_BASE, input.length * 2L, result);
+        return result;
+    }
+
+    public void hashChars(final char[] input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length, off, len);
+        unsafeHash(this, input, CHAR_BASE + (off * 2L), len * 2L, result);
+    }
+    @NotNull
+    public long[] hashChars(final char[] input, final int off, final int len) {
+        checkArrayOffs(input.length, off, len);
+        final long[] result = newResultArray();
+        unsafeHash(this, input, CHAR_BASE + (off * 2L), len * 2L, result);
+        return result;
+    }
+
+    public void hashChars(final String input, final long[] result) {
+        VALID_STRING_HASH.hash(input, this, 0, input.length(), result);
+    }
+    @NotNull
+    public long[] hashChars(final String input) {
+        final long[] result = newResultArray();
+        VALID_STRING_HASH.hash(input, this, 0, input.length(), result);
+        return result;
+    }
+
+    public void hashChars(final String input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length(), off, len);
+        VALID_STRING_HASH.hash(input, this, off, len, result);
+    }
+    @NotNull
+    public long[] hashChars(final String input, final int off, final int len) {
+        checkArrayOffs(input.length(), off, len);
+        final long[] result = newResultArray();
+        VALID_STRING_HASH.hash(input, this, off, len, result);
+        return result;
+    }
+
+    public <T extends CharSequence> void hashChars(final T input, final long[] result) {
+        hashNativeChars(this, input, 0, input.length(), result);
+    }
+    @NotNull
+    public <T extends CharSequence> long[] hashChars(final T input) {
+        final long[] result = newResultArray();
+        hashNativeChars(this, input, 0, input.length(), result);
+        return result;
+    }
+
+    public <T extends CharSequence> void hashChars(final T input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length(), off, len);
+        hashNativeChars(this, input, off, len, result);
+    }
+    @NotNull
+    public <T extends CharSequence> long[] hashChars(final T input, final int off, final int len) {
+        checkArrayOffs(input.length(), off, len);
+        final long[] result = newResultArray();
+        hashNativeChars(this, input, off, len, result);
+        return result;
+    }
+
+    public void hashShorts(final short[] input, final long[] result) {
+        unsafeHash(this, input, SHORT_BASE, input.length * 2L, result);
+    }
+    @NotNull
+    public long[] hashShorts(final short[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, SHORT_BASE, input.length * 2L, result);
+        return result;
+    }
+
+    public void hashShorts(final short[] input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length, off, len);
+        unsafeHash(this, input, SHORT_BASE + (off * 2L), len * 2L, result);
+    }
+    @NotNull
+    public long[] hashShorts(final short[] input, final int off, final int len) {
+        checkArrayOffs(input.length, off, len);
+        final long[] result = newResultArray();
+        unsafeHash(this, input, SHORT_BASE + (off * 2L), len * 2L, result);
+        return result;
+    }
+
+    public void hashInts(final int[] input, final long[] result) {
+        unsafeHash(this, input, INT_BASE, input.length * 4L, result);
+    }
+    @NotNull
+    public long[] hashInts(final int[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, INT_BASE, input.length * 4L, result);
+        return result;
+    }
+
+    public void hashInts(final int[] input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length, off, len);
+        unsafeHash(this, input, INT_BASE + (off * 4L), len * 4L, result);
+    }
+    @NotNull
+    public long[] hashInts(final int[] input, final int off, final int len) {
+        checkArrayOffs(input.length, off, len);
+        final long[] result = newResultArray();
+        unsafeHash(this, input, INT_BASE + (off * 4L), len * 4L, result);
+        return result;
+    }
+
+    public void hashLongs(final long[] input, final long[] result) {
+        unsafeHash(this, input, LONG_BASE, input.length * 8L, result);
+    }
+    @NotNull
+    public long[] hashLongs(final long[] input) {
+        final long[] result = newResultArray();
+        unsafeHash(this, input, LONG_BASE, input.length * 8L, result);
+        return result;
+    }
+
+    public void hashLongs(final long[] input, final int off, final int len, final long[] result) {
+        checkArrayOffs(input.length, off, len);
+        unsafeHash(this, input, LONG_BASE + (off * 8L), len * 8L, result);
+    }
+    @NotNull
+    public long[] hashLongs(final long[] input, final int off, final int len) {
+        checkArrayOffs(input.length, off, len);
+        final long[] result = newResultArray();
+        unsafeHash(this, input, LONG_BASE + (off * 8L), len * 8L, result);
+        return result;
+    }
+
+    // Internal helper
+    //
+    @NotNull
+    private static final Access<Object> OBJECT_ACCESS = UnsafeAccess.INSTANCE;
+    @NotNull
+    private static final Access<CharSequence> CHAR_SEQ_ACCESS = nativeCharSequenceAccess();
+    @NotNull
+    private static final Access<ByteBuffer> BYTE_BUF_ACCESS = ByteBufferAccess.INSTANCE;
+
+    private static void unsafeHash(final LongTupleHashFunction f, @Nullable final Object input,
+                    final long off, final long len, final long[] result) {
+        f.hash(input, OBJECT_ACCESS, off, len, result);
+    }
+
+    private static void hashByteBuffer(final LongTupleHashFunction f, final ByteBuffer input,
+                    final int off, final int len, final long[] result) {
         if (input.hasArray()) {
-            return unsafeHash(input.array(), BYTE_BASE + input.arrayOffset() + off, len, result);
+            unsafeHash(f, input.array(), BYTE_BASE + input.arrayOffset() + off, len, result);
         } else if (input instanceof DirectBuffer) {
-            return unsafeHash(null, ((DirectBuffer) input).address() + off, len, result);
+            unsafeHash(f, null, ((DirectBuffer) input).address() + off, len, result);
         } else {
-            return hash(input, ByteBufferAccess.INSTANCE, off, len, result);
+            f.hash(input, BYTE_BUF_ACCESS, off, len, result);
         }
     }
 
-    public long hashMemory(final long address, final long len, final long[] result) {
-        return unsafeHash(null, address, len, result);
-    }
-    public long hashMemory(final long address, final long len) {
-        return unsafeHash(null, address, len, null);
-    }
-    public long[] hashTupleMemory(final long address, final long len) {
-        final long[] result = newLongTuple();
-        unsafeHash(null, address, len, result);
-	return result;
+    static void hashNativeChars(final LongTupleHashFunction f, final CharSequence input,
+                    final int off, final int len, final long[] result) {
+        f.hash(input, CHAR_SEQ_ACCESS, off * 2L, len * 2L, result);
     }
 
-    public long hashChars(@NotNull final char[] input, final long[] result) {
-        return unsafeHash(input, CHAR_BASE, input.length * 2L, result);
-    }
-    public long hashChars(@NotNull final char[] input) {
-        return unsafeHash(input, CHAR_BASE, input.length * 2L, null);
-    }
-    public long[] hashTupleChars(@NotNull final char[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, CHAR_BASE, input.length * 2L, result);
-	return result;
-    }
-
-    public long hashChars(@NotNull final char[] input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, CHAR_BASE + (off * 2L), len * 2L, result);
-    }
-    public long hashChars(@NotNull final char[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, CHAR_BASE + (off * 2L), len * 2L, null);
-    }
-    public long[] hashTupleChars(@NotNull final char[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, CHAR_BASE + (off * 2L), len * 2L, result);
-	return result;
-    }
-
-    public long hashChars(@NotNull final String input, final long[] result) {
-        return stringHash.longHash(input, this, 0, input.length(), result);
-    }
-    public long hashChars(@NotNull final String input) {
-        return stringHash.longHash(input, this, 0, input.length(), null);
-    }
-    public long[] hashTupleChars(@NotNull final String input) {
-        final long[] result = newLongTuple();
-        stringHash.longHash(input, this, 0, input.length(), result);
-	return result;
-    }
-
-    public long hashChars(@NotNull final String input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length(), off, len);
-        return stringHash.longHash(input, this, off, len, result);
-    }
-    public long hashChars(@NotNull final String input, final int off, final int len) {
-        checkArrayOffs(input.length(), off, len);
-        return stringHash.longHash(input, this, off, len, null);
-    }
-    public long[] hashTupleChars(@NotNull final String input, final int off, final int len) {
-        checkArrayOffs(input.length(), off, len);
-        final long[] result = newLongTuple();
-        stringHash.longHash(input, this, off, len, result);
-	return result;
-    }
-
-    public long hashChars(@NotNull final StringBuilder input, final long[] result) {
-        return hashNativeChars(input, result);
-    }
-    public long hashChars(@NotNull final StringBuilder input) {
-        return hashNativeChars(input, null);
-    }
-    public long[] hashTupleChars(@NotNull final StringBuilder input) {
-        final long[] result = newLongTuple();
-        hashNativeChars(input, result);
-        return result;
-    }
-
-    public long hashChars(@NotNull final StringBuilder input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length(), off, len);
-        return hashNativeChars(input, off, len, result);
-    }
-    public long hashChars(@NotNull final StringBuilder input, final int off, final int len) {
-        checkArrayOffs(input.length(), off, len);
-        return hashNativeChars(input, off, len, null);
-    }
-    public long[] hashTupleChars(@NotNull final StringBuilder input, final int off, final int len) {
-        checkArrayOffs(input.length(), off, len);
-        final long[] result = newLongTuple();
-        hashNativeChars(input, off, len, result);
-	return result;
-    }
-
-    long hashNativeChars(final CharSequence input, final long[] result) {
-        return hashNativeChars(input, 0, input.length(), result);
-    }
-
-    long hashNativeChars(final CharSequence input, final int off, final int len, final long[] result) {
-        return hash(input, nativeCharSequenceAccess(), off * 2L, len * 2L, result);
-    }
-
-    public long hashShorts(@NotNull final short[] input, final long[] result) {
-        return unsafeHash(input, SHORT_BASE, input.length * 2L, result);
-    }
-    public long hashShorts(@NotNull final short[] input) {
-        return unsafeHash(input, SHORT_BASE, input.length * 2L, null);
-    }
-    public long[] hashTupleShorts(@NotNull final short[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, SHORT_BASE, input.length * 2L, result);
-	return result;
-    }
-
-    public long hashShorts(@NotNull final short[] input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, SHORT_BASE + (off * 2L), len * 2L, result);
-    }
-    public long hashShorts(@NotNull final short[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, SHORT_BASE + (off * 2L), len * 2L, null);
-    }
-    public long[] hashTupleShorts(@NotNull final short[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, SHORT_BASE + (off * 2L), len * 2L, result);
-	return result;
-    }
-
-    public long hashInts(@NotNull final int[] input, final long[] result) {
-        return unsafeHash(input, INT_BASE, input.length * 4L, result);
-    }
-    public long hashInts(@NotNull final int[] input) {
-        return unsafeHash(input, INT_BASE, input.length * 4L, null);
-    }
-    public long[] hashTupleInts(@NotNull final int[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, INT_BASE, input.length * 4L, result);
-        return result;
-    }
-
-    public long hashInts(@NotNull final int[] input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, INT_BASE + (off * 4L), len * 4L, result);
-    }
-    public long hashInts(@NotNull final int[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, INT_BASE + (off * 4L), len * 4L, null);
-    }
-    public long[] hashTupleInts(@NotNull final int[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, INT_BASE + (off * 4L), len * 4L, result);
-	return result;
-    }
-
-    public long hashLongs(@NotNull final long[] input, final long[] result) {
-        return unsafeHash(input, LONG_BASE, input.length * 8L, result);
-    }
-    public long hashLongs(@NotNull final long[] input) {
-        return unsafeHash(input, LONG_BASE, input.length * 8L, null);
-    }
-    public long[] hashTupleLongs(@NotNull final long[] input) {
-        final long[] result = newLongTuple();
-        unsafeHash(input, LONG_BASE, input.length * 8L, result);
-	return result;
-    }
-
-    public long hashLongs(@NotNull final long[] input, final int off, final int len, final long[] result) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, LONG_BASE + (off * 8L), len * 8L, result);
-    }
-    public long hashLongs(@NotNull final long[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        return unsafeHash(input, LONG_BASE + (off * 8L), len * 8L, null);
-    }
-    public long[] hashTupleLongs(@NotNull final long[] input, final int off, final int len) {
-        checkArrayOffs(input.length, off, len);
-        final long[] result = newLongTuple();
-        unsafeHash(input, LONG_BASE + (off * 8L), len * 8L, result);
-	return result;
-    }
 }
