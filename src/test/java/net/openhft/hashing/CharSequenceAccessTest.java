@@ -19,7 +19,7 @@ public class CharSequenceAccessTest {
         assertEquals(LITTLE_ENDIAN, nativeOrder()); // ut is designed for LE machines
 
         final Access<CharSequence> access = CharSequenceAccess.charSequenceAccess(LITTLE_ENDIAN);
-	assertSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
+        assertSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
 
         assertEquals(buildNumber('A', 'B', 'C', 'D'), access.getLong(TEST_STRING, 0));
         assertEquals((buildNumber('A', 'B', 'C', 'D') >>> 8) | (((long)'E') << 56), access.getLong(TEST_STRING, 1));
@@ -45,7 +45,7 @@ public class CharSequenceAccessTest {
         assertEquals(LITTLE_ENDIAN, nativeOrder()); // ut is designed for LE machines
 
         final Access<CharSequence> access = CharSequenceAccess.charSequenceAccess(BIG_ENDIAN);
-	assertNotSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
+        assertNotSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
 
         assertEquals(buildNumber('D', 'C', 'B', 'A'), access.getLong(TEST_STRING, 0));
         assertEquals((buildNumber('D', 'C', 'B', 'A') << 8) | ((byte)('E'>>>8)), access.getLong(TEST_STRING, 1));
