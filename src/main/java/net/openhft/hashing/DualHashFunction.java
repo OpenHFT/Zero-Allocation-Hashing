@@ -1,6 +1,7 @@
 package net.openhft.hashing;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 // An internal helper class for casting LongTupleHashFunction as LongHashFunction
@@ -51,42 +52,52 @@ abstract class DualHashFunction extends LongTupleHashFunction {
         dualHash(input, access, off, len, result);
     }
 
+    @Nullable
+    private transient volatile LongHashFunction longHashFunction = null;
+
+    @NotNull
     protected LongHashFunction asLongHashFunction() {
-        return new LongHashFunction() {
-            @Override
-            public long hashLong(final long input) {
-                return dualHashLong(input, null);
-            }
-        
-            @Override
-            public long hashInt(final int input) {
-                return dualHashInt(input, null);
-            }
-        
-            @Override
-            public long hashShort(final short input) {
-                return dualHashShort(input, null);
-            }
-        
-            @Override
-            public long hashChar(final char input) {
-                return dualHashChar(input, null);
-            }
-        
-            @Override
-            public long hashByte(final byte input) {
-                return dualHashByte(input, null);
-            }
-        
-            @Override
-            public long hashVoid() {
-                return dualHashVoid(null);
-            }
-        
-            @Override
-            public <T> long hash(@Nullable final T input, final Access<T> access, final long off, final long len) {
-                return dualHash(input, access, off, len, null);
-            }
-        };
+        if (null == longHashFunction) {
+            // LongTupleHashFunction and LongHashFunction are stateless objects after construction
+            // so when caching the instance, we don't care the concurrence,
+            // and this function is still thread safe.
+            longHashFunction = new LongHashFunction() {
+                @Override
+                public long hashLong(final long input) {
+                    return dualHashLong(input, null);
+                }
+
+                @Override
+                public long hashInt(final int input) {
+                    return dualHashInt(input, null);
+                }
+
+                @Override
+                public long hashShort(final short input) {
+                    return dualHashShort(input, null);
+                }
+
+                @Override
+                public long hashChar(final char input) {
+                    return dualHashChar(input, null);
+                }
+
+                @Override
+                public long hashByte(final byte input) {
+                    return dualHashByte(input, null);
+                }
+
+                @Override
+                public long hashVoid() {
+                    return dualHashVoid(null);
+                }
+
+                @Override
+                public <T> long hash(@Nullable final T input, final Access<T> access, final long off, final long len) {
+                    return dualHash(input, access, off, len, null);
+                }
+            };
+        }
+        return longHashFunction;
     }
 }
