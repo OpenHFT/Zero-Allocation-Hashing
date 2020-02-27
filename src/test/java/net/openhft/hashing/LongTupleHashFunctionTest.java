@@ -41,6 +41,7 @@ public class LongTupleHashFunctionTest {
     private static void testBits(LongTupleHashFunction f) {
         assertTrue("bits should be more than 64", f.bitsLength() > 64);
         assertEquals("tuple length", (f.bitsLength() + 63) / 64, f.newResultArray().length);
+        assertTrue("mutiple of 8", f.bitsLength() % 8 == 0);
     }
 
     private static void testVoid(LongTupleHashFunction f, long[] eh, int len) {
