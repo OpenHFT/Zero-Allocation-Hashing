@@ -37,8 +37,9 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
         return (int) (offset >> 1);
     }
 
-    static long getLong(CharSequence input, long offset,
-                        int char0Off, int char1Off, int char2Off, int char3Off) {
+    protected static long getLong(CharSequence input, long offset,
+                                  int char0Off, int char1Off, int char2Off, int char3Off,
+                                  int char4Off, int delta) {
         final int base = ix(offset);
         if (0 == ((int)offset & 1)) {
             final long char0 = input.charAt(base + char0Off);
@@ -47,29 +48,44 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
             final long char3 = input.charAt(base + char3Off);
             return char0 | (char1 << 16) | (char2 << 32) | (char3 << 48);
         } else {
-            final int delta = char0Off & 1;
             final long char0 = input.charAt(base + char0Off + delta) >>> 8;
             final long char1 = input.charAt(base + char1Off + delta);
             final long char2 = input.charAt(base + char2Off + delta);
             final long char3 = input.charAt(base + char3Off + delta);
-            final long char4 = input.charAt(base + ((delta ^ 1) << 2));
+            final long char4 = input.charAt(base + char4Off);
             return char0 | (char1 << 8) | (char2 << 24) | (char3 << 40) | (char4 << 56);
         }
     }
 
-    static long getUnsignedInt(CharSequence input, long offset, int char0Off, int char1Off) {
+    protected static long getUnsignedInt(CharSequence input, long offset,
+                                         int char0Off, int char1Off, int char2Off, int delta) {
         final int base = ix(offset);
         if (0 == ((int)offset & 1)) {
             final long char0 = input.charAt(base + char0Off);
             final long char1 = input.charAt(base + char1Off);
             return char0 | (char1 << 16);
         } else {
-            final int delta = char0Off & 1;
             final long char0 = input.charAt(base + char0Off + delta) >>> 8;
             final long char1 = input.charAt(base + char1Off + delta);
-            final long char2 = Primitives.unsignedByte(input.charAt(base + ((delta ^ 1) << 1)));
+            final int char2 = input.charAt(base + char2Off);
             return char0 | (char1 << 8) | (char2 << 24);
         }
+    }
+
+    protected static char getUnsignedShort(CharSequence input,
+                                           long offset, int char1Off, int delta) {
+        if (0 == ((int)offset & 1)) {
+            return input.charAt(ix(offset));
+        } else {
+            final int base = ix(offset);
+            final int char0 = input.charAt(base + delta) >>> 8;
+            final int char1 = input.charAt(base + char1Off);
+            return (char)(char0 | (char1 << 8));
+        }
+    }
+
+    protected static int getUnsignedByte(CharSequence input, long offset, int shift) {
+        return Primitives.unsignedByte(input.charAt(ix(offset)) >> shift);
     }
 
     private CharSequenceAccess() {}
@@ -80,31 +96,8 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
     }
 
     @Override
-    public int getUnsignedShort(CharSequence input, long offset) {
-        if (((int)offset & 1) == 0) {
-            return input.charAt(ix(offset));
-        } else {
-            final int base = ix(offset);
-            final int char0 = input.charAt(base) >>> 8;
-            final int char1 = input.charAt(base + 1);
-            return char0 | (char1 << 8);
-        }
-    }
-
-    @Override
     public int getShort(CharSequence input, long offset) {
-        if (((int)offset & 1) == 0) {
-            return (int) (short) input.charAt(ix(offset));
-        } else {
-            final int base = ix(offset);
-            final int char0 = input.charAt(base) >>> 8;
-            final int char1 = (int)(byte)input.charAt(base + 1);
-            return char0 | (char1 << 8);
-        }
-    }
-
-    static int getUnsignedByte(CharSequence input, long offset, int shift) {
-        return Primitives.unsignedByte(input.charAt(ix(offset)) >> shift);
+        return (int)(short)getUnsignedShort(input, offset);
     }
 
     @Override
@@ -119,12 +112,17 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
 
         @Override
         public long getLong(CharSequence input, long offset) {
-            return getLong(input, offset, 0, 1, 2, 3);
+            return getLong(input, offset, 0, 1, 2, 3, 4, 0);
         }
 
         @Override
         public long getUnsignedInt(CharSequence input, long offset) {
-            return getUnsignedInt(input, offset, 0, 1);
+            return getUnsignedInt(input, offset, 0, 1, 2, 0);
+        }
+
+        @Override
+        public int getUnsignedShort(CharSequence input, long offset) {
+            return getUnsignedShort(input, offset, 1, 0);
         }
 
         @Override
@@ -145,36 +143,17 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
 
         @Override
         public long getLong(CharSequence input, long offset) {
-            return getLong(input, offset, 3, 2, 1, 0);
+            return getLong(input, offset, 3, 2, 1, 0, 0, 1);
         }
 
         @Override
         public long getUnsignedInt(CharSequence input, long offset) {
-            return getUnsignedInt(input, offset, 1, 0);
+            return getUnsignedInt(input, offset, 1, 0, 0, 1);
         }
 
         @Override
         public int getUnsignedShort(CharSequence input, long offset) {
-            if (((int)offset & 1) == 0) {
-                return input.charAt(ix(offset));
-            } else {
-                final int base = ix(offset);
-                final int char0 = input.charAt(base + 1) >>> 8;
-                final int char1 = Primitives.unsignedByte(input.charAt(base));
-                return char0 | (char1 << 8);
-            }
-        }
-
-        @Override
-        public int getShort(CharSequence input, long offset) {
-            if (((int)offset & 1) == 0) {
-                return (int) (short) input.charAt(ix(offset));
-            } else {
-                final int base = ix(offset);
-                final int char0 = input.charAt(base + 1) >>> 8;
-                final int char1 = (int)(byte)input.charAt(base);
-                return char0 | (char1 << 8);
-            }
+            return getUnsignedShort(input, offset, 0, 1);
         }
 
         @Override
