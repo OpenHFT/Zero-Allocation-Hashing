@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
@@ -24,9 +25,13 @@ public class LongTupleHashFunctionTest {
     }
 
     public static void test(LongTupleHashFunction f, byte[] data, long[] eh) {
-        testBits(f);
-
         int len = data.length;
+
+        if (len == 0) {
+            testBits(f);
+            testException(f);
+        }
+
         testVoid(f, eh, len);
         testBoolean(f, len);
         ByteBuffer bb = ByteBuffer.wrap(data).order(nativeOrder());
@@ -44,6 +49,36 @@ public class LongTupleHashFunctionTest {
         assertTrue("mutiple of 8", f.bitsLength() % 8 == 0);
     }
 
+    private static void testException(LongTupleHashFunction f) {
+        boolean ok = false;
+        try {
+            f.hashBytes(new byte[0], null);
+        } catch (NullPointerException e) {
+            ok = true; // expected
+        } catch (Throwable e) {
+            fail(e.toString());
+        }
+        assertTrue("should throw NullPointerException", ok);
+
+        ok = false;
+        try {
+            f.hashBytes(new byte[0], new long[1]);
+        } catch (IndexOutOfBoundsException e) {
+            ok = true; // expected
+        } catch (Throwable e) {
+            fail(e.toString());
+        }
+        assertTrue("should throw IndexOutOfBoundsException", ok);
+
+        // no exception with larger array
+        long[] r1 = f.hashBytes(new byte[1]);
+        long[] r2 = new long[r1.length + 1];
+        f.hashBytes(new byte[1], r2);
+        for (int i = 0; i < r1.length; ++i) {
+            assertEquals(r1[i], r2[i]);
+        }
+    }
+
     private static void testVoid(LongTupleHashFunction f, long[] eh, int len) {
         if (len == 0) {
             long[] r1 = f.hashVoid();
@@ -51,9 +86,9 @@ public class LongTupleHashFunctionTest {
             assertNotSame("return different instance", r1, r2);
             assertArrayEquals("void once", eh, r1);
             assertArrayEquals("void twice", eh, r2);
-	}
+        }
     }
-    
+
     public static void testBoolean(LongTupleHashFunction f, int len) {
         if (len != 1)
             return;
