@@ -65,9 +65,9 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
     @Override
     public <T> long[] hash(@Nullable final T input, final Access<T> access, final long off, final long len) {
-	final long[] result = newResultArray();
+        final long[] result = newResultArray();
         dualHash(input, access, off, len, result);
-	return result;
+        return result;
     }
 
     // LongTupleHashFunction and LongHashFunction are stateless objects after construction
