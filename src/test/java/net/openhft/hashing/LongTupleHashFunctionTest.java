@@ -53,8 +53,8 @@ public class LongTupleHashFunctionTest {
         boolean ok = false;
         try {
             f.hashBytes(new byte[0], null);
-        } catch (NullPointerException e) {
-            ok = true; // expected
+        } catch (NullPointerException expected) {
+            ok = true;
         } catch (Throwable e) {
             fail(e.toString());
         }
@@ -63,12 +63,12 @@ public class LongTupleHashFunctionTest {
         ok = false;
         try {
             f.hashBytes(new byte[0], new long[1]);
-        } catch (IndexOutOfBoundsException e) {
-            ok = true; // expected
+        } catch (IllegalArgumentException expected) {
+            ok = true;
         } catch (Throwable e) {
             fail(e.toString());
         }
-        assertTrue("should throw IndexOutOfBoundsException", ok);
+        assertTrue("should throw IllegalArgumentException", ok);
 
         // no exception with larger array
         long[] r1 = f.hashBytes(new byte[1]);
