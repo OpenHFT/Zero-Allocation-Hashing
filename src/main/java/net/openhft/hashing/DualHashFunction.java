@@ -11,8 +11,13 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     private static final long serialVersionUID = 0L;
 
     private transient final int resultLength = newResultArray().length;
-    private long checkResult(final long[] result) {
-        return result[resultLength - 1];
+    private void checkResult(final long[] result) {
+        if (null == result) {
+            throw new NullPointerException();
+        }
+        if (result.length < resultLength) {
+            throw new IllegalArgumentException("The input result array has not enough space!");
+        }
     }
 
     protected abstract long dualHashLong(long input, @Nullable long[] result);

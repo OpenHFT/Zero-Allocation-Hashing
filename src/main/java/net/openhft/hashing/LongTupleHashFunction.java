@@ -121,7 +121,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * {@code result.length > newResultArray().length]}.
      *
      * @throws NullPointerException if {@code result == null}
-     * @throws IndexOutOfBoundsException if {@code result.length < newResultArray().length}
+     * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      */
     public abstract void hashLong(long input, long[] result);
 
@@ -151,7 +151,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * {@code result.length > newResultArray().length]}.
      *
      * @throws NullPointerException if {@code result == null}
-     * @throws IndexOutOfBoundsException if {@code result.length < newResultArray().length}
+     * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      */
     public abstract void hashInt(int input, long[] result);
 
@@ -181,7 +181,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * {@code result.length > newResultArray().length]}.
      *
      * @throws NullPointerException if {@code result == null}
-     * @throws IndexOutOfBoundsException if {@code result.length < newResultArray().length}
+     * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      */
     public abstract void hashShort(short input, long[] result);
 
@@ -344,7 +344,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @param len length of the subsequence to hash
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashBooleans(final boolean[] input,
@@ -396,7 +396,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @param len length of the subsequence to hash
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashBytes(final byte[] input, final int off, final int len, final long[] result) {
@@ -451,7 +451,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @param len length of the subsequence to hash
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.capacity()}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.capacity()}
      * or {@code len < 0}
      */
     public void hashBytes(final ByteBuffer input,
@@ -532,7 +532,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      *            sequence to hash is {@code len * 2L})
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashChars(final char[] input, final int off, final int len, final long[] result) {
@@ -585,7 +585,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      *            sequence to hash is {@code len * 2L})
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length()}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length()}
      * or {@code len < 0}
      */
     public void hashChars(final String input, final int off, final int len, final long[] result) {
@@ -639,7 +639,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
      * @param <T> the type of the input which extends CharSequence
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length()}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length()}
      * or {@code len < 0}
      */
     public <T extends CharSequence> void hashChars(final T input, final int off, final int len,
@@ -693,7 +693,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      *            sequence to hash is {@code len * 2L})
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashShorts(final short[] input, final int off, final int len, final long[] result) {
@@ -746,7 +746,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      *            sequence to hash is {@code len * 4L})
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashInts(final int[] input, final int off, final int len, final long[] result) {
@@ -799,7 +799,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      *            sequence to hash is {@code len * 8L})
      * @param result the container array for putting the hash results,
      *               should be alloced by {@link #newResultArray}
-     * @throws IndexOutOfBoundsException if {@code off < 0} or {@code off + len > input.length}
+     * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      * or {@code len < 0}
      */
     public void hashLongs(final long[] input, final int off, final int len, final long[] result) {
