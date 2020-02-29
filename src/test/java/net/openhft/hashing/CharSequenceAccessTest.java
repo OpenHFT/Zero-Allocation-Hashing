@@ -8,61 +8,61 @@ import static java.nio.ByteOrder.*;
 import static net.openhft.hashing.Primitives.*;
 
 public class CharSequenceAccessTest {
-    static String TEST_STRING = "ABCDEFGH";
-
-    static long buildNumber(char ll, char lh, char hl, char hh) {
-        return ll | (((int)lh) << 16) | (((long)hl) << 32) | (((long)hh) << 48);
-    }
+    static String TEST_STRING2 = new String(new char[] {0xF0E1,0xD2C3,0xB4A5,0x9687,0xC8E9});
 
     @Test
     public void testLittleEndian() {
-        assertEquals(LITTLE_ENDIAN, nativeOrder()); // ut is designed for LE machines
+        if (LITTLE_ENDIAN != nativeOrder()) {
+            return; // ut is designed for LE machines
+        }
 
         final Access<CharSequence> access = CharSequenceAccess.charSequenceAccess(LITTLE_ENDIAN);
         assertSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
 
-        assertEquals(buildNumber('A', 'B', 'C', 'D'), access.getLong(TEST_STRING, 0));
-        assertEquals((buildNumber('A', 'B', 'C', 'D') >>> 8) | (((long)'E') << 56), access.getLong(TEST_STRING, 1));
+        assertEquals(  0x9687B4A5D2C3F0E1L, access.getLong(TEST_STRING2, 0));
+        assertEquals(0xE99687B4A5D2C3F0L  , access.getLong(TEST_STRING2, 1));
 
-        assertEquals((int)buildNumber('A', 'B', '\0', '\0'), access.getInt(TEST_STRING, 0));
-        assertEquals((int)(buildNumber('A', 'B', 'C', '\0') >>> 8), access.getInt(TEST_STRING, 1));
-        assertEquals(unsignedInt((int)buildNumber('A', 'B', '\0', '\0')), access.getUnsignedInt(TEST_STRING, 0));
-        assertEquals(unsignedInt((int)(buildNumber('A', 'B', 'C', '\0') >>> 8)), access.getUnsignedInt(TEST_STRING, 1));
+        assertEquals(unsignedInt(  0xD2C3F0E1), access.getUnsignedInt(TEST_STRING2, 0));
+        assertEquals(unsignedInt(0xA5D2C3F0  ), access.getUnsignedInt(TEST_STRING2, 1));
+        assertEquals(  0xD2C3F0E1, access.getInt(TEST_STRING2, 0));
+        assertEquals(0xA5D2C3F0  , access.getInt(TEST_STRING2, 1));
 
-        assertEquals((int)buildNumber('A', '\0', '\0', '\0'), access.getShort(TEST_STRING, 0));
-        assertEquals((int)(short)(buildNumber('A', 'B', '\0', '\0') >>> 8), access.getShort(TEST_STRING, 1));
-        assertEquals(unsignedShort((short)buildNumber('A', '\0', '\0', '\0')), access.getUnsignedShort(TEST_STRING, 0));
-        assertEquals(unsignedShort((short)(buildNumber('A', 'B', '\0', '\0') >>> 8)), access.getUnsignedShort(TEST_STRING, 1));
+        assertEquals(unsignedShort(  0xF0E1), access.getUnsignedShort(TEST_STRING2, 0));
+        assertEquals(unsignedShort(0xC3F0  ), access.getUnsignedShort(TEST_STRING2, 1));
+        assertEquals((int)(short)  0xF0E1, access.getShort(TEST_STRING2, 0));
+        assertEquals((int)(short)0xC3F0  , access.getShort(TEST_STRING2, 1));
 
-        assertEquals((int)(byte)buildNumber('A', '\0', '\0', '\0'), access.getByte(TEST_STRING, 0));
-        assertEquals((int)(byte)(buildNumber('A', '\0', '\0', '\0') >>> 8), access.getByte(TEST_STRING, 1));
-        assertEquals(unsignedByte((byte)buildNumber('A', '\0', '\0', '\0')), access.getUnsignedByte(TEST_STRING, 0));
-        assertEquals(unsignedByte((byte)(buildNumber('A', '\0', '\0', '\0') >>> 8)), access.getUnsignedByte(TEST_STRING, 1));
+        assertEquals(unsignedByte(0xE1), access.getUnsignedByte(TEST_STRING2, 0));
+        assertEquals(unsignedByte(0xF0), access.getUnsignedByte(TEST_STRING2, 1));
+        assertEquals((int)(byte)0xE1, access.getByte(TEST_STRING2, 0));
+        assertEquals((int)(byte)0xF0, access.getByte(TEST_STRING2, 1));
     }
 
     @Test
-    public void testBigEndian() {
-        assertEquals(LITTLE_ENDIAN, nativeOrder()); // ut is designed for LE machines
+    public void testBigEndianOnLEMachine() {
+        if (LITTLE_ENDIAN != nativeOrder()) {
+            return; // ut is designed for LE machines
+        }
 
         final Access<CharSequence> access = CharSequenceAccess.charSequenceAccess(BIG_ENDIAN);
         assertNotSame(CharSequenceAccess.nativeCharSequenceAccess(), access);
 
-        assertEquals(buildNumber('D', 'C', 'B', 'A'), access.getLong(TEST_STRING, 0));
-        assertEquals((buildNumber('D', 'C', 'B', 'A') << 8) | ((byte)('E'>>>8)), access.getLong(TEST_STRING, 1));
+        assertEquals(0xF0E1D2C3B4A59687L  , access.getLong(TEST_STRING2, 0));
+        assertEquals(  0xE1D2C3B4A59687C8L, access.getLong(TEST_STRING2, 1));
 
-        assertEquals((int)buildNumber('B', 'A', '\0', '\0'), access.getInt(TEST_STRING, 0));
-        assertEquals((int)(buildNumber((char)('C'>>>8), 'B', 'A', '\0') >>> 8), access.getInt(TEST_STRING, 1));
-        assertEquals(unsignedInt((int)buildNumber('B', 'A', '\0', '\0')), access.getUnsignedInt(TEST_STRING, 0));
-        assertEquals(unsignedInt((int)(buildNumber((char)('C'>>>8), 'B', 'A', '\0') >>> 8)), access.getUnsignedInt(TEST_STRING, 1));
+        assertEquals(unsignedInt(0xF0E1D2C3), access.getUnsignedInt(TEST_STRING2, 0));
+        assertEquals(unsignedInt(  0xE1D2C3B4), access.getUnsignedInt(TEST_STRING2, 1));
+        assertEquals(0xF0E1D2C3, access.getInt(TEST_STRING2, 0));
+        assertEquals(  0xE1D2C3B4, access.getInt(TEST_STRING2, 1));
 
-        assertEquals((int)buildNumber('A', '\0', '\0', '\0'), access.getShort(TEST_STRING, 0));
-        assertEquals((int)(short)(buildNumber((char)('B'>>>8), 'A', '\0', '\0') >>> 8), access.getShort(TEST_STRING, 1));
-        assertEquals(unsignedShort((short)buildNumber('A', '\0', '\0', '\0')), access.getUnsignedShort(TEST_STRING, 0));
-        assertEquals(unsignedShort((short)(buildNumber((char)('B'>>>8), 'A', '\0', '\0') >>> 8)), access.getUnsignedShort(TEST_STRING, 1));
+        assertEquals(unsignedShort(0xF0E1), access.getUnsignedShort(TEST_STRING2, 0));
+        assertEquals(unsignedShort(  0xE1D2), access.getUnsignedShort(TEST_STRING2, 1));
+        assertEquals((int)(short)0xF0E1, access.getShort(TEST_STRING2, 0));
+        assertEquals((int)(short)  0xE1D2, access.getShort(TEST_STRING2, 1));
 
-        assertEquals((int)(byte)(buildNumber('A', '\0', '\0', '\0') >> 8), access.getByte(TEST_STRING, 0));
-        assertEquals((int)(byte)buildNumber('A', '\0', '\0', '\0'), access.getByte(TEST_STRING, 1));
-        assertEquals(unsignedByte((byte)(buildNumber('A', '\0', '\0', '\0') >> 8)), access.getUnsignedByte(TEST_STRING, 0));
-        assertEquals(unsignedByte((byte)buildNumber('A', '\0', '\0', '\0')), access.getUnsignedByte(TEST_STRING, 1));
+        assertEquals(unsignedByte(0xF0), access.getUnsignedByte(TEST_STRING2, 0));
+        assertEquals(unsignedByte(0xE1), access.getUnsignedByte(TEST_STRING2, 1));
+        assertEquals((int)(byte)0xF0, access.getByte(TEST_STRING2, 0));
+        assertEquals((int)(byte)0xE1, access.getByte(TEST_STRING2, 1));
     }
 }

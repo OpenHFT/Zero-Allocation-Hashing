@@ -67,7 +67,7 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
         } else {
             final long char0 = input.charAt(base + char0Off + delta) >>> 8;
             final long char1 = input.charAt(base + char1Off + delta);
-            final int char2 = input.charAt(base + char2Off);
+            final long char2 = Primitives.unsignedByte(input.charAt(base + char2Off));
             return char0 | (char1 << 8) | (char2 << 24);
         }
     }
