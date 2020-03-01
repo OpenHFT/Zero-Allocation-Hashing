@@ -17,25 +17,25 @@ import static net.openhft.hashing.Util.*;
  * {@code long[]} from any byte sequences. See {@link LongHashFunction} for the definition of byte
  * sequence semantics and {@link ByteOrder} requirements for implementations.
  *
- * Every {#link LongHashFunction} hash method has two corresponding ones in this class for different
- * allocation stradges:
+ * Every {@link LongHashFunction} hash method has two corresponding ones in this class for different
+ * allocation strategies:
  * <ul>
  *     <li>{@code void hash(input..., long[] result)} will store the hash results in array
- *     {@code result[0 .. newResultArray().length-1]}, and throws exceptions when {@code result}
- *     is not valid. {@link #newResultArray} method should always be used to create resuable result
- *     arrays to avoid exceptions. See {@link #hash(long, long[])}.</li>
+ *     {@code result[0 .. newResultArray().length-1]}, and throws exceptions when
+ *     {@code result == null} or the length of the array is less than
+ *     {@code newResultArray().length}. {@link #newResultArray} method should always be used to
+ *     create resuable result arrays to avoid exceptions. See {@link #hashLong(long, long[])}.</li>
  *     <li>{@code long[] hash(input...)} will allocate and return an array containing the results.
  *     </li>
  * </ul>
  *
- * <b>Warning:</b> Allocations <strong>cannot</strong> be totally avoid to exchange a more than
- * 64-bit result since there is no value type in java yet. For the first form of a hash method, a
- * single allocation occurs only at the begining of some runtime scope, so it could be called
+ * <p><b>Warning:</b> For the first form of a hash method, a single allocation occurs only at the
+ * begining of some runtime scope, so it could be called
  * <strong>Almost-Zero-Allocation-Hashing</strong>.
  *
- * <b>Warning:</b> The second form <strong>always performs exactly one allocation</strong> for the
- * result array in each invocation, that is <strong>One-Allocation-Hashing</strong>. So prefer the
- * first form as much as possible.
+ * <p><b>Warning:</b> The second form <strong>always performs exactly one allocation</strong> for
+ * the result array in each invocation, that is <strong>One-Allocation-Hashing</strong>. So prefer
+ * the first form as much as possible.
  *
  * <h3>Subclassing</h3>
  * To implement a specific hash function algorithm resulting more than 64 bits results, this class
