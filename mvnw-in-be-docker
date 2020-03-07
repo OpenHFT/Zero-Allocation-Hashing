@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e +x
+[[ $DEBUG != true ]] || set -x
+
+if ! command -v docker >/dev/null 2>&1; then
+    echo "no commmand docker!" >&2
+    exit 127
+fi
+if ! docker info >/dev/null 2>&1; then
+    echo "no privilege to run docker!" >&2
+    exit 127
+fi
+
+be_image=s390x/adoptopenjdk:8-jdk-hotspot
+
+cd -- "$(dirname -- "$0")"
+
+# volumes for timezone
+opt=
+for v in /etc/localtime /etc/sysconfig/clock /usr/share/zoneinfo; do
+  [[ -r "$v" ]] || continue
+  mkdir -p target/tz`dirname $v`
+  cp -r $v target/tz`dirname $v`/
+  opt="$opt --volume=`pwd`/target/tz$v:$v:ro"
+done
+
+exec docker run --rm -it $opt \
+	-v "$HOME/.m2":/root/.m2 \
+	-v "`pwd`:/cwd" \
+	-w /cwd \
+	$be_image \
+	./mvnw "$@"

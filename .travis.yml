@@ -1,10 +1,22 @@
-dist: trusty
 language: java
-install: mvn install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
-addons:
-  apt:
-    packages:
-      - openjdk-7-jdk
+
+arch:
+  - amd64
+  - s390x
+
+os: linux
+dist: trusty
+
+before_install:
+  - |
+    case "$(uname -m)" in
+    (amd64|x86_64) printf '\1' | od -dAn | grep 1 ;;
+    (s390x) printf '\1' | od -dAn | grep 256 ;;
+    (*) echo unknown arch; uname -m; exit 1 ;;
+    esac
+
+install: ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
+
 jdk:
   - openjdk13
   - openjdk12
@@ -13,3 +25,56 @@ jdk:
   - openjdk9
   - openjdk8
   - openjdk7
+
+env:
+  - INSTALL_JDK_MANUAL=0
+
+jobs:
+  exclude:
+    - arch: s390x
+      jdk: openjdk10
+      env: INSTALL_JDK_MANUAL=0
+    - arch: s390x
+      jdk: openjdk9
+      env: INSTALL_JDK_MANUAL=0
+    - arch: s390x
+      jdk: openjdk7
+      env: INSTALL_JDK_MANUAL=0
+
+  include:
+    - arch: s390x
+      jdk: openjdk10
+      env: INSTALL_JDK_MANUAL=1
+      install:
+      - wget -q -T 1 -t 1 https://github.com/AdoptOpenJDK/openjdk10-binaries/releases/download/jdk-10.0.2%2B13.1/OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz
+      - sha256sum OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz | grep 0733bcefec0c51b6f1225cfaf0e1008d987fa61053ddb76ba5aa3d5732d3cfd8
+      - tar -xf OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz
+      - export PATH="$PWD/jdk-10.0.2+13/bin:$PATH"
+      - export JAVA_HOME="$PWD/jdk-10.0.2+13"
+      - java -version
+      - ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
+
+    - arch: s390x
+      jdk: openjdk9
+      env: INSTALL_JDK_MANUAL=1
+      install:
+      - wget -q -T 1 -t 1 https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9.0.4%2B11/OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz
+      - sha256sum OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz | grep 7bfdc389c25820e08a85eb3a32c4193189f13945847619b14966f7fd45a5c345
+      - tar -xf OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz
+      - export PATH="$PWD/jdk-9.0.4+11/bin:$PATH"
+      - export JAVA_HOME="$PWD/jdk-9.0.4+11"
+      - java -version
+      - ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
+
+        # TODO no jdk7 package on s390x
+        #- arch: s390x
+        #jdk: openjdk7
+        #env: INSTALL_JDK_MANUAL=1
+        #addons:
+        #apt:
+        #packages:
+        #- openjdk-7
+
+cache:
+  directories:
+    - $HOME/.m2

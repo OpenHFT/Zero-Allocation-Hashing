@@ -188,7 +188,7 @@ public class LongHashFunctionTest {
             assertEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
 
             if (len >= 2) {
-                bb.order(BIG_ENDIAN);
+                bb.order(nonNativeOrder());
                 String s2 = bb.asCharBuffer().toString();
                 assert s.charAt(0) != bb.getChar(0);
 
