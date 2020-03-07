@@ -44,7 +44,7 @@
  *         {@linkplain net.openhft.hashing.LongHashFunction#metro(long) with a seed}.
  *         </li>
  *         <li>
- *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3() MurmurHash3 without seed} and
+ *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3() 64-bit MurmurHash3 without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#murmur_3(long) with a seed}.
  *         </li>
  *         <li>
@@ -54,6 +54,21 @@
  *         <li>
  *         {@linkplain net.openhft.hashing.LongHashFunction#xx() xxHash without seed} and
  *         {@linkplain net.openhft.hashing.LongHashFunction#xx(long) with a seed}.
+ *         </li>
+ *     </ul>
+ *     </li>
+ * </ul>
+ *
+ * <p>API for hashing sequential data to more than 64-bit result, pretty fast implementations of
+ * non-cryptographic hash functions.
+ *
+ * <p>Currently implemented (in alphabetical order):
+ * <ul>
+ *     <li>{@code long[]}-valued functions: see {@link net.openhft.hashing.LongTupleHashFunction}
+ *     <ul>
+ *         <li>
+ *         {@linkplain net.openhft.hashing.LongTupleHashFunction#murmur_3() 128-bit MurmurHash3 without seed}
+ *         and {@linkplain net.openhft.hashing.LongTupleHashFunction#murmur_3(long) with a seed}.
  *         </li>
  *     </ul>
  *     </li>
