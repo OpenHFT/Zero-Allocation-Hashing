@@ -47,7 +47,7 @@ jobs:
       env: INSTALL_JDK_MANUAL=1
       install:
       - wget -q -T 1 -t 1 https://github.com/AdoptOpenJDK/openjdk10-binaries/releases/download/jdk-10.0.2%2B13.1/OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz
-      - sha256sum OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz | grep 0733bcefec0c51b6f1225cfaf0e1008d987fa61053ddb76ba5aa3d5732d3cfd8
+      - echo "0733bcefec0c51b6f1225cfaf0e1008d987fa61053ddb76ba5aa3d5732d3cfd8  OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz" | sha256sum -c -
       - tar -xf OpenJDK10U-jdk_s390x_linux_hotspot_10.0.2_13.tar.gz
       - export PATH="$PWD/jdk-10.0.2+13/bin:$PATH"
       - export JAVA_HOME="$PWD/jdk-10.0.2+13"
@@ -59,21 +59,28 @@ jobs:
       env: INSTALL_JDK_MANUAL=1
       install:
       - wget -q -T 1 -t 1 https://github.com/AdoptOpenJDK/openjdk9-binaries/releases/download/jdk-9.0.4%2B11/OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz
-      - sha256sum OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz | grep 7bfdc389c25820e08a85eb3a32c4193189f13945847619b14966f7fd45a5c345
+      - echo "7bfdc389c25820e08a85eb3a32c4193189f13945847619b14966f7fd45a5c345  OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz" | sha256sum -c -
       - tar -xf OpenJDK9U-jdk_s390x_linux_hotspot_9.0.4_11.tar.gz
       - export PATH="$PWD/jdk-9.0.4+11/bin:$PATH"
       - export JAVA_HOME="$PWD/jdk-9.0.4+11"
       - java -version
       - ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 
-        # TODO no jdk7 package on s390x
-        #- arch: s390x
-        #jdk: openjdk7
-        #env: INSTALL_JDK_MANUAL=1
-        #addons:
-        #apt:
-        #packages:
-        #- openjdk-7
+    - arch: s390x
+      jdk: openjdk7
+      env: INSTALL_JDK_MANUAL=1
+      install:
+      - wget -O ibmjdk7.bin -q -T 1 -t 1 http://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/7.1.4.60/linux/s390x/ibm-java-sdk-7.1-4.60-s390x-archive.bin
+      - echo "3f0246ab8e9c6f6ba7e8863ab2304c34cc7d1d02edc6dfcda4a9b1be1fb84ad7  ibmjdk7.bin" | sha256sum -c -
+      - chmod +x ibmjdk7.bin
+      - echo "INSTALLER_UI=silent" > response.properties
+      - echo "USER_INSTALL_DIR=$PWD/ibmjdk7" >> response.properties
+      - echo "LICENSE_ACCEPTED=TRUE" >> response.properties
+      - ./ibmjdk7.bin -i silent -f response.properties
+      - export PATH="$PWD/ibmjdk7/bin:$PATH"
+      - export JAVA_HOME="$PWD/ibmjdk7"
+      - java -version
+      - ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 
 cache:
   directories:
