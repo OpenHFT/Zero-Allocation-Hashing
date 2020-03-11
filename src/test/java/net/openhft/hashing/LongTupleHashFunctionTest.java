@@ -2,6 +2,7 @@ package net.openhft.hashing;
 
 import sun.nio.ch.DirectBuffer;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -192,20 +193,23 @@ public class LongTupleHashFunctionTest {
     }
 
     private static void testByteBuffers(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
+        // To Support IBM JDK7, methods of Buffer#position(int) and Buffer#clear() for a ByteBuffer
+        // object need to be invoked from a parent Buffer object explicitly.
+
         bb.order(LITTLE_ENDIAN);
         assertArrayEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        bb2.position(1);
+        ((Buffer)bb2).position(1);
         bb2.put(bb);
         assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        bb.order(BIG_ENDIAN).clear();
+        ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
         assertArrayEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertArrayEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        bb.order(nativeOrder()).clear();
+        ((Buffer)bb.order(nativeOrder())).clear();
     }
 
     private static void testCharSequences(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
@@ -225,7 +229,7 @@ public class LongTupleHashFunctionTest {
             assertArrayEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
 
             if (len >= 2) {
-                bb.order(BIG_ENDIAN);
+                bb.order(nonNativeOrder());
                 String s2 = bb.asCharBuffer().toString();
                 assert s.charAt(0) != bb.getChar(0);
 
@@ -235,7 +239,7 @@ public class LongTupleHashFunctionTest {
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertArrayEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                bb.order(nativeOrder()).clear();
+                ((Buffer)bb.order(nativeOrder())).clear();
             }
         }
     }
@@ -244,6 +248,6 @@ public class LongTupleHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertArrayEquals("memory", eh, f.hashMemory(((DirectBuffer) directBB).address(), len));
-        bb.clear();
+        ((Buffer)bb).clear();
     }
 }
