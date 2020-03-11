@@ -18,6 +18,7 @@ package net.openhft.hashing;
 
 import sun.nio.ch.DirectBuffer;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class LongHashFunctionTest {
         if (len == 0)
             assertEquals("void", eh, f.hashVoid());
     }
-    
+
     public static void testBoolean(LongHashFunction f, int len) {
         if (len != 1)
             return;
@@ -155,20 +156,23 @@ public class LongHashFunctionTest {
     }
 
     private static void testByteBuffers(LongHashFunction f, long eh, int len, ByteBuffer bb) {
+        // To Support IBM JDK7, methods of Buffer#position(int) and Buffer#clear() for a ByteBuffer
+        // object need to be invoked from a parent Buffer object explicitly.
+
         bb.order(LITTLE_ENDIAN);
         assertEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        bb2.position(1);
+        ((Buffer)bb2).position(1);
         bb2.put(bb);
         assertEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        bb.order(BIG_ENDIAN).clear();
+        ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
         assertEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        bb.order(nativeOrder()).clear();
+        ((Buffer)bb.order(nativeOrder())).clear();
     }
 
     private static void testCharSequences(LongHashFunction f, long eh, int len, ByteBuffer bb) {
@@ -188,7 +192,7 @@ public class LongHashFunctionTest {
             assertEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
 
             if (len >= 2) {
-                bb.order(BIG_ENDIAN);
+                bb.order(nonNativeOrder());
                 String s2 = bb.asCharBuffer().toString();
                 assert s.charAt(0) != bb.getChar(0);
 
@@ -198,7 +202,7 @@ public class LongHashFunctionTest {
                 long toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                bb.order(nativeOrder()).clear();
+                ((Buffer)bb.order(nativeOrder())).clear();
             }
         }
     }
@@ -207,6 +211,6 @@ public class LongHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertEquals("memory", eh, f.hashMemory(((DirectBuffer) directBB).address(), len));
-        bb.clear();
+        ((Buffer)bb).clear();
     }
 }
