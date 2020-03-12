@@ -16,18 +16,25 @@
 
 package net.openhft.hashing;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static java.lang.Long.reverseBytes;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
+import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 import static net.openhft.hashing.Primitives.unsignedInt;
 
 /**
  * Derived from https://github.com/google/guava/blob/fa95e381e665d8ee9639543b99ed38020c8de5ef
  * /guava/src/com/google/common/hash/Murmur3_128HashFunction.java
  */
+@ParametersAreNonnullByDefault
 class MurmurHash_3 {
+    @NotNull
     private static final MurmurHash_3 INSTANCE = new MurmurHash_3();
 
+    @NotNull
     private static final MurmurHash_3 NATIVE_MURMUR = NATIVE_LITTLE_ENDIAN ?
             MurmurHash_3.INSTANCE : BigEndian.INSTANCE;
 
@@ -36,11 +43,11 @@ class MurmurHash_3 {
 
     private MurmurHash_3() {}
 
-    <T> long fetch64(Access<T> access, T in, long off) {
+    <T> long fetch64(Access<T> access, @Nullable T in, long off) {
         return access.getLong(in, off);
     }
 
-    <T> int fetch32(Access<T> access, T in, long off) {
+    <T> int fetch32(Access<T> access, @Nullable T in, long off) {
         return access.getInt(in, off);
     }
 
@@ -56,7 +63,7 @@ class MurmurHash_3 {
         return unsignedShort;
     }
 
-    public <T> long hash(long seed, T input, Access<T> access, long offset, long length) {
+    public <T> long hash(long seed, @Nullable T input, Access<T> access, long offset, long length, @Nullable long[] result) {
         long h1 = seed;
         long h2 = seed;
         long remaining = length;
@@ -192,10 +199,10 @@ class MurmurHash_3 {
 //            h2 ^= mixK2(k2);
 //        }
 
-        return finalize(length, h1, h2);
+        return finalize(length, h1, h2, result);
     }
 
-    private static long finalize(long length, long h1, long h2) {
+    private static long finalize(long length, long h1, long h2, @Nullable long[] result) {
         h1 ^= length;
         h2 ^= length;
 
@@ -205,8 +212,15 @@ class MurmurHash_3 {
         h1 = fmix64(h1);
         h2 = fmix64(h2);
 
-        h1 += h2;
-        return h1;
+
+        if (null != result) {
+            h1 += h2;
+            result[0] = h1;
+            result[1] = h1 + h2;
+            return h1;
+        } else {
+            return h1 + h2;
+        }
     }
 
     private static long fmix64(long k) {
@@ -233,16 +247,17 @@ class MurmurHash_3 {
     }
 
     private static class BigEndian extends MurmurHash_3 {
+        @NotNull
         private static final BigEndian INSTANCE = new BigEndian();
         private BigEndian() {}
 
         @Override
-        <T> long fetch64(Access<T> access, T in, long off) {
+        <T> long fetch64(Access<T> access, @Nullable T in, long off) {
             return reverseBytes(super.fetch64(access, in, off));
         }
 
         @Override
-        <T> int fetch32(Access<T> access, T in, long off) {
+        <T> int fetch32(Access<T> access, @Nullable T in, long off) {
             return Integer.reverseBytes(super.fetch32(access, in, off));
         }
 
@@ -262,79 +277,102 @@ class MurmurHash_3 {
         }
     }
 
-    private static class AsLongHashFunction extends LongHashFunction {
+    private static class AsLongTupleHashFunction extends DualHashFunction {
         private static final long serialVersionUID = 0L;
-        private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
+        @NotNull
+        private static final AsLongTupleHashFunction SEEDLESS_INSTANCE = new AsLongTupleHashFunction();
+        @NotNull
+        private static final LongHashFunction SEEDLESS_INSTANCE_LONG = SEEDLESS_INSTANCE.asLongHashFunction();
 
         private Object readResolve() {
             return SEEDLESS_INSTANCE;
+        }
+
+        @Override
+        public int bitsLength() {
+            return 128;
+        }
+        @Override
+        @NotNull
+        public long[] newResultArray() {
+            return new long[2]; // override for a little performance
         }
 
         long seed() {
             return 0L;
         }
 
-        long hashNativeLong(long nativeLong, long len) {
+        protected long hashNativeLong(long nativeLong, long len, @Nullable long[] result) {
             long h1 = mixK1(nativeLong);
             long h2 = 0L;
-            return MurmurHash_3.finalize(len, h1, h2);
+            return MurmurHash_3.finalize(len, h1, h2, result);
         }
 
         @Override
-        public long hashLong(long input) {
-            return hashNativeLong(NATIVE_MURMUR.toLittleEndian(input), 8L);
+        public long dualHashLong(long input, @Nullable long[] result) {
+            return hashNativeLong(NATIVE_MURMUR.toLittleEndian(input), 8L, result);
         }
 
         @Override
-        public long hashInt(int input) {
-            return hashNativeLong(unsignedInt(NATIVE_MURMUR.toLittleEndian(input)), 4L);
+        public long dualHashInt(int input, @Nullable long[] result) {
+            return hashNativeLong(unsignedInt(NATIVE_MURMUR.toLittleEndian(input)), 4L, result);
         }
 
         @Override
-        public long hashShort(short input) {
+        public long dualHashShort(short input, @Nullable long[] result) {
             return hashNativeLong(
-                    (long) NATIVE_MURMUR.toLittleEndianShort(Primitives.unsignedShort(input)), 2L);
+                    (long) NATIVE_MURMUR.toLittleEndianShort(Primitives.unsignedShort(input)), 2L, result);
         }
 
         @Override
-        public long hashChar(char input) {
-            return hashNativeLong((long) NATIVE_MURMUR.toLittleEndianShort((int) input), 2L);
+        public long dualHashChar(char input, @Nullable long[] result) {
+            return hashNativeLong((long) NATIVE_MURMUR.toLittleEndianShort((int) input), 2L, result);
         }
 
         @Override
-        public long hashByte(byte input) {
-            return hashNativeLong((long) Primitives.unsignedByte((int) input), 1L);
+        public long dualHashByte(byte input, @Nullable long[] result) {
+            return hashNativeLong((long) Primitives.unsignedByte((int) input), 1L, result);
         }
 
         @Override
-        public long hashVoid() {
-            return 0L;
+        public long dualHashVoid(@Nullable long[] result) {
+            if (null != result) {
+                result[0] = 0;
+                result[1] = 0;
+            }
+            return 0;
         }
 
         @Override
-        public <T> long hash(T input, Access<T> access, long off, long len) {
+        public <T> long dualHash(@Nullable T input, Access<T> access, long off, long len, @Nullable long[] result) {
             long seed = seed();
             if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return MurmurHash_3.INSTANCE.hash(seed, input, access, off, len);
+                return MurmurHash_3.INSTANCE.hash(seed, input, access, off, len, result);
             } else {
-                return BigEndian.INSTANCE.hash(seed, input, access, off, len);
+                return BigEndian.INSTANCE.hash(seed, input, access, off, len, result);
             }
         }
     }
 
+    @NotNull
+    static LongTupleHashFunction asLongTupleHashFunctionWithoutSeed() {
+        return AsLongTupleHashFunction.SEEDLESS_INSTANCE;
+    }
+    @NotNull
     static LongHashFunction asLongHashFunctionWithoutSeed() {
-        return AsLongHashFunction.SEEDLESS_INSTANCE;
+        return AsLongTupleHashFunction.SEEDLESS_INSTANCE_LONG;
     }
 
-    private static class AsLongHashFunctionSeeded extends AsLongHashFunction {
+    private static class AsLongTupleHashFunctionSeeded extends AsLongTupleHashFunction {
         private static final long serialVersionUID = 0L;
 
         private final long seed;
-        private final transient long voidHash;
+        @NotNull
+        private final transient long[] voidHash = newResultArray();
 
-        private AsLongHashFunctionSeeded(long seed) {
+        private AsLongTupleHashFunctionSeeded(long seed) {
             this.seed = seed;
-            voidHash = MurmurHash_3.finalize(0L, seed, seed);
+            MurmurHash_3.finalize(0L, seed, seed, voidHash);
         }
 
         @Override
@@ -343,20 +381,29 @@ class MurmurHash_3 {
         }
 
         @Override
-        long hashNativeLong(long nativeLong, long len) {
+        protected long hashNativeLong(long nativeLong, long len, @Nullable long[] result) {
             long seed = this.seed;
             long h1 = seed ^ mixK1(nativeLong);
             long h2 = seed;
-            return MurmurHash_3.finalize(len, h1, h2);
+            return MurmurHash_3.finalize(len, h1, h2, result);
         }
 
         @Override
-        public long hashVoid() {
-            return voidHash;
+        public long dualHashVoid(@Nullable long[] result) {
+            if (null != result) {
+                result[0] = voidHash[0];
+                result[1] = voidHash[1];
+            }
+            return voidHash[0];
         }
     }
 
+    @NotNull
+    static LongTupleHashFunction asLongTupleHashFunctionWithSeed(long seed) {
+        return new AsLongTupleHashFunctionSeeded(seed);
+    }
+    @NotNull
     static LongHashFunction asLongHashFunctionWithSeed(long seed) {
-        return new AsLongHashFunctionSeeded(seed);
+        return new AsLongTupleHashFunctionSeeded(seed).asLongHashFunction();
     }
 }

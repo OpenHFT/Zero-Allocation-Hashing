@@ -1,7 +1,7 @@
 package net.openhft.hashing;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static net.openhft.hashing.LongHashFunction.NATIVE_LITTLE_ENDIAN;
+import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 class MetroHash {
     private static final MetroHash INSTANCE = new MetroHash();

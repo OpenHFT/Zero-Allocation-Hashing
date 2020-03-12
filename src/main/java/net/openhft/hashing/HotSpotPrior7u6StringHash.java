@@ -17,7 +17,9 @@
 package net.openhft.hashing;
 
 import java.lang.reflect.Field;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 enum HotSpotPrior7u6StringHash implements StringHash {
     INSTANCE;
 
@@ -41,5 +43,13 @@ enum HotSpotPrior7u6StringHash implements StringHash {
         char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
         int offset = UnsafeAccess.UNSAFE.getInt(s, offsetOffset);
         return hashFunction.hashChars(value, offset + off, len);
+    }
+
+    @Override
+    public void hash(final String s, final LongTupleHashFunction hashFunction,
+                    final int off, final int len, final long[] result) {
+        final char[] value = (char[]) UnsafeAccess.UNSAFE.getObject(s, valueOffset);
+        final int offset = UnsafeAccess.UNSAFE.getInt(s, offsetOffset);
+        hashFunction.hashChars(value, offset + off, len, result);
     }
 }

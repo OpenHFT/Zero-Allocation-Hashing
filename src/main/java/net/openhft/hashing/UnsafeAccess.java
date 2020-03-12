@@ -22,10 +22,11 @@ import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 
 import static net.openhft.hashing.Primitives.*;
+import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 class UnsafeAccess extends Access<Object> {
-    public static final UnsafeAccess INSTANCE;
-    static final UnsafeAccess OLD_INSTANCE = ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN
+    static final UnsafeAccess INSTANCE;
+    static final UnsafeAccess OLD_INSTANCE = NATIVE_LITTLE_ENDIAN
                                              ? new OldUnsafeAccessLittleEndian()
                                              : new OldUnsafeAccessBigEndian();
 
@@ -36,6 +37,9 @@ class UnsafeAccess extends Access<Object> {
     static final long SHORT_BASE;
     static final long INT_BASE;
     static final long LONG_BASE;
+
+    static final byte TRUE_BYTE_VALUE;
+    static final byte FALSE_BYTE_VALUE;
 
     static {
         try {
@@ -56,10 +60,14 @@ class UnsafeAccess extends Access<Object> {
         try {
             inst.getByte(new byte[1], BYTE_BASE);
         } catch (final Throwable e) {
+            // Unsafe in pre-Nougat Android does not have getByte(), fall back to workround
             inst = OLD_INSTANCE;
         } finally {
             INSTANCE = inst;
         }
+
+        TRUE_BYTE_VALUE = (byte)INSTANCE.getByte(new boolean[] {true}, BOOLEAN_BASE);
+        FALSE_BYTE_VALUE = (byte)INSTANCE.getByte(new boolean[] {false}, BOOLEAN_BASE);
     }
 
     private UnsafeAccess() {}
