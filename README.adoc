@@ -1,17 +1,17 @@
 == Zero-Allocation Hashing
 
-==== Version 
+==== Version
 [#image-maven]
 [caption="", link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
 image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[]
 
 === Overview
 This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
-primitive arrays, buffers, `CharSequence`s and more. 
+primitive arrays, buffers, `CharSequence`s and more.
 
 Written for Java 7+ under Apache 2.0 license.
 
-The key difference compared to other similar projects, e.g. 
+The key difference compared to other similar projects, e.g.
 https://guava.dev/releases/28.1-jre/api/docs/com/google/common/hash/package-summary.html[Guava hashing],
 is that this has no object allocation during the hash computation and does not use `ThreadLocal`.
 
@@ -19,8 +19,9 @@ The implementation utilises native access where possible, but is also platform-e
 This provides consistent results whatever the byte order, while only moderately affecting
 performance.
 
-Currently `long`-valued hash function interface is defined, with the following
-implementations (in alphabetical order):
+Currently `long`-valued hash function interface is defined for 64-bit hash, and `long[]`-valued hash
+function interface for more than 64-bit hash, with the following implementations (in alphabetical
+order):
 
  - *https://github.com/google/cityhash[CityHash], version 1.1* (latest; 1.1.1 is a C++
  language-specific maintenance release).
@@ -30,14 +31,13 @@ implementations (in alphabetical order):
 
  - *https://github.com/jandrewrogers/MetroHash[MetroHash]* (using the metrohash64_2 initialization vector).
 
- - *https://github.com/aappleby/smhasher/wiki/MurmurHash3[MurmurHash3]*.
+ - *https://github.com/aappleby/smhasher/wiki/MurmurHash3[MurmurHash3]* 128-bit and low 64-bit.
 
  - *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
 
  - *https://github.com/Cyan4973/xxHash[xxHash]*.
 
-These are thoroughly tested with JDK 7, 8, 9, 10, and 11, 12, and 13 on little-endian platform. However,
-they are believed to be independent from the native byte order.
+These are thoroughly tested with JDK 7, 8, 9, 10, 11, 12 and 13 on both little- and big- endian platforms.
 
 ==== Performance
 
@@ -73,10 +73,10 @@ To sum up,
         int salary;
     }
 ----
-   
+
  * You need to hash byte sequences of unknown length, for the simpliest example,
    `Iterator<Byte>`.
-   
+
  * You need to transform the byte sequence (e.g. encode or decode it with a specific coding),
    and hash the resulting byte sequence on the way without dumping it to memory.
 
