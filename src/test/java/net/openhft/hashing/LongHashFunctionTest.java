@@ -16,8 +16,6 @@
 
 package net.openhft.hashing;
 
-import sun.nio.ch.DirectBuffer;
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -210,7 +208,7 @@ public class LongHashFunctionTest {
     private static void testMemory(LongHashFunction f, long eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertEquals("memory", eh, f.hashMemory(((DirectBuffer) directBB).address(), len));
+        assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         ((Buffer)bb).clear();
     }
 }

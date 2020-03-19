@@ -16,21 +16,23 @@
 
 package net.openhft.hashing;
 
-import sun.misc.Unsafe;
-
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
+import sun.misc.Unsafe;
 
 import static net.openhft.hashing.Primitives.*;
 import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 class UnsafeAccess extends Access<Object> {
     static final UnsafeAccess INSTANCE;
+
+    // for test only
     static final UnsafeAccess OLD_INSTANCE = NATIVE_LITTLE_ENDIAN
                                              ? new OldUnsafeAccessLittleEndian()
                                              : new OldUnsafeAccessBigEndian();
 
     static final Unsafe UNSAFE;
+
     static final long BOOLEAN_BASE;
     static final long BYTE_BASE;
     static final long CHAR_BASE;
@@ -46,28 +48,31 @@ class UnsafeAccess extends Access<Object> {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
             UNSAFE = (Unsafe) theUnsafe.get(null);
+
             BOOLEAN_BASE = UNSAFE.arrayBaseOffset(boolean[].class);
             BYTE_BASE = UNSAFE.arrayBaseOffset(byte[].class);
             CHAR_BASE = UNSAFE.arrayBaseOffset(char[].class);
             SHORT_BASE = UNSAFE.arrayBaseOffset(short[].class);
             INT_BASE = UNSAFE.arrayBaseOffset(int[].class);
             LONG_BASE = UNSAFE.arrayBaseOffset(long[].class);
-        } catch (Exception e) {
+
+            TRUE_BYTE_VALUE = (byte)UNSAFE.getInt(new boolean[] {true, true, true, true},
+                                                  BOOLEAN_BASE);
+            FALSE_BYTE_VALUE = (byte)UNSAFE.getInt(new boolean[] {false, false, false, false},
+                                                  BOOLEAN_BASE);
+        } catch (final Exception e) {
             throw new AssertionError(e);
         }
 
-        UnsafeAccess inst = new UnsafeAccess();
+        boolean hasGetByte = true;
         try {
-            inst.getByte(new byte[1], BYTE_BASE);
-        } catch (final Throwable e) {
+            UNSAFE.getByte(new byte[1], BYTE_BASE);
+        } catch (final Throwable ignore) {
             // Unsafe in pre-Nougat Android does not have getByte(), fall back to workround
-            inst = OLD_INSTANCE;
-        } finally {
-            INSTANCE = inst;
+            hasGetByte = false;
         }
 
-        TRUE_BYTE_VALUE = (byte)INSTANCE.getByte(new boolean[] {true}, BOOLEAN_BASE);
-        FALSE_BYTE_VALUE = (byte)INSTANCE.getByte(new boolean[] {false}, BOOLEAN_BASE);
+        INSTANCE = hasGetByte ? new UnsafeAccess() : OLD_INSTANCE;
     }
 
     private UnsafeAccess() {}
