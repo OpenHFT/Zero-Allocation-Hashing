@@ -37,7 +37,7 @@ order):
 
  - *https://github.com/Cyan4973/xxHash[xxHash]*.
 
-These are thoroughly tested with JDK 7, 8, 9, 10, 11, 12 and 13 on both little- and big- endian platforms.
+These are thoroughly tested with JDK 7, 8, 9, 10, 11, 12, 13 and 14 on both little- and big- endian platforms.
 
 ==== Performance
 
