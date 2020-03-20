@@ -23,19 +23,10 @@ class WyHash {
     public static final long _wyp3 = 0x589965cc75374cc3L;
     public static final long _wyp4 = 0x1d8e4e27c47d124fL;
 
-    private static long _wymum(long lhs, long rhs) {
-        //The Grade School method of multiplication is a hair faster in Java, primarily used here
-        // because the implementation is simpler.
-        long lo_lo = (lhs & 0xFFFFFFFFL) * (rhs & 0xFFFFFFFFL);
-        long hi_lo = (lhs >>> 32) * (rhs & 0xFFFFFFFFL);
-        long lo_hi = (lhs & 0xFFFFFFFFL) * (rhs >>> 32);
-        long hi_hi = (lhs >>> 32) * (rhs >>> 32);
+    private static final Maths MATHS = Maths.INSTANCE;
 
-        // Add the products together. This will never overflow.
-        long cross = (lo_lo >>> 32) + (hi_lo & 0xFFFFFFFFL) + lo_hi;
-        long upper = (hi_lo >>> 32) + (cross >>> 32) + hi_hi;
-        long lower = (cross << 32) | (lo_lo & 0xFFFFFFFFL);
-        return lower ^ upper;
+    private static long _wymum(final long lhs, final long rhs) {
+        return MATHS.unsignedLongMulXorFold(lhs, rhs);
     }
 
     <T> long _wyr8(final Access<T> access, T in, final long index) {
