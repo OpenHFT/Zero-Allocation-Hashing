@@ -43,7 +43,7 @@
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>
 
-        <!-- bundle plugin requires JDK8 from 4.1.0 -->
+        <!-- bundle plugin requires JDK8 from 4.0.0 -->
         <maven.bundle.plugin.version>4.2.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
@@ -323,7 +323,7 @@
             </activation>
             <properties>
                 <project.jdk.min-version>1.${project.target.release}</project.jdk.min-version>
-                <maven.bundle.plugin.version>4.0.0</maven.bundle.plugin.version>
+                <maven.bundle.plugin.version>3.5.1</maven.bundle.plugin.version>
                 <doclint></doclint>
             </properties>
         </profile>

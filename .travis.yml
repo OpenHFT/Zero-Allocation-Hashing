@@ -18,6 +18,7 @@ before_install:
 install: ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 
 jdk:
+  - openjdk14
   - openjdk13
   - openjdk12
   - openjdk11
