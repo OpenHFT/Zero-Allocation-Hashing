@@ -1,5 +1,8 @@
 package net.openhft.hashing;
 
+import java.nio.ByteBuffer;
+import sun.nio.ch.DirectBuffer;
+
 import org.jetbrains.annotations.NotNull;
 
 import static java.nio.ByteOrder.*;
@@ -41,5 +44,9 @@ final class Util {
     static void checkArrayOffs(final int arrayLength, final int off, final int len) {
         if (len < 0 || off < 0 || off + len > arrayLength || off + len < 0)
             throw new IndexOutOfBoundsException();
+    }
+
+    static long getDirectBufferAddress(@NotNull final ByteBuffer buff) {
+        return ((DirectBuffer)buff).address();
     }
 }

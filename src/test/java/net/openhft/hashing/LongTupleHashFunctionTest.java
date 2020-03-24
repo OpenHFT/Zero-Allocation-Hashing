@@ -1,7 +1,5 @@
 package net.openhft.hashing;
 
-import sun.nio.ch.DirectBuffer;
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,14 +8,14 @@ import java.util.Arrays;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 
 public class LongTupleHashFunctionTest {
 
@@ -247,7 +245,7 @@ public class LongTupleHashFunctionTest {
     private static void testMemory(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertArrayEquals("memory", eh, f.hashMemory(((DirectBuffer) directBB).address(), len));
+        assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         ((Buffer)bb).clear();
     }
 }

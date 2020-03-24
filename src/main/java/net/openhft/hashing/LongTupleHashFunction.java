@@ -41,7 +41,7 @@ import static net.openhft.hashing.Util.*;
  *     as possible.</li>
  * </ul>
  *
- * <h3>Subclassing</h3>
+ * <h2>Subclassing</h2>
  * To implement a specific hash function algorithm resulting more than 64 bits results, this class
  * should be subclassed. Only methods with resued result array that accept single primitives,
  * {@link #hashVoid(long[])} and {@link #hash(Object, Access, long, long, long[])} should be
@@ -687,7 +687,7 @@ public abstract class LongTupleHashFunction implements Serializable {
     /**
      * The result array is allocated on the fly.
      *
-     * @see #hashChars(String, int, int long[])
+     * @see #hashChars(String, int, int, long[])
      */
     @NotNull
     public long[] hashChars(final String input, final int off, final int len) {
