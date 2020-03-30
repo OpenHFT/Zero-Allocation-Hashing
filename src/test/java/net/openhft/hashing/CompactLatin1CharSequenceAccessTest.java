@@ -25,11 +25,11 @@ public class CompactLatin1CharSequenceAccessTest {
         assertEquals(Primitives.unsignedInt(0xD300E200), access.getUnsignedInt(b, 1));
 
         assertEquals(                         0xF1,    access.getShort(b, 0));
-        assertEquals(                         0xE200,  access.getShort(b, 1));
+        assertEquals(             (int)(short)0xE200,  access.getShort(b, 1));
         assertEquals(Primitives.unsignedShort(0xF1),   access.getUnsignedShort(b, 0));
         assertEquals(Primitives.unsignedShort(0xE200), access.getUnsignedShort(b, 1));
 
-        assertEquals(                        0xF1,  access.getByte(b, 0));
+        assertEquals(             (int)(byte)0xF1,  access.getByte(b, 0));
         assertEquals(                           0,  access.getByte(b, 1));
         assertEquals(Primitives.unsignedByte(0xF1), access.getUnsignedByte(b, 0));
         assertEquals(                           0,  access.getUnsignedByte(b, 1));
@@ -48,12 +48,12 @@ public class CompactLatin1CharSequenceAccessTest {
         assertEquals(Primitives.unsignedInt(0xF100E200), access.getUnsignedInt(b, 1));
 
         assertEquals(                         0xF1,    access.getShort(b, 0));
-        assertEquals(                         0xF100,  access.getShort(b, 1));
+        assertEquals(             (int)(short)0xF100,  access.getShort(b, 1));
         assertEquals(Primitives.unsignedShort(0xF1),   access.getUnsignedShort(b, 0));
         assertEquals(Primitives.unsignedShort(0xF100), access.getUnsignedShort(b, 1));
 
         assertEquals(                           0,  access.getByte(b, 0));
-        assertEquals(                        0xF1,  access.getByte(b, 1));
+        assertEquals(             (int)(byte)0xF1,  access.getByte(b, 1));
         assertEquals(                           0,  access.getUnsignedByte(b, 0));
         assertEquals(Primitives.unsignedByte(0xF1), access.getUnsignedByte(b, 1));
     }

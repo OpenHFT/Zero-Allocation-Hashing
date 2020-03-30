@@ -75,121 +75,97 @@ import static net.openhft.hashing.UnsafeAccess.BYTE_BASE;
  * Notes: This access is based on the UnsafeAccess, so only works for the native order.
  */
 @ParametersAreNonnullByDefault
-abstract class CompactLatin1CharSequenceAccess extends Access<byte[]> {
+class CompactLatin1CharSequenceAccess extends Access<byte[]> {
     @NotNull
-    static final CompactLatin1CharSequenceAccess INSTANCE
-        = ByteOrder.nativeOrder() == LITTLE_ENDIAN ? LittleEndian.INSTANCE : BigEndian.INSTANCE;
+    static final Access<byte[]> INSTANCE = new CompactLatin1CharSequenceAccess();
 
     @NotNull
     private static final UnsafeAccess UNSAFE = UnsafeAccess.INSTANCE;
 
-    private static int ix(final long offset) {
-        return (int) (offset >> 1);
-    }
-
-    protected static long getLong(final byte[] input, final long offset, final int offAdjust) {
-        final int byteIdx = ix(offset + offAdjust);
-        final int shift = ((int)offset & 1) << 3;
-        final long compact = UNSAFE.getUnsignedInt(input, BYTE_BASE + byteIdx);
-        long expanded = ((compact << 16) | compact) & 0xFFFF0000FFFFL;
-        expanded = ((expanded << 8) | expanded) & 0xFF00FF00FF00FFL;
-        return expanded << shift;
-    }
-
-    protected static int getInt(final byte[] input, final long offset, final int offAdjust) {
-        final int byteIdx = ix(offset + offAdjust);
-        final int shift = ((int)offset & 1) << 3;
-        final int compact = UNSAFE.getUnsignedShort(input, BYTE_BASE + byteIdx);
-        final int expanded = ((compact << 8) | compact) & 0xFF00FF;
-        return expanded << shift;
-    }
-
-    protected static int getShort(final byte[] input, final long offset, final int offAdjust) {
-        final int byteIdx = ix(offset + offAdjust);
-        final int shift = ((int)offset & 1) << 3;
-        return Primitives.unsignedByte(input[byteIdx]) << shift;
-    }
-
-    protected static int getByte(final byte[] input, final long offset, final int z) {
-        if (z == ((int)offset & 1)) {
-            return 0;
-        } else {
-            return Primitives.unsignedByte(input[ix(offset)]);
-        }
-    }
+    private static final long UNSAFE_IDX_ADJUST
+        = BYTE_BASE * 2L + (ByteOrder.nativeOrder() == LITTLE_ENDIAN ? 1 : 0);
+    private static final long ARRAY_IDX_ADJUST
+        = ByteOrder.nativeOrder() == LITTLE_ENDIAN ? 1 : 0;
 
     private CompactLatin1CharSequenceAccess() {}
 
     @Override
+    public long getLong(final byte[] input, final long offset) {
+        final long byteIdx = (offset + UNSAFE_IDX_ADJUST) >> 1;
+        final long compact = UNSAFE.getUnsignedInt(input, byteIdx);
+        long expanded = ((compact << 16) | compact) & 0xFFFF0000FFFFL;
+        expanded = ((expanded << 8) | expanded) & 0xFF00FF00FF00FFL;
+        if (((int)offset & 1) == 1) {
+            return expanded << 8;
+        }
+        return expanded;
+    }
+
+    @Override
+    public int getInt(final byte[] input, final long offset) {
+        final long byteIdx = (offset + UNSAFE_IDX_ADJUST) >> 1;
+        final int compact = UNSAFE.getShort(input, byteIdx) & 0xFFFF;
+        final int expanded = ((compact << 8) | compact) & 0xFF00FF;
+        if (((int)offset & 1) == 1) {
+            return expanded << 8;
+        }
+        return expanded;
+    }
+
+    @Override
     public long getUnsignedInt(final byte[] input, final long offset) {
-        return Primitives.unsignedInt(getInt(input, offset));
+        final long byteIdx = (offset + UNSAFE_IDX_ADJUST) >> 1;
+        final int compact = UNSAFE.getShort(input, byteIdx) & 0xFFFF;
+        final long expanded = (long)(((compact << 8) | compact) & 0xFF00FF);
+        if (((int)offset & 1) == 1) {
+            return expanded << 8;
+        }
+        return expanded;
+    }
+
+    @Override
+    public int getShort(final byte[] input, final long offset) {
+        if (((int)offset & 1) == 0) {
+            final int byteIdx = (int)(offset >> 1);
+            return (int)input[byteIdx] & 0xFF;
+        } else {
+            final int byteIdx = (int)((offset + ARRAY_IDX_ADJUST) >> 1);
+            return (int)input[byteIdx] << 8;
+        }
     }
 
     @Override
     public int getUnsignedShort(final byte[] input, final long offset) {
-        return Primitives.unsignedShort(getShort(input, offset));
+        if (((int)offset & 1) == 0) {
+            final int byteIdx = (int)(offset >> 1);
+            return (int)input[byteIdx] & 0xFF;
+        } else {
+            final int byteIdx = (int)((offset + ARRAY_IDX_ADJUST) >> 1);
+            return ((int)input[byteIdx] & 0xFF) << 8;
+        }
+    }
+
+    @Override
+    public int getByte(final byte[] input, final long offset) {
+        if (ARRAY_IDX_ADJUST == ((int)offset & 1)) {
+            return 0;
+        } else {
+            return (int)input[(int)(offset >> 1)];
+        }
     }
 
     @Override
     public int getUnsignedByte(final byte[] input, final long offset) {
-        return Primitives.unsignedByte(getByte(input, offset));
+        if (ARRAY_IDX_ADJUST == ((int)offset & 1)) {
+            return 0;
+        } else {
+            return (int)input[(int)(offset >> 1)] & 0xFF;
+        }
     }
 
     @Override
     @NotNull
     public ByteOrder byteOrder(final byte[] input) {
         return UNSAFE.byteOrder(input);
-    }
-
-    private static class LittleEndian extends CompactLatin1CharSequenceAccess {
-        private static final LittleEndian INSTANCE = new LittleEndian();
-
-        private LittleEndian() {}
-
-        @Override
-        public long getLong(final byte[] input, final long offset) {
-            return getLong(input, offset, 1);
-        }
-
-        @Override
-        public int getInt(final byte[] input, final long offset) {
-            return getInt(input, offset, 1);
-        }
-
-        @Override
-        public int getShort(final byte[] input, final long offset) {
-            return getShort(input, offset, 1);
-        }
-
-        @Override
-        public int getByte(final byte[] input, final long offset) {
-            return getByte(input, offset, 1);
-        }
-    }
-
-    private static class BigEndian extends CompactLatin1CharSequenceAccess {
-        private static final BigEndian INSTANCE = new BigEndian();
-
-        private BigEndian() {}
-
-        @Override
-        public long getLong(final byte[] input, final long offset) {
-            return getLong(input, offset, 0);
-        }
-
-        @Override
-        public int getInt(final byte[] input, final long offset) {
-            return getInt(input, offset, 0);
-        }
-
-        @Override
-        public int getShort(final byte[] input, final long offset) {
-            return getShort(input, offset, 0);
-        }
-
-        @Override
-        public int getByte(final byte[] input, final long offset) {
-            return getByte(input, offset, 0);
-        }
     }
 }
