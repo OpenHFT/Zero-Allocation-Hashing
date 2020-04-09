@@ -92,7 +92,7 @@ Gradle:
 [source, groovy]
 ----
 dependencies {
-    compile 'net.openhft:zero-allocation-hashing:0.10.1'
+    implementation 'net.openhft:zero-allocation-hashing:0.10.1'
 }
 ----
 
