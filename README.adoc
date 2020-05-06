@@ -92,7 +92,7 @@ Gradle:
 [source, groovy]
 ----
 dependencies {
-    implementation 'net.openhft:zero-allocation-hashing:0.10.1'
+    implementation 'net.openhft:zero-allocation-hashing:0.11'
 }
 ----
 
@@ -102,7 +102,7 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.10.1</version>
+  <version>0.11</version>
 </dependency>
 ----
 
@@ -112,7 +112,7 @@ In Java:
 long hash = LongHashFunction.wy_3().hashChars("hello");
 ----
 
-See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.10.1[JavaDocs]* for more
+See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.11[JavaDocs]* for more
 information.
 
 == Contributions are most welcome!
