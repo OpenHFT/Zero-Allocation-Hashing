@@ -26,6 +26,7 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 public class LongHashFunctionTest {
 
@@ -43,6 +44,7 @@ public class LongHashFunctionTest {
         testArrays(f, data, eh, len, bb);
         testByteBuffers(f, eh, len, bb);
         testCharSequences(f, eh, len, bb);
+        testLatin1String(f, data);
         testMemory(f, eh, len, bb);
     }
 
@@ -210,5 +212,19 @@ public class LongHashFunctionTest {
         directBB.put(bb);
         assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         ((Buffer)bb).clear();
+    }
+
+    private static void testLatin1String(LongHashFunction f, byte[] data) {
+        // test for compact string from JDK 9
+        try {
+            String inputStr = new String(data, "ISO-8859-1");
+            char[] inputCharArray = new char[data.length];
+            for (int i = 0; i < data.length; ++i) {
+                inputCharArray[i] = (char)(data[i]&0xFF);
+            }
+            assertEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
+        } catch (Exception e) {
+            fail(e.toString());
+        }
     }
 }

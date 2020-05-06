@@ -39,6 +39,7 @@ public class LongTupleHashFunctionTest {
         testArrays(f, data, eh, len, bb);
         testByteBuffers(f, eh, len, bb);
         testCharSequences(f, eh, len, bb);
+        testLatin1String(f, data);
         testMemory(f, eh, len, bb);
     }
 
@@ -247,5 +248,19 @@ public class LongTupleHashFunctionTest {
         directBB.put(bb);
         assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         ((Buffer)bb).clear();
+    }
+
+    private static void testLatin1String(LongTupleHashFunction f, byte[] data) {
+        // test for compact string from JDK 9
+        try {
+            String inputStr = new String(data, "ISO-8859-1");
+            char[] inputCharArray = new char[data.length];
+            for (int i = 0; i < data.length; ++i) {
+                inputCharArray[i] = (char)(data[i]&0xFF);
+            }
+            assertArrayEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
+        } catch (Exception e) {
+            fail(e.toString());
+        }
     }
 }

@@ -197,6 +197,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <enableAssertions>true</enableAssertions>
+                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
 
@@ -344,6 +345,24 @@
             <properties>
                 <maven.compiler.release>${project.target.release}</maven.compiler.release>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-without-compact-string</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <argLine>-XX:-CompactStrings</argLine>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
