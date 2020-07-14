@@ -25,7 +25,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zero-allocation-hashing</artifactId>
-    <version>0.12</version>
+    <version>0.12-SNAPSHOT</version>
     <name>Zero-allocation Hashing</name>
     <description>Zero-allocation implementations of fast non-cryptographic hash functions
         for byte sequences or blocks of memory</description>
@@ -313,7 +313,7 @@
         <connection>scm:git:git@github.com:OpenHFT/zero-allocation-hashing.git</connection>
         <developerConnection>scm:git:git@github.com:OpenHFT/zero-allocation-hashing.git
         </developerConnection>
-        <tag>zero-allocation-hashing-0.12</tag>
+        <tag>master</tag>
     </scm>
 
     <profiles>
@@ -325,7 +325,7 @@
             <properties>
                 <project.jdk.min-version>1.${project.target.release}</project.jdk.min-version>
                 <maven.bundle.plugin.version>3.5.1</maven.bundle.plugin.version>
-                <doclint />
+                <doclint></doclint>
             </properties>
         </profile>
         <profile>
