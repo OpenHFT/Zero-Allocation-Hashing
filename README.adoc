@@ -4,6 +4,8 @@
 [#image-maven]
 [caption="", link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
 image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[]
+[caption="", link=https://javadoc.io/doc/net.openhft/zero-allocation-hashing]
+image::https://javadoc.io/badge2/net.openhft/zero-allocation-hashing/javadoc.svg[]
 
 === Overview
 This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
