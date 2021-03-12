@@ -25,7 +25,7 @@ for v in /etc/localtime /etc/sysconfig/clock /usr/share/zoneinfo; do
   opt="$opt --volume=`pwd`/target/tz$v:$v:ro"
 done
 
-exec docker run --rm -it $opt \
+exec docker run --platform linux/s390x --rm -it $opt \
 	-v "$HOME/.m2":/root/.m2 \
 	-v "`pwd`:/cwd" \
 	-w /cwd \
