@@ -15,6 +15,7 @@ before_install:
     (*) echo unknown arch; uname -m; exit 1 ;;
     esac
 
+isntall: true
 script: ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 
 jdk:
