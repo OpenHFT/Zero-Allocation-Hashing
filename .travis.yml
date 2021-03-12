@@ -26,6 +26,7 @@ script: ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=tru
 jobs:
   include:
     - arch: amd64
+      dist: trusty
       jdk: openjdk7 # target release on little-endian machine
 
     - arch: s390x
