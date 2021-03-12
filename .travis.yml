@@ -5,10 +5,12 @@ arch:
   - s390x
 
 os: linux
-dist: trusty
+dist: xenial
 
 jdk:
+  - openjdk8 # LTS release
   - openjdk11 # LTS release
+  - openjdk15 # latest non-LTS release
 
 before_install:
   - |
@@ -26,12 +28,6 @@ jobs:
     - arch: amd64
       jdk: openjdk7 # target release on little-endian machine
 
-    - arch: amd64
-      jdk: openjdk8 # LTS release
-
-    - arch: amd64
-      jdk: openjdk15 # latest non-LTS release
-
     - arch: s390x
       jdk: openjdk7 # target release on big-endian machine
       install:
@@ -45,28 +41,6 @@ jobs:
       - export PATH="$PWD/ibmjdk7/bin:$PATH"
       - export JAVA_HOME="$PWD/ibmjdk7"
       - java -version
-
-    - arch: s390x
-      dist: xenial
-      jdk: openjdk8 # LTS release
-      addons:
-        apt:
-          sources:
-          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb xenial main'
-            key_url: 'https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public'
-          packages:
-          - adoptopenjdk-8-hotspot
-
-    - arch: s390x
-      dist: xenial
-      jdk: openjdk15 # latest non-LTS release
-      addons:
-        apt:
-          sources:
-          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb xenial main'
-            key_url: 'https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public'
-          packages:
-          - adoptopenjdk-15-hotspot
 
 cache:
   directories:
