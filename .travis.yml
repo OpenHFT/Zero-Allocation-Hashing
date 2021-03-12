@@ -7,6 +7,17 @@ arch:
 os: linux
 dist: trusty
 
+addons:
+  apt:
+    sources:
+    - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb <codename> main'
+      key_url: 'https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public'
+
+jdk:
+  - openjdk15 # latest non-LTS release
+  - openjdk11 # LTS release
+  - openjdk8  # LTS release
+
 before_install:
   - |
     case "$(uname -m)" in
@@ -18,11 +29,6 @@ before_install:
 install: true
 script: ./mvnw install -DskipTests=true -Dgpg.skip=true -Dmaven.javadoc.skip=true
 
-jdk:
-  - openjdk15 # latest non-LTS release
-  - openjdk11 # LTS release
-  - openjdk8  # LTS release
-
 jobs:
   include:
     - arch: amd64
@@ -31,7 +37,7 @@ jobs:
     - arch: s390x
       jdk: openjdk7 # target release on big-endian machine
       install:
-      - wget -O ibmjdk7.bin -q -T 1 -t 1 http://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/7.1.4.80/linux/s390x/ibm-java-sdk-7.1-4.80-s390x-archive.bin
+      - wget -O ibmjdk7.bin -q -T 1 -t 1 https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/7.1.4.80/linux/s390x/ibm-java-sdk-7.1-4.80-s390x-archive.bin
       - echo "c8d61c9e1bdcee9a332fd46e2799d48fdc8f4568cf59545066539003822962d0  ibmjdk7.bin" | sha256sum -c -
       - chmod +x ibmjdk7.bin
       - echo "INSTALLER_UI=silent" > response.properties
