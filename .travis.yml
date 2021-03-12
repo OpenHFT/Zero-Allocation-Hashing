@@ -47,21 +47,23 @@ jobs:
       - java -version
 
     - arch: s390x
+      dist: xenial
       jdk: openjdk8 # LTS release
       addons:
         apt:
           sources:
-          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb <codename> main'
+          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb xenial main'
             key_url: 'https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public'
           packages:
           - adoptopenjdk-8-hotspot
 
     - arch: s390x
+      dist: xenial
       jdk: openjdk15 # latest non-LTS release
       addons:
         apt:
           sources:
-          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb <codename> main'
+          - sourceline: 'deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb xenial main'
             key_url: 'https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public'
           packages:
           - adoptopenjdk-15-hotspot
