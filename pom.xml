@@ -43,8 +43,8 @@
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>
 
-        <!-- bundle plugin requires JDK8 from 4.0.0 -->
-        <maven.bundle.plugin.version>4.2.1</maven.bundle.plugin.version>
+        <!-- bundle plugin requires JDK8 from 4.0.0, JDK15 requires 5.1.1 for issue FELIX-6259 -->
+        <maven.bundle.plugin.version>5.1.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
     </properties>
