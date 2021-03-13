@@ -51,18 +51,6 @@ class XxHash {
         return access.getUnsignedByte(in, off);
     }
 
-    long toLittleEndian(long v) {
-        return v;
-    }
-
-    int toLittleEndian(int v) {
-        return v;
-    }
-
-    short toLittleEndian(short v) {
-        return v;
-    }
-
     <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
         long hash;
         long remaining = length;
@@ -181,21 +169,6 @@ class XxHash {
         }
 
         // fetch8 is not overloaded, because endianness doesn't matter for single byte
-
-        @Override
-        long toLittleEndian(long v) {
-            return Long.reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndian(int v) {
-            return Integer.reverseBytes(v);
-        }
-
-        @Override
-        short toLittleEndian(short v) {
-            return Short.reverseBytes(v);
-        }
     }
 
     static LongHashFunction asLongHashFunctionWithoutSeed() {
@@ -217,7 +190,7 @@ class XxHash {
 
         @Override
         public long hashLong(long input) {
-            input = NATIVE_XX.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hash = seed() + P5 + 8;
             input *= P2;
             input = Long.rotateLeft(input, 31);
@@ -229,7 +202,7 @@ class XxHash {
 
         @Override
         public long hashInt(int input) {
-            input = NATIVE_XX.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hash = seed() + P5 + 4;
             hash ^= Primitives.unsignedInt(input) * P1;
             hash = Long.rotateLeft(hash, 23) * P2 + P3;
@@ -238,7 +211,7 @@ class XxHash {
 
         @Override
         public long hashShort(short input) {
-            input = NATIVE_XX.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hash = seed() + P5 + 2;
             hash ^= Primitives.unsignedByte(input) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;

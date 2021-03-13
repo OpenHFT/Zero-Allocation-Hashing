@@ -51,18 +51,6 @@ class WyHash {
     private WyHash() {
     }
 
-    long toLittleEndian(long v) {
-        return v;
-    }
-
-    int toLittleEndian(int v) {
-        return v;
-    }
-
-    short toLittleEndian(short v) {
-        return v;
-    }
-
     /**
      *
      * @param seed seed for the hash
@@ -174,21 +162,6 @@ class WyHash {
         <T> long _wyr4(Access<T> access, T in, long off) {
             return Primitives.unsignedInt(Integer.reverseBytes(access.getInt(in, off)));
         }
-
-        @Override
-        long toLittleEndian(long v) {
-            return Long.reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndian(int v) {
-            return Integer.reverseBytes(v);
-        }
-
-        @Override
-        short toLittleEndian(short v) {
-            return Short.reverseBytes(v);
-        }
     }
 
 
@@ -210,7 +183,7 @@ class WyHash {
 
         @Override
         public long hashLong(long input) {
-            input = NATIVE_WY.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hi = input & 0xFFFFFFFFL;
             long lo = (input >>> 32) & 0xFFFFFFFFL;
             return _wymum(_wymum(hi ^ seed() ^ _wyp0,
@@ -220,7 +193,7 @@ class WyHash {
 
         @Override
         public long hashInt(int input) {
-            input = NATIVE_WY.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long longInput = (input & 0xFFFFFFFFL);
             return _wymum(_wymum(longInput ^ seed() ^ _wyp0,
                                  longInput ^ seed() ^ _wyp1)
@@ -229,7 +202,7 @@ class WyHash {
 
         @Override
         public long hashShort(short input) {
-            input = NATIVE_WY.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hi = (input >>> 8) & 0xFFL;
             long wyr3 = hi | hi << 8 | (input & 0xFFL) << 16;
             return _wymum(_wymum(wyr3 ^ seed() ^ _wyp0,

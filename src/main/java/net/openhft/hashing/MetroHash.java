@@ -30,18 +30,6 @@ class MetroHash {
         return access.getUnsignedByte(in, off);
     }
 
-    long toLittleEndian(long v) {
-        return v;
-    }
-
-    int toLittleEndian(int v) {
-        return v;
-    }
-
-    short toLittleEndian(short v) {
-        return v;
-    }
-
 
     <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
         long remaining = length;
@@ -153,21 +141,6 @@ class MetroHash {
         <T> int fetch8(Access<T> access, T in, long off) {
             return super.fetch8(access, in, off);
         }
-
-        @Override
-        long toLittleEndian(long v) {
-            return Long.reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndian(int v) {
-            return Integer.reverseBytes(v);
-        }
-
-        @Override
-        short toLittleEndian(short v) {
-            return Short.reverseBytes(v);
-        }
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
@@ -185,7 +158,7 @@ class MetroHash {
 
         @Override
         public long hashLong(long input) {
-            input = NATIVE_METRO.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long h = (seed() + k2) * k0;
             h += input * k3;
             h ^= Long.rotateRight(h, 55) * k1;
@@ -195,7 +168,7 @@ class MetroHash {
 
         @Override
         public long hashInt(int input) {
-            input = NATIVE_METRO.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long h = (seed() + k2) * k0;
             h += Primitives.unsignedInt(input) * k3;
             h ^= Long.rotateRight(h, 26) * k1;
@@ -205,7 +178,7 @@ class MetroHash {
 
         @Override
         public long hashShort(short input) {
-            input = NATIVE_METRO.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long h = (seed() + k2) * k0;
             h += Primitives.unsignedShort(input) * k3;
             h ^= Long.rotateRight(h, 48) * k1;

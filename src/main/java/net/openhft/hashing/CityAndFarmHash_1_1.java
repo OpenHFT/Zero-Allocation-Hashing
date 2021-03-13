@@ -83,14 +83,6 @@ class CityAndFarmHash_1_1 {
         return access.getInt(in, off);
     }
 
-    long toLittleEndian(long v) {
-        return v;
-    }
-
-    int toLittleEndian(int v) {
-        return v;
-    }
-
     private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
             long a = fetch64(access, in, off);
@@ -254,16 +246,6 @@ class CityAndFarmHash_1_1 {
         <T> int fetch32(Access<T> access, T in, long off) {
             return Integer.reverseBytes(super.fetch32(access, in, off));
         }
-
-        @Override
-        long toLittleEndian(long v) {
-            return reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndian(int v) {
-            return Integer.reverseBytes(v);
-        }
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
@@ -276,14 +258,14 @@ class CityAndFarmHash_1_1 {
 
         @Override
         public long hashLong(long input) {
-            input = NATIVE_CITY.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long hash = hash8To16Bytes(8L, input, input);
             return finalize(hash);
         }
 
         @Override
         public long hashInt(int input) {
-            input = NATIVE_CITY.toLittleEndian(input);
+            input = Primitives.nativeToLittleEndian(input);
             long unsignedInt = Primitives.unsignedInt(input);
             long hash = hash4To7Bytes(4L, unsignedInt, unsignedInt);
             return finalize(hash);
