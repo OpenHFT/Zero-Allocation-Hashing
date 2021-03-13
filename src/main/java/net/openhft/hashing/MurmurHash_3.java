@@ -24,6 +24,7 @@ import static java.lang.Long.reverseBytes;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 import static net.openhft.hashing.Primitives.unsignedInt;
+import static net.openhft.hashing.Primitives.unsignedShort;
 
 /**
  * Derived from https://github.com/google/guava/blob/fa95e381e665d8ee9639543b99ed38020c8de5ef
@@ -49,18 +50,6 @@ class MurmurHash_3 {
 
     <T> int fetch32(Access<T> access, @Nullable T in, long off) {
         return access.getInt(in, off);
-    }
-
-    long toLittleEndian(long v) {
-        return v;
-    }
-
-    int toLittleEndian(int v) {
-        return v;
-    }
-
-    int toLittleEndianShort(int unsignedShort) {
-        return unsignedShort;
     }
 
     public <T> long hash(long seed, @Nullable T input, Access<T> access, long offset, long length, @Nullable long[] result) {
@@ -147,7 +136,7 @@ class MurmurHash_3 {
 //                                case 15:
 //                                    k2 ^= ((long) access.getUnsignedByte(input, offset + 14L)) << 48;
 //                                case 14:
-//                                    k2 ^= ((long) toLittleEndianShort(
+//                                    k2 ^= ((long) Primitives.nativeToLittleEndian(
 //                                            access.getUnsignedShort(input, offset + 12L))) << 32;
 //                                    break fetch8_11;
 //                                case 13:
@@ -157,7 +146,7 @@ class MurmurHash_3 {
 //                                case 11:
 //                                    k2 ^= ((long) access.getUnsignedByte(input, offset + 10L)) << 16;
 //                                case 10:
-//                                    k2 ^= (long) toLittleEndianShort(
+//                                    k2 ^= (long) Primitives.nativeToLittleEndian(
 //                                            access.getUnsignedShort(input, offset + 8L));
 //                                    break fetch0_7;
 //                                case 9:
@@ -167,7 +156,7 @@ class MurmurHash_3 {
 //                                case 7:
 //                                    k1 ^= ((long) access.getUnsignedByte(input, offset + 6L)) << 48;
 //                                case 6:
-//                                    k1 ^= ((long) toLittleEndianShort(
+//                                    k1 ^= ((long) Primitives.nativeToLittleEndian(
 //                                            access.getUnsignedShort(input, offset + 4L))) << 32;
 //                                    break fetch0_3;
 //                                case 5:
@@ -177,7 +166,7 @@ class MurmurHash_3 {
 //                                case 3:
 //                                    k1 ^= ((long) access.getUnsignedByte(input, offset + 2L)) << 16;
 //                                case 2:
-//                                    k1 ^= (long) toLittleEndianShort(
+//                                    k1 ^= (long) Primitives.nativeToLittleEndian(
 //                                            access.getUnsignedShort(input, offset));
 //                                    break megaSwitch;
 //                                case 1:
@@ -260,21 +249,6 @@ class MurmurHash_3 {
         <T> int fetch32(Access<T> access, @Nullable T in, long off) {
             return Integer.reverseBytes(super.fetch32(access, in, off));
         }
-
-        @Override
-        long toLittleEndian(long v) {
-            return reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndian(int v) {
-            return Integer.reverseBytes(v);
-        }
-
-        @Override
-        int toLittleEndianShort(int unsignedShort) {
-            return ((unsignedShort & 0xFF) << 8) | (unsignedShort >> 8);
-        }
     }
 
     private static class AsLongTupleHashFunction extends DualHashFunction {
@@ -310,28 +284,27 @@ class MurmurHash_3 {
 
         @Override
         public long dualHashLong(long input, @Nullable long[] result) {
-            return hashNativeLong(NATIVE_MURMUR.toLittleEndian(input), 8L, result);
+            return hashNativeLong(Primitives.nativeToLittleEndian(input), 8L, result);
         }
 
         @Override
         public long dualHashInt(int input, @Nullable long[] result) {
-            return hashNativeLong(unsignedInt(NATIVE_MURMUR.toLittleEndian(input)), 4L, result);
+            return hashNativeLong(unsignedInt(Primitives.nativeToLittleEndian(input)), 4L, result);
         }
 
         @Override
         public long dualHashShort(short input, @Nullable long[] result) {
-            return hashNativeLong(
-                    (long) NATIVE_MURMUR.toLittleEndianShort(Primitives.unsignedShort(input)), 2L, result);
+            return hashNativeLong(unsignedShort(Primitives.nativeToLittleEndian(input)), 2L, result);
         }
 
         @Override
         public long dualHashChar(char input, @Nullable long[] result) {
-            return hashNativeLong((long) NATIVE_MURMUR.toLittleEndianShort((int) input), 2L, result);
+            return hashNativeLong(unsignedShort(Primitives.nativeToLittleEndian(input)), 2L, result);
         }
 
         @Override
         public long dualHashByte(byte input, @Nullable long[] result) {
-            return hashNativeLong((long) Primitives.unsignedByte((int) input), 1L, result);
+            return hashNativeLong(Primitives.unsignedByte((int) input), 1L, result);
         }
 
         @Override
