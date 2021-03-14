@@ -107,6 +107,7 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
 
     private static class LittleEndianCharSequenceAccess extends CharSequenceAccess {
         private static final CharSequenceAccess INSTANCE = new LittleEndianCharSequenceAccess();
+        private static final Access<CharSequence> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
         private LittleEndianCharSequenceAccess() {}
 
@@ -134,10 +135,16 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
         public ByteOrder byteOrder(CharSequence input) {
             return LITTLE_ENDIAN;
         }
+
+        @Override
+        protected Access<CharSequence> reverseAccess() {
+            return INSTANCE_REVERSE;
+        }
     }
 
     private static class BigEndianCharSequenceAccess extends CharSequenceAccess {
         private static final CharSequenceAccess INSTANCE = new BigEndianCharSequenceAccess();
+        private static final Access<CharSequence> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
         private BigEndianCharSequenceAccess() {}
 
@@ -164,6 +171,11 @@ abstract class CharSequenceAccess extends Access<CharSequence> {
         @Override
         public ByteOrder byteOrder(CharSequence input) {
             return BIG_ENDIAN;
+        }
+
+        @Override
+        protected Access<CharSequence> reverseAccess() {
+            return INSTANCE_REVERSE;
         }
     }
 }

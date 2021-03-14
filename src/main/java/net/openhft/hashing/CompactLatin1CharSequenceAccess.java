@@ -80,6 +80,9 @@ class CompactLatin1CharSequenceAccess extends Access<byte[]> {
     static final Access<byte[]> INSTANCE = new CompactLatin1CharSequenceAccess();
 
     @NotNull
+    private static final Access<byte[]> INSTANCE_NON_NATIVE = Access.newDefaultReverseAccess(INSTANCE);
+
+    @NotNull
     private static final UnsafeAccess UNSAFE = UnsafeAccess.INSTANCE;
 
     private static final long UNSAFE_IDX_ADJUST
@@ -167,5 +170,11 @@ class CompactLatin1CharSequenceAccess extends Access<byte[]> {
     @NotNull
     public ByteOrder byteOrder(final byte[] input) {
         return UNSAFE.byteOrder(input);
+    }
+
+    @Override
+    @NotNull
+    protected Access<byte[]> reverseAccess() {
+        return INSTANCE_NON_NATIVE;
     }
 }

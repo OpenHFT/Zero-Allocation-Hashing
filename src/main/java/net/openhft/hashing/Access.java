@@ -19,6 +19,7 @@ package net.openhft.hashing;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 /**
@@ -259,4 +260,78 @@ public abstract class Access<T> {
      * @return the byte order of all multi-byte reads from the given {@code input}
      */
     public abstract ByteOrder byteOrder(T input);
+
+    /**
+     * Get {@code this} or the reversed access object for reading the input as fixed
+     * byte order of {@code byteOrder}.
+     *
+     * @param input the accessed object
+     * @param byteOrder the byte order to be used for reading the {@code input}
+     * @return a {@code Access} object which will read the {@code input} with the
+     * byte order of {@code byteOrder}.
+     */
+    public Access<T> byteOrder(final T input, final ByteOrder byteOrder) {
+        return byteOrder(input) == byteOrder ? this : reverseAccess();
+    }
+
+    /**
+     * Get the {@code Access} object with a different byte order. This method should
+     * always return a fixed reference.
+     */
+    protected abstract Access<T> reverseAccess();
+
+    /**
+     * Get or create the reverse byte order {@code Access} object for {@code access}.
+     */
+    static <T> Access<T> newDefaultReverseAccess(final Access<T> access) {
+        return access instanceof ReverseAccess
+               ? access.reverseAccess()
+               : new ReverseAccess<T>(access);
+    }
+
+    /**
+     * The default reverse byte order delegating {@code Access} class.
+     */
+    private static class ReverseAccess<T> extends Access<T> {
+        final Access<T> access;
+        private ReverseAccess(final Access<T> access) {
+            this.access = access;
+        }
+        @Override
+        public long getLong(final T input, final long offset) {
+            return Long.reverseBytes(access.getLong(input, offset));
+        }
+        @Override
+        public long getUnsignedInt(final T input, final long offset) {
+            return Long.reverseBytes(access.getUnsignedInt(input, offset)) >>> 32;
+        }
+        @Override
+        public int getInt(final T input, final long offset) {
+            return Integer.reverseBytes(access.getInt(input, offset));
+        }
+        @Override
+        public int getUnsignedShort(final T input, final long offset) {
+            return Integer.reverseBytes(access.getUnsignedShort(input, offset)) >>> 16;
+        }
+        @Override
+        public int getShort(final T input, final long offset) {
+            return Integer.reverseBytes(access.getShort(input, offset)) >> 16;
+        }
+        @Override
+        public int getUnsignedByte(final T input, final long offset) {
+            return access.getUnsignedByte(input, offset);
+        }
+        @Override
+        public int getByte(final T input, final long offset) {
+            return access.getByte(input, offset);
+        }
+        @Override
+        public ByteOrder byteOrder(final T input) {
+            return LITTLE_ENDIAN == access.byteOrder(input) ? BIG_ENDIAN : LITTLE_ENDIAN;
+        }
+        @Override
+        protected Access<T> reverseAccess() {
+            return access;
+        }
+    }
 }

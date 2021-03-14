@@ -24,10 +24,6 @@ import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
  * This implementation provides endian-independant hash values, but it's slower on big-endian platforms.
  */
 class XxHash {
-    private static final XxHash INSTANCE = new XxHash();
-    private static final XxHash NATIVE_XX = NATIVE_LITTLE_ENDIAN ?
-        XxHash.INSTANCE : BigEndian.INSTANCE;
-
     // Primes if treated as unsigned
     private static final long P1 = -7046029288634856825L;
     private static final long P2 = -4417276706812531889L;
@@ -37,21 +33,21 @@ class XxHash {
 
     private XxHash() {}
 
-    <T> long fetch64(Access<T> access, T in, long off) {
+    static <T> long fetch64(Access<T> access, T in, long off) {
         return access.getLong(in, off);
     }
 
     // long because of unsigned nature of original algorithm
-    <T> long fetch32(Access<T> access, T in, long off) {
+    static <T> long fetch32(Access<T> access, T in, long off) {
         return access.getUnsignedInt(in, off);
     }
 
     // int because of unsigned nature of original algorithm
-    private <T> int fetch8(Access<T> access, T in, long off) {
+    static private <T> int fetch8(Access<T> access, T in, long off) {
         return access.getUnsignedByte(in, off);
     }
 
-    <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
+    static <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
         long hash;
         long remaining = length;
 
@@ -153,24 +149,6 @@ class XxHash {
         return hash;
     }
 
-    private static class BigEndian extends XxHash {
-        private static final BigEndian INSTANCE = new BigEndian();
-
-        private BigEndian() {}
-
-        @Override
-        <T> long fetch64(Access<T> access, T in, long off) {
-            return Long.reverseBytes(super.fetch64(access, in, off));
-        }
-
-        @Override
-        <T> long fetch32(Access<T> access, T in, long off) {
-            return Primitives.unsignedInt(Integer.reverseBytes(access.getInt(in, off)));
-        }
-
-        // fetch8 is not overloaded, because endianness doesn't matter for single byte
-    }
-
     static LongHashFunction asLongHashFunctionWithoutSeed() {
         return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
@@ -241,11 +219,7 @@ class XxHash {
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long seed = seed();
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return XxHash.INSTANCE.xxHash64(seed, input, access, off, len);
-            } else {
-                return BigEndian.INSTANCE.xxHash64(seed, input, access, off, len);
-            }
+            return XxHash.xxHash64(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len);
         }
     }
 

@@ -12,10 +12,6 @@ import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
  * The original C based version is also much faster.
  */
 class WyHash {
-    private static final WyHash INSTANCE = new WyHash();
-    private static final WyHash NATIVE_WY = NATIVE_LITTLE_ENDIAN ?
-        WyHash.INSTANCE : WyHash.BigEndian.INSTANCE;
-
     // Primes
     public static final long _wyp0 = 0xa0761d6478bd642fL;
     public static final long _wyp1 = 0xe7037ed1a0b428dbL;
@@ -29,21 +25,21 @@ class WyHash {
         return MATHS.unsignedLongMulXorFold(lhs, rhs);
     }
 
-    <T> long _wyr8(final Access<T> access, T in, final long index) {
+    static <T> long _wyr8(final Access<T> access, T in, final long index) {
         return access.getLong(in, index);
     }
 
-    <T> long _wyr4(final Access<T> access, T in, final long index) {
+    static <T> long _wyr4(final Access<T> access, T in, final long index) {
         return access.getUnsignedInt(in, index);
     }
 
-    private <T> long _wyr3(final Access<T> access, T in, final long index, long k) {
+    private static <T> long _wyr3(final Access<T> access, T in, final long index, long k) {
         return ((long) access.getUnsignedByte(in, index) << 16) |
                ((long) access.getUnsignedByte(in, index + (k >>> 1)) << 8) |
                ((long) access.getUnsignedByte(in, index + k - 1));
     }
 
-    private <T> long __wyr8(final Access<T> access, T in, final long index) {
+    private static <T> long __wyr8(final Access<T> access, T in, final long index) {
         return (_wyr4(access, in, index) << 32) |
                _wyr4(access, in, index + 4);
     }
@@ -61,7 +57,7 @@ class WyHash {
      * @param <T> byte[], ByteBuffer, etc.
      * @return hash result
      */
-    <T> long wyHash64(long seed, T input, Access<T> access, long off, long length) {
+    static <T> long wyHash64(long seed, T input, Access<T> access, long off, long length) {
         if(length <= 0)
             return 0;
         else if(length<4)
@@ -147,24 +143,6 @@ class WyHash {
         return _wymum(seed ^ see1, length ^ _wyp4);
     }
 
-    private static class BigEndian extends WyHash {
-        private static final WyHash.BigEndian INSTANCE = new WyHash.BigEndian();
-
-        private BigEndian() {
-        }
-
-        @Override
-        <T> long _wyr8(Access<T> access, T in, long off) {
-            return Long.reverseBytes(super._wyr8(access, in, off));
-        }
-
-        @Override
-        <T> long _wyr4(Access<T> access, T in, long off) {
-            return Primitives.unsignedInt(Integer.reverseBytes(access.getInt(in, off)));
-        }
-    }
-
-
     static LongHashFunction asLongHashFunctionWithoutSeed() {
         return AsLongHashFunction.SEEDLESS_INSTANCE;
     }
@@ -231,13 +209,10 @@ class WyHash {
         public <T> long hash(final T input, final Access<T> access,
                              final long off, final long len) {
             long seed = seed();
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return WyHash.INSTANCE.wyHash64(seed, input, access, off, len);
-            } else {
-                return BigEndian.INSTANCE.wyHash64(seed, input, access, off, len);
-            }
+            return WyHash.wyHash64(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len);
         }
     }
+
     static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongHashFunctionSeeded(seed);
     }
