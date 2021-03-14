@@ -21,6 +21,7 @@ import java.nio.ByteOrder;
 
 final class ByteBufferAccess extends Access<ByteBuffer> {
     public static final ByteBufferAccess INSTANCE = new ByteBufferAccess();
+    private static final Access<ByteBuffer> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
     private ByteBufferAccess() {}
 
@@ -62,5 +63,10 @@ final class ByteBufferAccess extends Access<ByteBuffer> {
     @Override
     public ByteOrder byteOrder(ByteBuffer input) {
         return input.order();
+    }
+
+    @Override
+    protected Access<ByteBuffer> reverseAccess() {
+        return INSTANCE_REVERSE;
     }
 }

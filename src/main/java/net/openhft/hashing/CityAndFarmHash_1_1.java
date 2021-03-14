@@ -26,11 +26,6 @@ import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
  * https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc.
  */
 class CityAndFarmHash_1_1 {
-    private static final CityAndFarmHash_1_1 INSTANCE = new CityAndFarmHash_1_1();
-
-    private static final CityAndFarmHash_1_1 NATIVE_CITY = NATIVE_LITTLE_ENDIAN ?
-            CityAndFarmHash_1_1.INSTANCE : BigEndian.INSTANCE;
-
     CityAndFarmHash_1_1() {}
 
     static final long K0 = 0xc3a5c85c97cb3127L;
@@ -75,15 +70,15 @@ class CityAndFarmHash_1_1 {
         return hashLen16(c, d, mul);
     }
 
-    <T> long fetch64(Access<T> access, T in, long off) {
+    static <T> long fetch64(Access<T> access, T in, long off) {
         return access.getLong(in, off);
     }
 
-    <T> int fetch32(Access<T> access, T in, long off) {
+    static <T> int fetch32(Access<T> access, T in, long off) {
         return access.getInt(in, off);
     }
 
-    private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
+    static private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
             long a = fetch64(access, in, off);
             long b = fetch64(access, in, off + len - 8L);
@@ -101,7 +96,7 @@ class CityAndFarmHash_1_1 {
         return K2;
     }
 
-    private <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
+    static private <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = fetch64(access, in, off) * K1;
         long b = fetch64(access, in, off + 8L);
@@ -111,7 +106,7 @@ class CityAndFarmHash_1_1 {
                 a + rotateRight(b + K2, 18) + c, mul);
     }
 
-    private <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
+    static private <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = fetch64(access, in, off) * K2;
         long b = fetch64(access, in, off + 8L);
@@ -132,7 +127,7 @@ class CityAndFarmHash_1_1 {
         return b + x;
     }
 
-    <T> long cityHash64(Access<T> access, T in, long off, long len) {
+    static <T> long cityHash64(Access<T> access, T in, long off, long len) {
         if (len <= 32L) {
             if (len <= 16L) {
                 return hashLen0To16(access, in, off, len);
@@ -233,21 +228,6 @@ class CityAndFarmHash_1_1 {
                 hashLen16(vSecond, wSecond) + x);
     }
 
-    private static class BigEndian extends CityAndFarmHash_1_1 {
-        private static final BigEndian INSTANCE = new BigEndian();
-        private BigEndian() {}
-
-        @Override
-        <T> long fetch64(Access<T> access, T in, long off) {
-            return reverseBytes(super.fetch64(access, in, off));
-        }
-
-        @Override
-        <T> int fetch32(Access<T> access, T in, long off) {
-            return Integer.reverseBytes(super.fetch32(access, in, off));
-        }
-    }
-
     private static class AsLongHashFunction extends LongHashFunction {
         private static final long serialVersionUID = 0L;
         private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
@@ -306,11 +286,7 @@ class CityAndFarmHash_1_1 {
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long hash;
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                hash = CityAndFarmHash_1_1.INSTANCE.cityHash64(access, input, off, len);
-            } else {
-                hash = BigEndian.INSTANCE.cityHash64(access, input, off, len);
-            }
+            hash = CityAndFarmHash_1_1.cityHash64(access.byteOrder(input, LITTLE_ENDIAN), input, off, len);
             return finalize(hash);
         }
 
@@ -357,7 +333,7 @@ class CityAndFarmHash_1_1 {
 
     // FarmHash
 
-    private <T> long naHashLen33To64(Access<T> access, T in, long off, long len) {
+    private static <T> long naHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = fetch64(access, in, off) * K2;
         long b = fetch64(access, in, off + 8L);
@@ -373,7 +349,7 @@ class CityAndFarmHash_1_1 {
                 e + rotateRight(f + a, 18) + g, mul);
     }
 
-    <T> long naHash64(Access<T> access, T in, long off, long len) {
+    static <T> long naHash64(Access<T> access, T in, long off, long len) {
         final long seed = 81;
         if (len <= 32) {
             if (len <= 16) {
@@ -477,18 +453,18 @@ class CityAndFarmHash_1_1 {
                 mul);
     }
 
-    private <T> long naHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
+    private static <T> long naHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
         return hashLen16(naHash64(access, in, off, len) - seed0, seed1);
     }
 
-    private long uoH(long x, long y, long mul, int r) {
+    private static long uoH(long x, long y, long mul, int r) {
         long a = (x ^ y) * mul;
         a = shiftMix(a);
         long b = (y ^ a) * mul;
         return rotateRight(b, r) * mul;
     }
 
-    <T> long uoHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
+    static <T> long uoHash64WithSeeds(Access<T> access, T in, long off, long len, long seed0, long seed1) {
         if (len <= 64) {
             return naHash64WithSeeds(access, in, off, len, seed0, seed1);
         }
@@ -617,11 +593,7 @@ class CityAndFarmHash_1_1 {
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long hash;
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                hash = CityAndFarmHash_1_1.INSTANCE.naHash64(access, input, off, len);
-            } else {
-                hash = BigEndian.INSTANCE.naHash64(access, input, off, len);
-            }
+            hash = CityAndFarmHash_1_1.naHash64(access.byteOrder(input, LITTLE_ENDIAN), input, off, len);
             return finalize(hash);
         }
     }
@@ -671,12 +643,10 @@ class CityAndFarmHash_1_1 {
 
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
-            CityAndFarmHash_1_1 instance = access.byteOrder(input) == LITTLE_ENDIAN ?
-                    CityAndFarmHash_1_1.INSTANCE : BigEndian.INSTANCE;
             if (len <= 64) {
-                return instance.naHash64(access, input, off, len);
+                return CityAndFarmHash_1_1.naHash64(access.byteOrder(input, LITTLE_ENDIAN), input, off, len);
             }
-            return instance.uoHash64WithSeeds(access, input, off, len, 81, 0);
+            return CityAndFarmHash_1_1.uoHash64WithSeeds(access.byteOrder(input, LITTLE_ENDIAN), input, off, len, 81, 0);
         }
     }
 
@@ -693,12 +663,10 @@ class CityAndFarmHash_1_1 {
 
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
-            CityAndFarmHash_1_1 instance = access.byteOrder(input) == LITTLE_ENDIAN ?
-                    CityAndFarmHash_1_1.INSTANCE : BigEndian.INSTANCE;
             if (len <= 64) {
-                return finalize(instance.naHash64(access, input, off, len));
+                return finalize(CityAndFarmHash_1_1.naHash64(access.byteOrder(input, LITTLE_ENDIAN), input, off, len));
             }
-            return instance.uoHash64WithSeeds(access, input, off, len, 0, seed1);
+            return CityAndFarmHash_1_1.uoHash64WithSeeds(access.byteOrder(input, LITTLE_ENDIAN), input, off, len, 0, seed1);
         }
     }
 
@@ -715,12 +683,8 @@ class CityAndFarmHash_1_1 {
 
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return CityAndFarmHash_1_1.INSTANCE.uoHash64WithSeeds(
-                        access, input, off, len, seed0, seed1);
-            } else {
-                return BigEndian.INSTANCE.uoHash64WithSeeds(access, input, off, len, seed0, seed1);
-            }
+            return CityAndFarmHash_1_1.uoHash64WithSeeds(
+                    access.byteOrder(input, LITTLE_ENDIAN), input, off, len, seed0, seed1);
         }
     }
 
