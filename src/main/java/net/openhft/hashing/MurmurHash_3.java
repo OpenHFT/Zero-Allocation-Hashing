@@ -32,27 +32,20 @@ import static net.openhft.hashing.Primitives.unsignedShort;
  */
 @ParametersAreNonnullByDefault
 class MurmurHash_3 {
-    @NotNull
-    private static final MurmurHash_3 INSTANCE = new MurmurHash_3();
-
-    @NotNull
-    private static final MurmurHash_3 NATIVE_MURMUR = NATIVE_LITTLE_ENDIAN ?
-            MurmurHash_3.INSTANCE : BigEndian.INSTANCE;
-
     private static final long C1 = 0x87c37b91114253d5L;
     private static final long C2 = 0x4cf5ad432745937fL;
 
     private MurmurHash_3() {}
 
-    <T> long fetch64(Access<T> access, @Nullable T in, long off) {
+    private static <T> long fetch64(Access<T> access, @Nullable T in, long off) {
         return access.getLong(in, off);
     }
 
-    <T> int fetch32(Access<T> access, @Nullable T in, long off) {
+    private static <T> int fetch32(Access<T> access, @Nullable T in, long off) {
         return access.getInt(in, off);
     }
 
-    public <T> long hash(long seed, @Nullable T input, Access<T> access, long offset, long length, @Nullable long[] result) {
+    private static <T> long hash(long seed, @Nullable T input, Access<T> access, long offset, long length, @Nullable long[] result) {
         long h1 = seed;
         long h2 = seed;
         long remaining = length;
@@ -235,22 +228,6 @@ class MurmurHash_3 {
         return k2;
     }
 
-    private static class BigEndian extends MurmurHash_3 {
-        @NotNull
-        private static final BigEndian INSTANCE = new BigEndian();
-        private BigEndian() {}
-
-        @Override
-        <T> long fetch64(Access<T> access, @Nullable T in, long off) {
-            return reverseBytes(super.fetch64(access, in, off));
-        }
-
-        @Override
-        <T> int fetch32(Access<T> access, @Nullable T in, long off) {
-            return Integer.reverseBytes(super.fetch32(access, in, off));
-        }
-    }
-
     private static class AsLongTupleHashFunction extends DualHashFunction {
         private static final long serialVersionUID = 0L;
         @NotNull
@@ -319,11 +296,7 @@ class MurmurHash_3 {
         @Override
         public <T> long dualHash(@Nullable T input, Access<T> access, long off, long len, @Nullable long[] result) {
             long seed = seed();
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return MurmurHash_3.INSTANCE.hash(seed, input, access, off, len, result);
-            } else {
-                return BigEndian.INSTANCE.hash(seed, input, access, off, len, result);
-            }
+            return MurmurHash_3.hash(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
         }
     }
 

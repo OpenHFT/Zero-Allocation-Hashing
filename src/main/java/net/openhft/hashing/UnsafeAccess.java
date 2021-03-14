@@ -25,6 +25,7 @@ import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 class UnsafeAccess extends Access<Object> {
     static final UnsafeAccess INSTANCE;
+    private static final Access<Object> INSTANCE_NON_NATIVE;
 
     // for test only
     static final UnsafeAccess OLD_INSTANCE = NATIVE_LITTLE_ENDIAN
@@ -73,6 +74,7 @@ class UnsafeAccess extends Access<Object> {
         }
 
         INSTANCE = hasGetByte ? new UnsafeAccess() : OLD_INSTANCE;
+        INSTANCE_NON_NATIVE = Access.newDefaultReverseAccess(INSTANCE);
     }
 
     private UnsafeAccess() {}
@@ -115,6 +117,11 @@ class UnsafeAccess extends Access<Object> {
     @Override
     public ByteOrder byteOrder(Object input) {
         return ByteOrder.nativeOrder();
+    }
+
+    @Override
+    protected Access<Object> reverseAccess() {
+        return INSTANCE_NON_NATIVE;
     }
 
     private static class OldUnsafeAccessLittleEndian extends UnsafeAccess {

@@ -4,34 +4,30 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 class MetroHash {
-    private static final MetroHash INSTANCE = new MetroHash();
-    private static final MetroHash NATIVE_METRO = NATIVE_LITTLE_ENDIAN ?
-            MetroHash.INSTANCE : BigEndian.INSTANCE;
-
     //primes
     private static final long k0 = 0xD6D018F5L;
     private static final long k1 = 0xA2AA033BL;
     private static final long k2 = 0x62992FC1L;
     private static final long k3 = 0x30BC5B29L;
 
-    <T> long fetch64(Access<T> access, T in, long off) {
+    static <T> long fetch64(Access<T> access, T in, long off) {
         return access.getLong(in, off);
     }
 
-    <T> long fetch32(Access<T> access, T in, long off) {
+    static <T> long fetch32(Access<T> access, T in, long off) {
         return access.getUnsignedInt(in, off);
     }
 
-    <T> long fetch16(Access<T> access, T in, long off) {
+    static <T> long fetch16(Access<T> access, T in, long off) {
         return access.getUnsignedShort(in, off);
     }
 
-    <T> int fetch8(Access<T> access, T in, long off) {
+    static <T> int fetch8(Access<T> access, T in, long off) {
         return access.getUnsignedByte(in, off);
     }
 
 
-    <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
+    static <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
         long remaining = length;
 
         long h = (seed + k2) * k0;
@@ -116,33 +112,6 @@ class MetroHash {
         return h;
     }
 
-    private static class BigEndian extends MetroHash {
-        private static final BigEndian INSTANCE = new BigEndian();
-
-        private BigEndian() {
-        }
-
-        @Override
-        <T> long fetch64(Access<T> access, T in, long off) {
-            return Long.reverseBytes(super.fetch64(access, in, off));
-        }
-
-        @Override
-        <T> long fetch32(Access<T> access, T in, long off) {
-            return Integer.reverseBytes(access.getInt(in, off)) & 0xFFFFFFFFL;
-        }
-
-        @Override
-        <T> long fetch16(Access<T> access, T in, long off) {
-            return Short.reverseBytes((short)access.getShort(in, off)) & 0xFFFFL;
-        }
-
-        @Override
-        <T> int fetch8(Access<T> access, T in, long off) {
-            return super.fetch8(access, in, off);
-        }
-    }
-
     private static class AsLongHashFunction extends LongHashFunction {
         private static final long serialVersionUID = 0L;
         private static final AsLongHashFunction SEEDLESS_INSTANCE = new AsLongHashFunction();
@@ -208,11 +177,7 @@ class MetroHash {
         @Override
         public <T> long hash(T input, Access<T> access, long off, long len) {
             long seed = seed();
-            if (access.byteOrder(input) == LITTLE_ENDIAN) {
-                return MetroHash.INSTANCE.metroHash64(seed, input, access, off, len);
-            } else {
-                return MetroHash.BigEndian.INSTANCE.metroHash64(seed, input, access, off, len);
-            }
+            return MetroHash.metroHash64(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len);
         }
     }
 
