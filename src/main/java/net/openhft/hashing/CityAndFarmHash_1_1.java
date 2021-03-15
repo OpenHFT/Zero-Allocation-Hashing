@@ -26,8 +26,6 @@ import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
  * https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc.
  */
 class CityAndFarmHash_1_1 {
-    CityAndFarmHash_1_1() {}
-
     static final long K0 = 0xc3a5c85c97cb3127L;
     private static final long K1 = 0xb492b66fbe98f273L;
     private static final long K2 = 0x9ae16a3b2f90404fL;
@@ -70,27 +68,19 @@ class CityAndFarmHash_1_1 {
         return hashLen16(c, d, mul);
     }
 
-    static <T> long fetch64(Access<T> access, T in, long off) {
-        return access.getLong(in, off);
-    }
-
-    static <T> int fetch32(Access<T> access, T in, long off) {
-        return access.getInt(in, off);
-    }
-
     static private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
-            long a = fetch64(access, in, off);
-            long b = fetch64(access, in, off + len - 8L);
+            long a = access.i64(in, off);
+            long b = access.i64(in, off + len - 8L);
             return hash8To16Bytes(len, a, b);
         } else if (len >= 4L) {
-            long a = Primitives.unsignedInt(fetch32(access, in, off));
-            long b = Primitives.unsignedInt(fetch32(access, in, off + len - 4L));
+            long a = access.u32(in, off);
+            long b = access.u32(in, off + len - 4L);
             return hash4To7Bytes(len, a, b);
         } else if (len > 0L) {
-            int a = access.getUnsignedByte(in, off);
-            int b = access.getUnsignedByte(in, off + (len >> 1));
-            int c = access.getUnsignedByte(in, off + len - 1L);
+            int a = access.u8(in, off);
+            int b = access.u8(in, off + (len >> 1));
+            int c = access.u8(in, off + len - 1L);
             return hash1To3Bytes((int) len, a, b, c);
         }
         return K2;
@@ -98,24 +88,24 @@ class CityAndFarmHash_1_1 {
 
     static private <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
-        long a = fetch64(access, in, off) * K1;
-        long b = fetch64(access, in, off + 8L);
-        long c = fetch64(access, in, off + len - 8L) * mul;
-        long d = fetch64(access, in, off + len - 16L) * K2;
+        long a = access.i64(in, off) * K1;
+        long b = access.i64(in, off + 8L);
+        long c = access.i64(in, off + len - 8L) * mul;
+        long d = access.i64(in, off + len - 16L) * K2;
         return hashLen16(rotateRight(a + b, 43) + rotateRight(c, 30) + d,
                 a + rotateRight(b + K2, 18) + c, mul);
     }
 
     static private <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
-        long a = fetch64(access, in, off) * K2;
-        long b = fetch64(access, in, off + 8L);
-        long c = fetch64(access, in, off + len - 24L);
-        long d = fetch64(access, in, off + len - 32L);
-        long e = fetch64(access, in, off + 16L) * K2;
-        long f = fetch64(access, in, off + 24L) * 9L;
-        long g = fetch64(access, in, off + len - 8L);
-        long h = fetch64(access, in, off + len - 16L) * mul;
+        long a = access.i64(in, off) * K2;
+        long b = access.i64(in, off + 8L);
+        long c = access.i64(in, off + len - 24L);
+        long d = access.i64(in, off + len - 32L);
+        long e = access.i64(in, off + 16L) * K2;
+        long f = access.i64(in, off + 24L) * 9L;
+        long g = access.i64(in, off + len - 8L);
+        long h = access.i64(in, off + len - 16L) * mul;
         long u = rotateRight(a + g, 43) + (rotateRight(b, 30) + c) * 9L;
         long v = ((a + g) ^ d) + f + 1L;
         long w = reverseBytes((u + v) * mul) + h;
@@ -138,10 +128,10 @@ class CityAndFarmHash_1_1 {
             return cityHashLen33To64(access, in, off, len);
         }
 
-        long x = fetch64(access, in, off + len - 40L);
-        long y = fetch64(access, in, off + len - 16L) + fetch64(access, in, off + len - 56L);
-        long z = hashLen16(fetch64(access, in, off + len - 48L) + len,
-                fetch64(access, in, off + len - 24L));
+        long x = access.i64(in, off + len - 40L);
+        long y = access.i64(in, off + len - 16L) + access.i64(in, off + len - 56L);
+        long z = hashLen16(access.i64(in, off + len - 48L) + len,
+                access.i64(in, off + len - 24L));
 
         long vFirst, vSecond, wFirst, wSecond;
 
@@ -150,10 +140,10 @@ class CityAndFarmHash_1_1 {
         // WeakHashLen32WithSeeds
         long a3 = len;
         long b3 = z;
-        long w4 = fetch64(access, in, off + len - 64L);
-        long x4 = fetch64(access, in, off + len - 64L + 8L);
-        long y4 = fetch64(access, in, off + len - 64L + 16L);
-        long z4 = fetch64(access, in, off + len - 64L + 24L);
+        long w4 = access.i64(in, off + len - 64L);
+        long x4 = access.i64(in, off + len - 64L + 8L);
+        long y4 = access.i64(in, off + len - 64L + 16L);
+        long z4 = access.i64(in, off + len - 64L + 24L);
         a3 += w4;
         b3 = rotateRight(b3 + a3 + z4, 21);
         long c3 = a3;
@@ -165,10 +155,10 @@ class CityAndFarmHash_1_1 {
         // WeakHashLen32WithSeeds
         long a2 = y + K1;
         long b2 = x;
-        long w3 = fetch64(access, in, off + len - 32L);
-        long x3 = fetch64(access, in, off + len - 32L + 8L);
-        long y3 = fetch64(access, in, off + len - 32L + 16L);
-        long z3 = fetch64(access, in, off + len - 32L + 24L);
+        long w3 = access.i64(in, off + len - 32L);
+        long x3 = access.i64(in, off + len - 32L + 8L);
+        long y3 = access.i64(in, off + len - 32L + 16L);
+        long z3 = access.i64(in, off + len - 32L + 24L);
         a2 += w3;
         b2 = rotateRight(b2 + a2 + z3, 21);
         long c2 = a2;
@@ -177,23 +167,23 @@ class CityAndFarmHash_1_1 {
         wFirst = a2 + z3;
         wSecond = b2 + c2;
 
-        x = x * K1 + fetch64(access, in, off);
+        x = x * K1 + access.i64(in, off);
 
         len = (len - 1L) & (~63L);
         do {
-            x = rotateRight(x + y + vFirst + fetch64(access, in, off + 8L), 37) * K1;
-            y = rotateRight(y + vSecond + fetch64(access, in, off + 48L), 42) * K1;
+            x = rotateRight(x + y + vFirst + access.i64(in, off + 8L), 37) * K1;
+            y = rotateRight(y + vSecond + access.i64(in, off + 48L), 42) * K1;
             x ^= wSecond;
-            y += vFirst + fetch64(access, in, off + 40L);
+            y += vFirst + access.i64(in, off + 40L);
             z = rotateRight(z + wFirst, 33) * K1;
 
             // WeakHashLen32WithSeeds
             long a1 = vSecond * K1;
             long b1 = x + wFirst;
-            long w2 = fetch64(access, in, off);
-            long x2 = fetch64(access, in, off + 8L);
-            long y2 = fetch64(access, in, off + 16L);
-            long z2 = fetch64(access, in, off + 24L);
+            long w2 = access.i64(in, off);
+            long x2 = access.i64(in, off + 8L);
+            long y2 = access.i64(in, off + 16L);
+            long z2 = access.i64(in, off + 24L);
             a1 += w2;
             b1 = rotateRight(b1 + a1 + z2, 21);
             long c1 = a1;
@@ -204,11 +194,11 @@ class CityAndFarmHash_1_1 {
 
             // WeakHashLen32WithSeeds
             long a = z + wSecond;
-            long b = y + fetch64(access, in, off + 16L);
-            long w1 = fetch64(access, in, off + 32L);
-            long x1 = fetch64(access, in, off + 32L + 8L);
-            long y1 = fetch64(access, in, off + 32L + 16L);
-            long z1 = fetch64(access, in, off + 32L + 24L);
+            long b = y + access.i64(in, off + 16L);
+            long w1 = access.i64(in, off + 32L);
+            long x1 = access.i64(in, off + 32L + 8L);
+            long y1 = access.i64(in, off + 32L + 16L);
+            long z1 = access.i64(in, off + 32L + 24L);
             a += w1;
             b = rotateRight(b + a + z1, 21);
             long c = a;
@@ -335,16 +325,16 @@ class CityAndFarmHash_1_1 {
 
     private static <T> long naHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
-        long a = fetch64(access, in, off) * K2;
-        long b = fetch64(access, in, off + 8L);
-        long c = fetch64(access, in, off + len - 8) * mul;
-        long d = fetch64(access, in, off + len - 16) * K2;
+        long a = access.i64(in, off) * K2;
+        long b = access.i64(in, off + 8L);
+        long c = access.i64(in, off + len - 8) * mul;
+        long d = access.i64(in, off + len - 16) * K2;
         long y = rotateRight(a + b, 43) + rotateRight(c, 30) + d;
         long z = hashLen16(y, a + rotateRight(b + K2, 18) + c, mul);
-        long e = fetch64(access, in, off + 16) * mul;
-        long f = fetch64(access, in, off + 24);
-        long g = (y + fetch64(access, in, off + len - 32)) * mul;
-        long h = (z + fetch64(access, in, off + len - 24)) * mul;
+        long e = access.i64(in, off + 16) * mul;
+        long f = access.i64(in, off + 24);
+        long g = (y + access.i64(in, off + len - 32)) * mul;
+        long h = (z + access.i64(in, off + len - 24)) * mul;
         return hashLen16(rotateRight(e + f, 43) + rotateRight(g, 30) + h,
                 e + rotateRight(f + a, 18) + g, mul);
     }
@@ -371,37 +361,37 @@ class CityAndFarmHash_1_1 {
         long z = shiftMix(y * K2 + 113) * K2;
         long v1 = 0, v2 = 0;
         long w1 = 0, w2 = 0;
-        x = x * K2 + fetch64(access, in, off);
+        x = x * K2 + access.i64(in, off);
 
         // Set end so that after the loop we have 1 to 64 bytes left to process.
         long end = off + ((len - 1) >> 6) * 64;
         long last64 = end + ((len - 1) & 63) - 63;
 
         do {
-            x = rotateRight(x + y + v1 + fetch64(access, in, off + 8), 37) * K1;
-            y = rotateRight(y + v2 + fetch64(access, in, off + 48), 42) * K1;
+            x = rotateRight(x + y + v1 + access.i64(in, off + 8), 37) * K1;
+            y = rotateRight(y + v2 + access.i64(in, off + 48), 42) * K1;
             x ^= w2;
-            y += v1 + fetch64(access, in, off + 40);
+            y += v1 + access.i64(in, off + 40);
             z = rotateRight(z + w1, 33) * K1;
             long a = v2 * K1;
             long b = x + w1;
-            long z1 = fetch64(access, in, off + 24);
-            a += fetch64(access, in, off);
+            long z1 = access.i64(in, off + 24);
+            a += access.i64(in, off);
             b = rotateRight(b + a + z1, 21);
             long c = a;
-            a += fetch64(access, in, off + 8);
-            a += fetch64(access, in, off + 16);
+            a += access.i64(in, off + 8);
+            a += access.i64(in, off + 16);
             b += rotateRight(a, 44);
             v1 = a + z1;
             v2 = b + c;
             long a1 = z + w2;
-            long b1 = y + fetch64(access, in, off + 16);
-            long z2 = fetch64(access, in, off + 32 + 24);
-            a1 += fetch64(access, in, off + 32);
+            long b1 = y + access.i64(in, off + 16);
+            long z2 = access.i64(in, off + 32 + 24);
+            a1 += access.i64(in, off + 32);
             b1 = rotateRight(b1 + a1 + z2, 21);
             long c1 = a1;
-            a1 += fetch64(access, in, off + 32 + 8);
-            a1 += fetch64(access, in, off + 32 + 16);
+            a1 += access.i64(in, off + 32 + 8);
+            a1 += access.i64(in, off + 32 + 16);
             b1 += rotateRight(a1, 44);
             w1 = a1 + z2;
             w2 = b1 + c1;
@@ -418,30 +408,30 @@ class CityAndFarmHash_1_1 {
         w1 += (len - 1) & 63;
         v1 += w1;
         w1 += v1;
-        x = rotateRight(x + y + v1 + fetch64(access, in, off + 8), 37) * mul;
-        y = rotateRight(y + v2 + fetch64(access, in, off + 48), 42) * mul;
+        x = rotateRight(x + y + v1 + access.i64(in, off + 8), 37) * mul;
+        y = rotateRight(y + v2 + access.i64(in, off + 48), 42) * mul;
         x ^= w2 * 9;
-        y += v1 * 9 + fetch64(access, in, off + 40);
+        y += v1 * 9 + access.i64(in, off + 40);
         z = rotateRight(z + w1, 33) * mul;
         long a = v2 * mul;
         long b = x + w1;
-        long z1 = fetch64(access, in, off + 24);
-        a += fetch64(access, in, off);
+        long z1 = access.i64(in, off + 24);
+        a += access.i64(in, off);
         b = rotateRight(b + a + z1, 21);
         long c = a;
-        a += fetch64(access, in, off + 8);
-        a += fetch64(access, in, off + 16);
+        a += access.i64(in, off + 8);
+        a += access.i64(in, off + 16);
         b += rotateRight(a, 44);
         v1 = a + z1;
         v2 = b + c;
         long a1 = z + w2;
-        long b1 = y + fetch64(access, in, off + 16);
-        long z2 = fetch64(access, in, off + 32 + 24);
-        a1 += fetch64(access, in, off + 32);
+        long b1 = y + access.i64(in, off + 16);
+        long z2 = access.i64(in, off + 32 + 24);
+        a1 += access.i64(in, off + 32);
         b1 = rotateRight(b1 + a1 + z2, 21);
         long c1 = a1;
-        a1 += fetch64(access, in, off + 32 + 8);
-        a1 += fetch64(access, in, off + 32 + 16);
+        a1 += access.i64(in, off + 32 + 8);
+        a1 += access.i64(in, off + 32 + 16);
         b1 += rotateRight(a1, 44);
         w1 = a1 + z2;
         w2 = b1 + c1;
@@ -484,14 +474,14 @@ class CityAndFarmHash_1_1 {
         long last64 = end + ((len - 1) & 63) - 63;
 
         do {
-            long a0 = fetch64(access, in, off);
-            long a1 = fetch64(access, in, off + 8);
-            long a2 = fetch64(access, in, off + 16);
-            long a3 = fetch64(access, in, off + 24);
-            long a4 = fetch64(access, in, off + 32);
-            long a5 = fetch64(access, in, off + 40);
-            long a6 = fetch64(access, in, off + 48);
-            long a7 = fetch64(access, in, off + 56);
+            long a0 = access.i64(in, off);
+            long a1 = access.i64(in, off + 8);
+            long a2 = access.i64(in, off + 16);
+            long a3 = access.i64(in, off + 24);
+            long a4 = access.i64(in, off + 32);
+            long a5 = access.i64(in, off + 40);
+            long a6 = access.i64(in, off + 48);
+            long a7 = access.i64(in, off + 56);
             x += a0 + a1;
             y += a2;
             z += a3;
@@ -547,32 +537,32 @@ class CityAndFarmHash_1_1 {
         w0 += (len - 1) & 63;
         u += y;
         y += u;
-        x = rotateRight(y - x + v0 + fetch64(access, in, off + 8), 37) * mul;
-        y = rotateRight(y ^ v1 ^ fetch64(access, in, off + 48), 42) * mul;
+        x = rotateRight(y - x + v0 + access.i64(in, off + 8), 37) * mul;
+        y = rotateRight(y ^ v1 ^ access.i64(in, off + 48), 42) * mul;
         x ^= w1 * 9;
-        y += v0 + fetch64(access, in, off + 40);
+        y += v0 + access.i64(in, off + 40);
         z = rotateRight(z + w0, 33) * mul;
 
         long a = v1 * mul;
         long b = x + w0;
-        long z1 = fetch64(access, in, off + 24);
-        a += fetch64(access, in, off);
+        long z1 = access.i64(in, off + 24);
+        a += access.i64(in, off);
         b = rotateRight(b + a + z1, 21);
         long c = a;
-        a += fetch64(access, in, off + 8);
-        a += fetch64(access, in, off + 16);
+        a += access.i64(in, off + 8);
+        a += access.i64(in, off + 16);
         b += rotateRight(a, 44);
         v0 =  a + z1;
         v1 = b + c;
 
         long a1 = z + w1;
-        long b1 = y + fetch64(access, in, off + 16);
-        long z2 = fetch64(access, in, off + 32 + 24);
-        a1 += fetch64(access, in, off + 32);
+        long b1 = y + access.i64(in, off + 16);
+        long z2 = access.i64(in, off + 32 + 24);
+        a1 += access.i64(in, off + 32);
         b1 = rotateRight(b1 + a1 + z2, 21);
         long c1 = a1;
-        a1 += fetch64(access, in, off + 32 + 8);
-        a1 += fetch64(access, in, off + 32 + 16);
+        a1 += access.i64(in, off + 32 + 8);
+        a1 += access.i64(in, off + 32 + 16);
         b1 += rotateRight(a1, 44);
         w0 = a1 + z2;
         w1 = b1 + c1;
