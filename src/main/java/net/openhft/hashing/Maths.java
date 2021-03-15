@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 class Maths {
     @NotNull
-    static final Maths INSTANCE;
+    private static final Maths INSTANCE;
 
     static {
         boolean hasMultiplyHigh = true;
@@ -16,7 +16,11 @@ class Maths {
         INSTANCE = hasMultiplyHigh ? new MathsJDK9() : new Maths();
     }
 
-    long unsignedLongMulXorFold(final long lhs, final long rhs) {
+    public static long unsignedLongMulXorFold(final long lhs, final long rhs) {
+        return INSTANCE.unsignedLongMulXorFoldImp(lhs, rhs);
+    }
+
+    long unsignedLongMulXorFoldImp(final long lhs, final long rhs) {
         //The Grade School method of multiplication is a hair faster in Java, primarily used here
         // because the implementation is simpler.
         final long lhs_l = lhs & 0xFFFFFFFFL;
@@ -40,7 +44,7 @@ class MathsJDK9 extends Maths {
     // Math.multiplyHigh() is intrinsified from JDK 10. But JDK 9 is out of life, we always prefer
     // this version to the scalar one.
     @Override
-    long unsignedLongMulXorFold(final long lhs, final long rhs) {
+    long unsignedLongMulXorFoldImp(final long lhs, final long rhs) {
         final long upper = Math.multiplyHigh(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);
         final long lower = lhs * rhs;
         return lower ^ upper;

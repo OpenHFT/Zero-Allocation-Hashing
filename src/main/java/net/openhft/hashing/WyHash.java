@@ -19,10 +19,8 @@ class WyHash {
     public static final long _wyp3 = 0x589965cc75374cc3L;
     public static final long _wyp4 = 0x1d8e4e27c47d124fL;
 
-    private static final Maths MATHS = Maths.INSTANCE;
-
     private static long _wymum(final long lhs, final long rhs) {
-        return MATHS.unsignedLongMulXorFold(lhs, rhs);
+        return Maths.unsignedLongMulXorFold(lhs, rhs);
     }
 
     private static <T> long _wyr3(final Access<T> access, T in, final long index, long k) {
