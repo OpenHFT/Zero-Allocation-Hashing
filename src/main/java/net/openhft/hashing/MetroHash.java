@@ -10,23 +10,6 @@ class MetroHash {
     private static final long k2 = 0x62992FC1L;
     private static final long k3 = 0x30BC5B29L;
 
-    static <T> long fetch64(Access<T> access, T in, long off) {
-        return access.getLong(in, off);
-    }
-
-    static <T> long fetch32(Access<T> access, T in, long off) {
-        return access.getUnsignedInt(in, off);
-    }
-
-    static <T> long fetch16(Access<T> access, T in, long off) {
-        return access.getUnsignedShort(in, off);
-    }
-
-    static <T> int fetch8(Access<T> access, T in, long off) {
-        return access.getUnsignedByte(in, off);
-    }
-
-
     static <T> long metroHash64(long seed, T input, Access<T> access, long off, long length) {
         long remaining = length;
 
@@ -39,13 +22,13 @@ class MetroHash {
             long v3 = h;
 
             do {
-                v0 += fetch64(access, input, off) * k0;
+                v0 += access.i64(input, off) * k0;
                 v0 = Long.rotateRight(v0, 29) + v2;
-                v1 += fetch64(access, input, off + 8) * k1;
+                v1 += access.i64(input, off + 8) * k1;
                 v1 = Long.rotateRight(v1, 29) + v3;
-                v2 += fetch64(access, input, off + 16) * k2;
+                v2 += access.i64(input, off + 16) * k2;
                 v2 = Long.rotateRight(v2, 29) + v0;
-                v3 += fetch64(access, input, off + 24) * k3;
+                v3 += access.i64(input, off + 24) * k3;
                 v3 = Long.rotateRight(v3, 29) + v1;
 
                 off += 32;
@@ -61,9 +44,9 @@ class MetroHash {
         }
 
         if (remaining >= 16) {
-            long v0 = h + (fetch64(access, input, off) * k2);
+            long v0 = h + (access.i64(input, off) * k2);
             v0 = Long.rotateRight(v0, 29) * k3;
-            long v1 = h + (fetch64(access, input, off + 8) * k2);
+            long v1 = h + (access.i64(input, off + 8) * k2);
             v1 = Long.rotateRight(v1, 29) * k3;
             v0 ^= Long.rotateRight(v0 * k0, 21) + v1;
             v1 ^= Long.rotateRight(v1 * k3, 21) + v0;
@@ -74,7 +57,7 @@ class MetroHash {
         }
 
         if (remaining >= 8) {
-            h += fetch64(access, input, off) * k3;
+            h += access.i64(input, off) * k3;
             h ^= Long.rotateRight(h, 55) * k1;
 
             off += 8;
@@ -82,7 +65,7 @@ class MetroHash {
         }
 
         if (remaining >= 4) {
-            h += fetch32(access, input, off) * k3;
+            h += access.u32(input, off) * k3;
             h ^= Long.rotateRight(h, 26) * k1;
 
             off += 4;
@@ -90,7 +73,7 @@ class MetroHash {
         }
 
         if (remaining >= 2) {
-            h += fetch16(access, input, off) * k3;
+            h += access.u16(input, off) * k3;
             h ^= Long.rotateRight(h, 48) * k1;
 
             off += 2;
@@ -98,7 +81,7 @@ class MetroHash {
         }
 
         if (remaining >= 1) {
-            h += fetch8(access, input, off) * k3;
+            h += access.u8(input, off) * k3;
             h ^= Long.rotateRight(h, 37) * k1;
         }
 
