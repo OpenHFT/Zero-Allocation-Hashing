@@ -252,6 +252,15 @@ public abstract class Access<T> {
      */
     public abstract int getByte(T input, long offset);
 
+    // short names
+    public long i64(final T input, final long offset) { return getLong(input, offset); }
+    public long u32(final T input, final long offset) { return getUnsignedInt(input, offset); }
+    public  int i32(final T input, final long offset) { return getInt(input, offset); }
+    public  int u16(final T input, final long offset) { return getUnsignedShort(input, offset); }
+    public  int i16(final T input, final long offset) { return getShort(input, offset); }
+    public  int  u8(final T input, final long offset) { return getUnsignedByte(input, offset); }
+    public  int  i8(final T input, final long offset) { return getByte(input, offset); }
+
     /**
      * The byte order in which all multi-byte {@code getXXX()} reads from the given {@code input}
      * are performed.

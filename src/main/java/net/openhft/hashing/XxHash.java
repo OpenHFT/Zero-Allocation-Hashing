@@ -31,22 +31,6 @@ class XxHash {
     private static final long P4 = -8796714831421723037L;
     private static final long P5 = 2870177450012600261L;
 
-    private XxHash() {}
-
-    static <T> long fetch64(Access<T> access, T in, long off) {
-        return access.getLong(in, off);
-    }
-
-    // long because of unsigned nature of original algorithm
-    static <T> long fetch32(Access<T> access, T in, long off) {
-        return access.getUnsignedInt(in, off);
-    }
-
-    // int because of unsigned nature of original algorithm
-    static private <T> int fetch8(Access<T> access, T in, long off) {
-        return access.getUnsignedByte(in, off);
-    }
-
     static <T> long xxHash64(long seed, T input, Access<T> access, long off, long length) {
         long hash;
         long remaining = length;
@@ -58,19 +42,19 @@ class XxHash {
             long v4 = seed - P1;
 
             do {
-                v1 += fetch64(access, input, off) * P2;
+                v1 += access.i64(input, off) * P2;
                 v1 = Long.rotateLeft(v1, 31);
                 v1 *= P1;
 
-                v2 += fetch64(access, input, off + 8) * P2;
+                v2 += access.i64(input, off + 8) * P2;
                 v2 = Long.rotateLeft(v2, 31);
                 v2 *= P1;
 
-                v3 += fetch64(access, input, off + 16) * P2;
+                v3 += access.i64(input, off + 16) * P2;
                 v3 = Long.rotateLeft(v3, 31);
                 v3 *= P1;
 
-                v4 += fetch64(access, input, off + 24) * P2;
+                v4 += access.i64(input, off + 24) * P2;
                 v4 = Long.rotateLeft(v4, 31);
                 v4 *= P1;
 
@@ -113,7 +97,7 @@ class XxHash {
         hash += length;
 
         while (remaining >= 8) {
-            long k1 = fetch64(access, input, off);
+            long k1 = access.i64(input, off);
             k1 *= P2;
             k1 = Long.rotateLeft(k1, 31);
             k1 *= P1;
@@ -124,14 +108,14 @@ class XxHash {
         }
 
         if (remaining >= 4) {
-            hash ^= fetch32(access, input, off) * P1;
+            hash ^= access.u32(input, off) * P1;
             hash = Long.rotateLeft(hash, 23) * P2 + P3;
             off += 4;
             remaining -= 4;
         }
 
         while (remaining != 0) {
-            hash ^= fetch8(access, input, off) * P5;
+            hash ^= access.u8(input, off) * P5;
             hash = Long.rotateLeft(hash, 11) * P1;
             --remaining;
             ++off;
