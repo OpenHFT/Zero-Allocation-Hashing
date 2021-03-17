@@ -261,6 +261,30 @@ public abstract class LongHashFunction implements Serializable {
     }
 
     /**
+     * Returns a hash function implementing <a href="https://github.com/Cyan4973/xxHash">XXH3 64bit
+     * algorithm</a> without a seed value (0 is used as default seed value). This implementation
+     * produces equal results for equal input on platforms with different {@link
+     * ByteOrder}, but is slower on big-endian platforms than on little-endian.
+     *
+     * @see #xx3(long)
+     */
+    public static LongHashFunction xx3() {
+        return XXH3.asLongHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing <a href="https://github.com/Cyan4973/xxHash">XXH3 64bit
+     * algorithm</a> with the given seed value. This implementation produces equal results for equal
+     * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
+     * than on little-endian.
+     *
+     * @see #xx3()
+     */
+    public static LongHashFunction xx3(final long seed) {
+        return XXH3.asLongHashFunctionWithSeed(seed);
+    }
+
+    /**
      * Returns a hash function implementing
      * <a href="https://github.com/wangyi-fudan/wyhash/blob/9f68c1b10166a54c17f55b284c21bd455fd0f7e2/wyhash.h">
      * wyhash algorithm, version 3</a> without a seed value (0 is used as default seed value). This

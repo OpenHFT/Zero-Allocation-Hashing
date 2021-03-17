@@ -96,11 +96,11 @@ public class LongHashFunctionTest {
         long twoByteExpected = f.hashBytes(bytes, 0, 2);
         long fourByteExpected = f.hashBytes(bytes, 0, 4);
         long eightByteExpected = f.hashBytes(bytes);
-        assertEquals("byte hash", oneByteExpected, f.hashByte((byte) -1));
-        assertEquals("short hash", twoByteExpected, f.hashShort((short) -1));
-        assertEquals("char hash", twoByteExpected, f.hashChar((char) -1));
-        assertEquals("int hash", fourByteExpected, f.hashInt(-1));
-        assertEquals("long hash", eightByteExpected, f.hashLong(-1L));
+        assertEquals("byte hash neg", oneByteExpected, f.hashByte((byte) -1));
+        assertEquals("short hash neg", twoByteExpected, f.hashShort((short) -1));
+        assertEquals("char hash neg", twoByteExpected, f.hashChar((char) -1));
+        assertEquals("int hash neg", fourByteExpected, f.hashInt(-1));
+        assertEquals("long hash neg", eightByteExpected, f.hashLong(-1L));
     }
 
     private static void testArrays(LongHashFunction f, byte[] data, long eh, int len,
