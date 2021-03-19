@@ -56,7 +56,7 @@ public class LongTupleHashFunctionTest {
         } catch (NullPointerException expected) {
             ok = true;
         } catch (Throwable e) {
-            fail(e.toString());
+            fail("unexpected exception: " + e.toString());
         }
         assertTrue("should throw NullPointerException", ok);
 
@@ -66,7 +66,7 @@ public class LongTupleHashFunctionTest {
         } catch (IllegalArgumentException expected) {
             ok = true;
         } catch (Throwable e) {
-            fail(e.toString());
+            fail("unexpected exception: " + e.toString());
         }
         assertTrue("should throw IllegalArgumentException", ok);
 
@@ -75,7 +75,7 @@ public class LongTupleHashFunctionTest {
         long[] r2 = new long[r1.length + 1];
         f.hashBytes(new byte[1], r2);
         for (int i = 0; i < r1.length; ++i) {
-            assertEquals(r1[i], r2[i]);
+            assertEquals("compare element[" + i + "] for larger result array", r1[i], r2[i]);
         }
     }
 
@@ -96,8 +96,8 @@ public class LongTupleHashFunctionTest {
             boolean[] a = {b};
             long[] single = f.hashBoolean(b);
             long[] array = f.hashBooleans(a);
-            assertArrayEquals(single, array);
-            assertArrayEquals(single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
+            assertArrayEquals("testBoolean array", single, array);
+            assertArrayEquals("testBoolean unsafe", single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
         }
     }
 
@@ -132,11 +132,11 @@ public class LongTupleHashFunctionTest {
         long[] twoByteExpected = f.hashBytes(bytes, 0, 2);
         long[] fourByteExpected = f.hashBytes(bytes, 0, 4);
         long[] eightByteExpected = f.hashBytes(bytes);
-        assertArrayEquals("byte hash", oneByteExpected, f.hashByte((byte) -1));
-        assertArrayEquals("short hash", twoByteExpected, f.hashShort((short) -1));
-        assertArrayEquals("char hash", twoByteExpected, f.hashChar((char) -1));
-        assertArrayEquals("int hash", fourByteExpected, f.hashInt(-1));
-        assertArrayEquals("long hash", eightByteExpected, f.hashLong(-1L));
+        assertArrayEquals("byte hash neg", oneByteExpected, f.hashByte((byte) -1));
+        assertArrayEquals("short hash neg", twoByteExpected, f.hashShort((short) -1));
+        assertArrayEquals("char hash neg", twoByteExpected, f.hashChar((char) -1));
+        assertArrayEquals("int hash neg", fourByteExpected, f.hashInt(-1));
+        assertArrayEquals("long hash neg", eightByteExpected, f.hashLong(-1L));
     }
 
     private static void testArrays(LongTupleHashFunction f, byte[] data, long[] eh, int len,
@@ -258,9 +258,13 @@ public class LongTupleHashFunctionTest {
             for (int i = 0; i < data.length; ++i) {
                 inputCharArray[i] = (char)(data[i]&0xFF);
             }
+            char[] inputCharArray2 = new char[data.length];
+            for (int i = 0; i < data.length; ++i) {
+                inputCharArray2[i] = (char)(data[i]&0xFF);
+            }
             assertArrayEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
         } catch (Exception e) {
-            fail(e.toString());
+            fail("exception when test latin1 string:" + e.toString());
         }
     }
 }
