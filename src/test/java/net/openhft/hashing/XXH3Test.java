@@ -31,7 +31,7 @@ public class XXH3Test {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         final int maxLen = Math.min(XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED.length,
-			XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
+                                    XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < maxLen; len++) {
             data.add(new Object[]{len});

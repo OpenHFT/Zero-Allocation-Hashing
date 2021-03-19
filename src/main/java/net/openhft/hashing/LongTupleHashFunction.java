@@ -92,6 +92,33 @@ public abstract class LongTupleHashFunction implements Serializable {
     }
 
     /**
+     * Returns a 128-bit hash function implementing
+     * <a href="https://github.com/Cyan4973/xxHash">XXH3 128bit algorithm</a> without seed values
+     * (0 is used as default seed value). This implementation produces equal results for equal input
+     * on platforms with different {@link ByteOrder}, but is slower on big-endian platforms than on
+     * little-endian.
+     *
+     * @see #xx128(long)
+     */
+    @NotNull
+    public static LongTupleHashFunction xx128() {
+        return XXH3.asLongTupleHashFunctionWithoutSeed();
+    }
+
+    /**
+     * Returns a hash function implementing
+     * <a href="https://github.com/Cyan4973/xxHash">XXH3 128bit algorithm</a> with the given seed
+     * value. This implementation produces equal results for equal input on platforms with different
+     * {@link ByteOrder}, but is slower on big-endian platforms than on little-endian.
+     *
+     * @see #xx128()
+     */
+    @NotNull
+    public static LongTupleHashFunction xx128(final long seed) {
+        return XXH3.asLongTupleHashFunctionWithSeed(seed);
+    }
+
+    /**
      * Constructor for use in subclasses.
      */
     protected LongTupleHashFunction() {}
