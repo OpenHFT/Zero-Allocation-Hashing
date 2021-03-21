@@ -93,11 +93,11 @@ class XXH3 {
     /*
      * A bit slower than XXH3_mix16B, but handles multiply by zero better.
      */
-    private static <T> void XXH128_mix32B(final long seed, final T input, final Access<T> access, final long offIn1, final long offIn2, final long offSec, final long acc[]) {
-        acc[0] += XXH3_mix16B(seed, input, access, offIn1, offSec);
-        acc[0] ^= access.i64(input, offIn2) + access.i64(input, offIn2 + 8);
-        acc[1] += XXH3_mix16B (seed, input, access, offIn2, offSec + 16);
-        acc[1] ^= access.i64(input, offIn1) + access.i64(input, offIn1 + 8);
+    private static long XXH128_mix32B_once(final long seed, final long offSec, long acc, final long input0, final long input1, final long input2, final long input3) {
+        acc += unsignedLongMulXorFold(
+            input0 ^ (unsafeLE.i64(XXH3_kSecret, offSec    ) + seed),
+            input1 ^ (unsafeLE.i64(XXH3_kSecret, offSec + 8) - seed));
+        return acc ^ (input2 + input3);
     }
 
     private static long XXH3_mix2Accs(final long acc_lh, final long acc_rh, final byte[] secret, final long offSec) {
@@ -343,7 +343,7 @@ class XXH3 {
         return XXH3_avalanche(result64);
     }
 
-    private static <T> void XXH3_128bits_internal(final long seed, final byte[] secret, final T input, final Access<T> access, final long off, final long length, final long[] result) {
+    private static <T> long XXH3_128bits_internal(final long seed, final byte[] secret, final T input, final Access<T> access, final long off, final long length, final long[] result) {
         if (length <= 16) {
             // XXH3_len_0to16_128b
             if (length > 8) {
@@ -359,9 +359,12 @@ class XXH3 {
                 m128_hi += input_hi + Primitives.unsignedInt((int)input_hi) * (XXH_PRIME32_2 - 1);
                 m128_lo ^= Long.reverseBytes(m128_hi);
 
-                result[0] = XXH3_avalanche(m128_lo * XXH_PRIME64_2);
-                result[1] = XXH3_avalanche(Maths.unsignedLongMulHigh(m128_lo, XXH_PRIME64_2) + m128_hi * XXH_PRIME64_2);
-                return;
+                final long low = XXH3_avalanche(m128_lo * XXH_PRIME64_2);
+                if (null != result) {
+                    result[0] = low;
+                    result[1] = XXH3_avalanche(Maths.unsignedLongMulHigh(m128_lo, XXH_PRIME64_2) + m128_hi * XXH_PRIME64_2);
+                }
+                return low;
             }
             if (length >= 4) {
                 // XXH3_len_4to8_128b
@@ -380,9 +383,12 @@ class XXH3 {
                 m128_lo ^= m128_lo >>> 35;
                 m128_lo *= 0x9FB21C651E98DF25L;
                 m128_lo ^= m128_lo >>> 28;
-                result[0] = m128_lo;
-                result[1] = XXH3_avalanche(m128_hi);
-                return;
+
+                if (null != result) {
+                    result[0] = m128_lo;
+                    result[1] = XXH3_avalanche(m128_hi);
+                }
+                return m128_lo;
             }
             if (length != 0) {
                 // XXH3_len_1to3_128b
@@ -393,59 +399,104 @@ class XXH3 {
                 final int combinedh = Integer.rotateLeft(Integer.reverseBytes(combinedl), 13);
                 final long bitflipl = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+4)) + seed;
                 final long bitfliph = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE+8) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+12)) - seed;
-                result[0] = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
-                result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
-                return;
+
+                final long low = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
+                if (null != result) {
+                    result[0] = low;
+                    result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
+                }
+                return low;
             }
-            result[0] = XXH64_avalanche(seed ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+64) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+72));
-            result[1] = XXH64_avalanche(seed ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+80) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+88));
-            return;
+            final long low = XXH64_avalanche(seed ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+64) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+72));
+            if (null != result) {
+                result[0] = low;
+                result[1] = XXH64_avalanche(seed ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+80) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+88));
+            }
+            return low;
         }
         if (length <= 128) {
             // XXH3_len_17to128_128b
-            result[0] = length * XXH_PRIME64_1;
-            result[1] = 0;
+            long acc0 = length * XXH_PRIME64_1;
+            long acc1 = 0;
             if (length > 32) {
                 if (length > 64) {
                     if (length > 96) {
-                        XXH128_mix32B(seed, input, access, off + 48, off + length - 64, BYTE_BASE + 96, result);
+                        final long input0 = access.i64(input, off + 48);
+                        final long input1 = access.i64(input, off + 48 + 8);
+                        final long input2 = access.i64(input, off + length - 64);
+                        final long input3 = access.i64(input, off + length - 64 + 8);
+                        acc0 = XXH128_mix32B_once(seed, BYTE_BASE + 96,      acc0, input0, input1, input2, input3);
+                        acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 96 + 16, acc1, input2, input3, input0, input1);
                     }
-                    XXH128_mix32B(seed, input, access, off + 32, off + length - 48, BYTE_BASE + 64, result);
+                    final long input0 = access.i64(input, off + 32);
+                    final long input1 = access.i64(input, off + 32 + 8);
+                    final long input2 = access.i64(input, off + length - 48);
+                    final long input3 = access.i64(input, off + length - 48 + 8);
+                    acc0 = XXH128_mix32B_once(seed, BYTE_BASE + 64,      acc0, input0, input1, input2, input3);
+                    acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 64 + 16, acc1, input2, input3, input0, input1);
                 }
-                XXH128_mix32B(seed, input, access, off + 16, off + length - 32, BYTE_BASE + 32, result);
+                final long input0 = access.i64(input, off + 16);
+                final long input1 = access.i64(input, off + 16 + 8);
+                final long input2 = access.i64(input, off + length - 32);
+                final long input3 = access.i64(input, off + length - 32 + 8);
+                acc0 = XXH128_mix32B_once(seed, BYTE_BASE + 32,      acc0, input0, input1, input2, input3);
+                acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 32 + 16, acc1, input2, input3, input0, input1);
             }
-            XXH128_mix32B(seed, input, access, off + 0, off + length - 16, BYTE_BASE, result);
+            final long input0 = access.i64(input, off + 0);
+            final long input1 = access.i64(input, off + 0 + 8);
+            final long input2 = access.i64(input, off + length - 16);
+            final long input3 = access.i64(input, off + length - 16 + 8);
+            acc0 = XXH128_mix32B_once(seed, BYTE_BASE,      acc0, input0, input1, input2, input3);
+            acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 16, acc1, input2, input3, input0, input1);
 
-            final long acc_lo = result[0];
-            final long acc_hi = result[1];
-            result[0] = XXH3_avalanche(acc_lo + acc_hi);
-            result[1] = -XXH3_avalanche(acc_lo*XXH_PRIME64_1 + acc_hi*XXH_PRIME64_4 + (length - seed)*XXH_PRIME64_2);
-            return;
+            final long low = XXH3_avalanche(acc0 + acc1);
+            if (null != result) {
+                result[0] = low;
+                result[1] = -XXH3_avalanche(acc0*XXH_PRIME64_1 + acc1*XXH_PRIME64_4 + (length - seed)*XXH_PRIME64_2);
+            }
+            return low;
         }
 
         if (length <= 240) {
             // XXH3_len_129to240_128b
             final int nbRounds = (int)length / 32;
-            result[0] = length * XXH_PRIME64_1;
-            result[1] = 0;
+            long acc0 = length * XXH_PRIME64_1;
+            long acc1 = 0;
             int i = 0;
             for (; i < 4; ++i) {
-                XXH128_mix32B(seed, input, access, off + 32*i, off + 32*i + 16, BYTE_BASE + 32*i, result);
+                final long input0 = access.i64(input, off + 32*i);
+                final long input1 = access.i64(input, off + 32*i + 8);
+                final long input2 = access.i64(input, off + 32*i + 16);
+                final long input3 = access.i64(input, off + 32*i + 24);
+                acc0 = XXH128_mix32B_once(seed, BYTE_BASE + 32*i,      acc0, input0, input1, input2, input3);
+                acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 32*i + 16, acc1, input2, input3, input0, input1);
             }
-            result[0] = XXH3_avalanche(result[0]);
-            result[1] = XXH3_avalanche(result[1]);
+            acc0 = XXH3_avalanche(acc0);
+            acc1 = XXH3_avalanche(acc1);
 
             for (; i < nbRounds; ++i) {
-                XXH128_mix32B(seed, input, access, off + 32*i, off + 32*i + 16, BYTE_BASE + 3 + 32*(i-4), result);
+                final long input0 = access.i64(input, off + 32*i);
+                final long input1 = access.i64(input, off + 32*i + 8);
+                final long input2 = access.i64(input, off + 32*i + 16);
+                final long input3 = access.i64(input, off + 32*i + 24);
+                acc0 = XXH128_mix32B_once(seed, BYTE_BASE + 3 + 32*(i-4),      acc0, input0, input1, input2, input3);
+                acc1 = XXH128_mix32B_once(seed, BYTE_BASE + 3 + 32*(i-4) + 16, acc1, input2, input3, input0, input1);
             }
 
             /* last bytes */
-            XXH128_mix32B(-seed, input, access, off + length - 16, off + length - 32, BYTE_BASE + 136 - 17 - 16, result);
-            final long acc_lo = result[0];
-            final long acc_hi = result[1];
-            result[0] = XXH3_avalanche(acc_lo + acc_hi);
-            result[1] = -XXH3_avalanche(acc_lo*XXH_PRIME64_1 + acc_hi*XXH_PRIME64_4 + (length - seed)*XXH_PRIME64_2);
-            return;
+            final long input0 = access.i64(input, off + length - 16);
+            final long input1 = access.i64(input, off + length - 16 + 8);
+            final long input2 = access.i64(input, off + length - 32);
+            final long input3 = access.i64(input, off + length - 32 + 8);
+            acc0 = XXH128_mix32B_once(-seed, BYTE_BASE + 136 - 17 - 16, acc0, input0, input1, input2, input3);
+            acc1 = XXH128_mix32B_once(-seed, BYTE_BASE + 136 - 17     , acc1, input2, input3, input0, input1);
+
+            final long low = XXH3_avalanche(acc0 + acc1);
+            if (null != result) {
+                result[0] = low;
+                result[1] = -XXH3_avalanche(acc0*XXH_PRIME64_1 + acc1*XXH_PRIME64_4 + (length - seed)*XXH_PRIME64_2);
+            }
+            return low;
         }
 
         // XXH3_hashLong_128b_internal
@@ -604,16 +655,20 @@ class XXH3 {
         }
 
         // XXH3_mergeAccs
-        result[0] = XXH3_avalanche(length * XXH_PRIME64_1
+        final long low = XXH3_avalanche(length * XXH_PRIME64_1
                 + XXH3_mix2Accs(acc_0, acc_1, secret, BYTE_BASE + 11)
                 + XXH3_mix2Accs(acc_2, acc_3, secret, BYTE_BASE + 11 + 16)
                 + XXH3_mix2Accs(acc_4, acc_5, secret, BYTE_BASE + 11 + 16 * 2)
                 + XXH3_mix2Accs(acc_6, acc_7, secret, BYTE_BASE + 11 + 16 * 3));
-        result[1] = XXH3_avalanche(~(length * XXH_PRIME64_2)
-                + XXH3_mix2Accs(acc_0, acc_1, secret, BYTE_BASE + 192 - 64 - 11)
-                + XXH3_mix2Accs(acc_2, acc_3, secret, BYTE_BASE + 192 - 64 - 11 + 16)
-                + XXH3_mix2Accs(acc_4, acc_5, secret, BYTE_BASE + 192 - 64 - 11 + 16 * 2)
-                + XXH3_mix2Accs(acc_6, acc_7, secret, BYTE_BASE + 192 - 64 - 11 + 16 * 3));
+        if (null != result) {
+            result[0] = low;
+            result[1] = XXH3_avalanche(~(length * XXH_PRIME64_2)
+                    + XXH3_mix2Accs(acc_0, acc_1, secret, BYTE_BASE + 192 - 64 - 11)
+                    + XXH3_mix2Accs(acc_2, acc_3, secret, BYTE_BASE + 192 - 64 - 11 + 16)
+                    + XXH3_mix2Accs(acc_4, acc_5, secret, BYTE_BASE + 192 - 64 - 11 + 16 * 2)
+                    + XXH3_mix2Accs(acc_6, acc_7, secret, BYTE_BASE + 192 - 64 - 11 + 16 * 3));
+        }
+        return low;
     }
 
     private static void XXH3_initCustomSecret(final byte[] customSecret, final long seed64) {
@@ -723,6 +778,9 @@ class XXH3 {
     static LongTupleHashFunction asLongTupleHashFunctionWithoutSeed() {
         return AsLongTupleHashFunction.SEEDLESS_INSTANCE;
     }
+    static LongHashFunction asLongTupleLowHashFunctionWithoutSeed() {
+        return AsLongTupleHashFunction.SEEDLESS_INSTANCE.asLongHashFunction();
+    }
 
     private static class AsLongTupleHashFunction extends DualHashFunction {
         private static final long serialVersionUID = 0L;
@@ -757,8 +815,11 @@ class XXH3 {
             m128_lo ^= m128_lo >>> 35;
             m128_lo *= 0x9FB21C651E98DF25L;
             m128_lo ^= m128_lo >>> 28;
-            result[0] = m128_lo;
-            result[1] = XXH3_avalanche(m128_hi);
+
+            if (null != result) {
+                result[0] = m128_lo;
+                result[1] = XXH3_avalanche(m128_hi);
+            }
             return m128_lo;
         }
 
@@ -778,8 +839,11 @@ class XXH3 {
             m128_lo ^= m128_lo >>> 35;
             m128_lo *= 0x9FB21C651E98DF25L;
             m128_lo ^= m128_lo >>> 28;
-            result[0] = m128_lo;
-            result[1] = XXH3_avalanche(m128_hi);
+
+            if (null != result) {
+                result[0] = m128_lo;
+                result[1] = XXH3_avalanche(m128_hi);
+            }
             return m128_lo;
         }
 
@@ -793,9 +857,13 @@ class XXH3 {
             final int combinedh = Integer.rotateLeft(Integer.reverseBytes(combinedl), 13);
             final long bitflipl = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+4)) + seed();
             final long bitfliph = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE+8) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+12)) - seed();
-            result[0] = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
-            result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
-            return result[0];
+
+            final long low = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
+            if (null != result) {
+                result[0] = low;
+                result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
+            }
+            return low;
         }
 
         @Override
@@ -813,27 +881,36 @@ class XXH3 {
             final int combinedh = Integer.rotateLeft(Integer.reverseBytes(combinedl), 13);
             final long bitflipl = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+4)) + seed();
             final long bitfliph = Primitives.unsignedInt(unsafeLE.i32(XXH3_kSecret, BYTE_BASE+8) ^ unsafeLE.i32(XXH3_kSecret, BYTE_BASE+12)) - seed();
-            result[0] = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
-            result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
-            return result[0];
+
+            final long low = XXH64_avalanche(Primitives.unsignedInt(combinedl) ^ bitflipl);
+            if (null != result) {
+                result[0] = low;
+                result[1] = XXH64_avalanche(Primitives.unsignedInt(combinedh) ^ bitfliph);
+            }
+            return low;
         }
 
         @Override
         public long dualHashVoid(final long[] result) {
-            result[0] = XXH64_avalanche(seed() ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+64) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+72));
-            result[1] = XXH64_avalanche(seed() ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+80) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+88));
-            return result[0];
+            final long low = XXH64_avalanche(seed() ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+64) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+72));
+            if (null != result) {
+                result[0] = low;
+                result[1] = XXH64_avalanche(seed() ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+80) ^ unsafeLE.i64(XXH3_kSecret, BYTE_BASE+88));
+            }
+            return low;
         }
 
         @Override
         public <T> long dualHash(final T input, final Access<T> access, final long off, final long len, final long[] result) {
-            XXH3.XXH3_128bits_internal(0, XXH3.XXH3_kSecret, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
-            return result[0];
+            return XXH3.XXH3_128bits_internal(0, XXH3.XXH3_kSecret, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
         }
     }
 
     static LongTupleHashFunction asLongTupleHashFunctionWithSeed(final long seed) {
         return 0 == seed ? AsLongTupleHashFunction.SEEDLESS_INSTANCE : new AsLongTupleHashFunctionSeeded(seed);
+    }
+    static LongHashFunction asLongTupleLowHashFunctionWithSeed(long seed) {
+        return new AsLongTupleHashFunctionSeeded(seed).asLongHashFunction();
     }
 
     private static class AsLongTupleHashFunctionSeeded extends AsLongTupleHashFunction {
@@ -854,8 +931,7 @@ class XXH3 {
 
         @Override
         public <T> long dualHash(final T input, final Access<T> access, final long off, final long len, final long[] result) {
-            XXH3.XXH3_128bits_internal(this.seed, this.secret, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
-            return result[0];
+            return XXH3.XXH3_128bits_internal(seed, secret, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
         }
     }
 }
