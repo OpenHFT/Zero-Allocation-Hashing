@@ -44,20 +44,21 @@ public class XXH128Test {
 
     @Test
     public void testXXH3WithoutSeeds() {
-        test(LongTupleHashFunction.xx128(), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+        test(LongTupleHashFunction.xx128(), LongHashFunction.xx128low(), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
     @Test
     public void testXXH128WithOneSeed() {
-        test(LongTupleHashFunction.xx128(42L), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+        test(LongTupleHashFunction.xx128(42L), LongHashFunction.xx128low(42L), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    public void test(LongTupleHashFunction h, long[][] hashesOfLoopingBytes) {
+    public void test(LongTupleHashFunction h, LongHashFunction hl, long[][] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
         LongTupleHashFunctionTest.test(h, data, hashesOfLoopingBytes[len]);
+        LongHashFunctionTest.test(hl, data, hashesOfLoopingBytes[len][0]);
     }
 }
 
