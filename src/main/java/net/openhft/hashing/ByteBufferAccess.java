@@ -19,7 +19,7 @@ package net.openhft.hashing;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-final class ByteBufferAccess extends Access<ByteBuffer> {
+public final class ByteBufferAccess extends Access<ByteBuffer> {
     public static final ByteBufferAccess INSTANCE = new ByteBufferAccess();
     private static final Access<ByteBuffer> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
