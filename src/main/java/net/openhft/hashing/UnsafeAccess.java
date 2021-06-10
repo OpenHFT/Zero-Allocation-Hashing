@@ -23,7 +23,7 @@ import sun.misc.Unsafe;
 import static net.openhft.hashing.Primitives.*;
 import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
-class UnsafeAccess extends Access<Object> {
+public class UnsafeAccess extends Access<Object> {
     static final UnsafeAccess INSTANCE;
     private static final Access<Object> INSTANCE_NON_NATIVE;
 

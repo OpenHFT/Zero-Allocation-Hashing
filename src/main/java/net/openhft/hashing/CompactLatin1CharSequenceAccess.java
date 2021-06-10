@@ -75,7 +75,7 @@ import static net.openhft.hashing.UnsafeAccess.BYTE_BASE;
  * Notes: This access is based on the UnsafeAccess, so only works for the native order.
  */
 @ParametersAreNonnullByDefault
-class CompactLatin1CharSequenceAccess extends Access<byte[]> {
+public class CompactLatin1CharSequenceAccess extends Access<byte[]> {
     @NotNull
     static final Access<byte[]> INSTANCE = new CompactLatin1CharSequenceAccess();
 
