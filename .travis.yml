@@ -10,7 +10,7 @@ dist: xenial
 jdk:
   - openjdk8 # LTS release
   - openjdk11 # LTS release
-  - openjdk15 # latest non-LTS release
+  - openjdk16 # latest non-LTS release
 
 before_install:
   - |

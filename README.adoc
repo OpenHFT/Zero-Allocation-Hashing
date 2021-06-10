@@ -41,7 +41,7 @@ order):
 
 These are thoroughly tested with
 *https://www.oracle.com/java/technologies/java-se-support-roadmap.html[LTS JDKs]*
-7, 8, and 11, the latest non-LTS JDKs 15 on both little- and big- endian platforms.
+7, 8, and 11, the latest non-LTS JDKs 16 on both little- and big- endian platforms.
 Other non-LTS JDKs from 9 should also work, but they will not be tested from half year after EOL.
 
 ==== Performance
