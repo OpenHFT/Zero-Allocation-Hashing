@@ -248,12 +248,12 @@
 
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.0.0-M4</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.8.1</version>
+			<version>1.11.2</version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
                     </dependency>
                 </dependencies>
             </plugin>
