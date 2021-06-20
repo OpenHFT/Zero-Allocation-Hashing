@@ -38,6 +38,8 @@ order):
  - *https://github.com/wangyi-fudan/wyhash[wyHash]*, version 3.
 
  - *https://github.com/Cyan4973/xxHash[xxHash]*.
+ 
+ - *https://github.com/Cyan4973/xxHash[xxh3, xxh128]*, 128-bit and 64 bit.
 
 These are thoroughly tested with
 *https://www.oracle.com/java/technologies/java-se-support-roadmap.html[LTS JDKs]*
