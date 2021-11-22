@@ -47,6 +47,8 @@
         <maven.bundle.plugin.version>5.1.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
+	<sonar.organization>openhft</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
