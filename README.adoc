@@ -1,13 +1,24 @@
 == Zero-Allocation Hashing
+Chronicle Software
+:css-signature: demo
+:toc: macro
+:toclevels: 2
+:icons: font
 
-==== Version
-[#image-maven]
-[caption="", link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
-image::https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[]
-[caption="", link=https://javadoc.io/doc/net.openhft/zero-allocation-hashing]
-image::https://javadoc.io/badge2/net.openhft/zero-allocation-hashing/javadoc.svg[]
+image:https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[caption="",link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
+image:https://javadoc.io/badge2/net.openhft/zero-allocation-hashing/javadoc.svg[link="https://www.javadoc.io/doc/net.openhft/zero-allocation-hashing/latest/index.html"]
+//image:https://javadoc-badge.appspot.com/net.openhft/zero-allocation-hashing.svg?label=javadoc[JavaDoc, link=https://www.javadoc.io/doc/net.openhft/zero-allocation-hashing]
+image:https://img.shields.io/github/license/OpenHFT/Zero-Allocation-Hashing[GitHub]
+image:https://img.shields.io/badge/release%20notes-subscribe-brightgreen[link="https://chronicle.software/release-notes/"]
+image:https://sonarcloud.io/api/project_badges/measure?project=OpenHFT_Zero-Allocation-Hashing&metric=alert_status[link="https://sonarcloud.io/dashboard?id=OpenHFT_Zero-Allocation-Hashing"]
 
-=== Overview
+image::docs/images/Map_line.png[width=20%]
+
+toc::[]
+
+== About
+
+
 This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence`s and more.
 
