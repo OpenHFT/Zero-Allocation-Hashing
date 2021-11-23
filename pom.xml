@@ -17,10 +17,11 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
+   <parent>
         <groupId>net.openhft</groupId>
-        <artifactId>root-parent-pom</artifactId>
-        <version>1.2.2</version>
+        <artifactId>java-parent-pom</artifactId>
+        <version>1.1.28</version>
+        <relativePath />
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -235,19 +236,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
+    
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0-M4</version>
