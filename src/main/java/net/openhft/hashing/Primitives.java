@@ -16,11 +16,14 @@
 
 package net.openhft.hashing;
 
-import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+import static java.nio.ByteOrder.nativeOrder;
 
 final class Primitives {
 
     private Primitives() {}
+
+    static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
 
     static long unsignedInt(int i) {
         return i & 0xFFFFFFFFL;
