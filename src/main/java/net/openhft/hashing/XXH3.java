@@ -21,7 +21,6 @@ import java.nio.ByteBuffer;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.Maths.unsignedLongMulXorFold;
 import static net.openhft.hashing.UnsafeAccess.*;
-import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 /**
  * Adapted version of XXH3 implementation from https://github.com/Cyan4973/xxHash.

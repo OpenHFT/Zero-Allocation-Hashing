@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import static java.nio.ByteOrder.*;
 
 final class Util {
-    static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
 
     /* Known java.vm.name list:
      *
