@@ -21,7 +21,6 @@ import java.nio.ByteOrder;
 import sun.misc.Unsafe;
 
 import static net.openhft.hashing.Primitives.*;
-import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 
 public class UnsafeAccess extends Access<Object> {
     static final UnsafeAccess INSTANCE;

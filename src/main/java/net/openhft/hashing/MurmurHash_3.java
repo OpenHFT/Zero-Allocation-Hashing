@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static java.lang.Long.reverseBytes;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static net.openhft.hashing.Util.NATIVE_LITTLE_ENDIAN;
 import static net.openhft.hashing.Primitives.unsignedInt;
 import static net.openhft.hashing.Primitives.unsignedShort;
 
