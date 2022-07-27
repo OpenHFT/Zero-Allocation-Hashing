@@ -1,9 +1,5 @@
 == Zero-Allocation Hashing
 Chronicle Software
-:css-signature: demo
-:toc: macro
-:toclevels: 2
-:icons: font
 
 image:https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[caption="",link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
 image:https://javadoc.io/badge2/net.openhft/zero-allocation-hashing/javadoc.svg[link="https://www.javadoc.io/doc/net.openhft/zero-allocation-hashing/latest/index.html"]
@@ -16,9 +12,8 @@ toc::[]
 
 == About
 
-
 This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
-primitive arrays, buffers, `CharSequence`s and more.
+primitive arrays, buffers, `CharSequence` and more.
 
 Written for Java 7+ under Apache 2.0 license.
 
@@ -97,7 +92,7 @@ To sum up,
    and hash the resulting byte sequence on the way without dumping it to memory.
 
 ==== Java Doc
-See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.15
+See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
 
 == Quick start
 
@@ -105,7 +100,7 @@ Gradle:
 [source, groovy]
 ----
 dependencies {
-    implementation 'net.openhft:zero-allocation-hashing:0.15'
+    implementation 'net.openhft:zero-allocation-hashing:0.16'
 }
 ----
 
@@ -115,7 +110,7 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.15</version>
+  <version>0.16</version>
 </dependency>
 ----
 
