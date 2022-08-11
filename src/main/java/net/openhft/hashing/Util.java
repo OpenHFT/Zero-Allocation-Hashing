@@ -26,13 +26,17 @@ final class Util {
         return name.contains("Eclipse OpenJ9") || name.contains("IBM J9");
     }
 
+    static private boolean isZing(@NotNull final String name) {
+        return name.startsWith("Zing");
+    }
+
     @NotNull
     static final StringHash VALID_STRING_HASH;
     static  {
         StringHash stringHash = null;
         try {
             final String vmName = System.getProperty("java.vm.name");
-            if (isHotSpotVM(vmName) || isJ9VM(vmName)) {
+            if (isHotSpotVM(vmName) || isJ9VM(vmName) || isZing(vmName)) {
                 final String javaVersion = System.getProperty("java.version");
                 if (javaVersion.compareTo("1.7.0_06") >= 0) {
                     if (javaVersion.compareTo("1.9") >= 0) {
