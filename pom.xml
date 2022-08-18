@@ -20,7 +20,7 @@
    <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.1.28</version>
+        <version>1.1.35</version>
         <relativePath />
     </parent>
 
@@ -236,7 +236,7 @@
                 </executions>
             </plugin>
 
-    
+
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0-M4</version>
