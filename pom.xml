@@ -200,7 +200,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <enableAssertions>true</enableAssertions>
-                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
 
