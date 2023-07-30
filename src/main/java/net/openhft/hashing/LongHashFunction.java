@@ -48,13 +48,13 @@ import static net.openhft.hashing.Util.*;
  *
  * <p>Hash function implementation could either produce equal results for equal input on platforms
  * with different {@link ByteOrder}, favoring one byte order in terms of performance, or different
- * results, but performing equally good. This choice should be explicitly documented for all
+ * results, but performing equally well. This choice should be explicitly documented for all
  * {@code LongHashFunction} implementations.
  *
  * <h2>Subclassing</h2>
  * To implement a specific hash function algorithm, this class should be subclassed. Only methods
- * that accept single primitives, {@link #hashVoid()} and {@link #hash(Object, Access, long, long)}
- * should be implemented; other have default implementations which in the end delegate to
+ * that accept single primitives, {@link #hashVoid()}, and {@link #hash(Object, Access, long, long)}
+ * should be implemented; others have default implementations which ultimately delegate to the
  * {@link #hash(Object, Access, long, long)} abstract method.
  *
  * <p>Notes about how exactly methods with default implementations are implemented in doc comments
@@ -64,7 +64,8 @@ import static net.openhft.hashing.Util.*;
  * to which the referenced method delegates.
  *
  *<p>{@code LongHashFunction} implementations shouldn't assume that {@code Access} strategies
- * do defensive checks, and access only bytes within the requested range.
+ * do defensive checks and access only bytes within the requested range.
+ *
  */
 public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
@@ -76,6 +77,7 @@ public abstract class LongHashFunction implements Serializable {
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
      *
+     * @return A hash function implementing the CityHash64 algorithm, version 1.1, without seed values.
      * @see #city_1_1(long)
      * @see #city_1_1(long, long)
      */
@@ -90,6 +92,9 @@ public abstract class LongHashFunction implements Serializable {
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
      *
+     * @param seed The seed value to use for hashing.
+     * @return A hash function implementing the CityHash64 algorithm, version 1.1, using the given seed value.
+     *
      * @see #city_1_1()
      * @see #city_1_1(long, long)
      */
@@ -103,6 +108,10 @@ public abstract class LongHashFunction implements Serializable {
      * CityHash64 algorithm, version 1.1</a> using the two given seed values. This implementation
      * produce equal results for equal input on platforms with different {@link ByteOrder}, but
      * is slower on big-endian platforms than on little-endian.
+     *
+     * @param seed0 The first seed value to use for hashing.
+     * @param seed1 The second seed value to use for hashing.
+     * @return A hash function implementing the CityHash64 algorithm, version 1.1, using the two given seed values.
      *
      * @see #city_1_1()
      * @see #city_1_1(long)
