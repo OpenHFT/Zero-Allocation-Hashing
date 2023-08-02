@@ -133,7 +133,7 @@ public abstract class LongTupleHashFunction implements Serializable {
 
     /**
      * Returns a new-allocated result array.
-     *
+     * <p>
      * If {@code bitsLength()} returns non-multiple of 64, the implementation of this method should
      * round-up the length to a multiple of 64 for allocating the {@code long} array.
      */
