@@ -2,7 +2,7 @@ package sun.nio.ch;
 
 /**
  * Stub for JDK internal ckass sun.nio.ch.DirectBuffer.
- *
+ * <p>
  * - When crossing compiling for Java SE 7 and 8, this stub class bypasses compiler sun-api
  *   warnings.
  * - When crossing compiling for Java SE 9+, the package 'sun.nio.ch' is not exported from
