@@ -279,8 +279,15 @@
                             !java.*,
                             !sun.*
                         </Export-Package>
-                        <Private-Package>!java.*,!sun.*</Private-Package>
-                        <Import-Package>*</Import-Package>
+                        <Private-Package>
+                            !java.*,
+                            !sun.*
+                        </Private-Package>
+                        <Import-Package>
+                            javax.annotation;resolution:=optional;bundle-symbolic-name="${@bundlesymbolicname}",
+                            sun.*;resolution:=optional,
+                            *
+                        </Import-Package>
                     </instructions>
                 </configuration>
                 <executions>
