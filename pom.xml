@@ -20,13 +20,13 @@
    <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.1.36</version>
+        <version>1.25.4</version>
         <relativePath />
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zero-allocation-hashing</artifactId>
-    <version>0.17-SNAPSHOT</version>
+    <version>0.26-SNAPSHOT</version>
     <name>Zero-allocation Hashing</name>
     <description>Zero-allocation implementations of fast non-cryptographic hash functions
         for byte sequences or blocks of memory</description>
