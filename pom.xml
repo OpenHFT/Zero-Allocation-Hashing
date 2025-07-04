@@ -20,7 +20,7 @@
    <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.27ea4</version>
+        <version>1.27ea1</version>
         <relativePath />
     </parent>
 
@@ -36,7 +36,7 @@
 
     <properties>
         <!-- specify the target Java SE release, at least 7 -->
-        <project.target.release>7</project.target.release>
+        <project.target.release>8</project.target.release>
 
         <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
         <project.maven.min-version>3.5.0</project.maven.min-version>
