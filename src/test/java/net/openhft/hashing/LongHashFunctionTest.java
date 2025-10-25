@@ -21,6 +21,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
+import org.junit.Test;
+
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
@@ -225,5 +227,52 @@ public class LongHashFunctionTest {
         } catch (Exception e) {
             fail(e.toString());
         }
+    }
+
+    @Test
+    public void hashBooleansSliceMatchesUnsafeAccess() {
+        LongHashFunction f = LongHashFunction.city_1_1();
+        boolean[] data = {true, false, true, true, false};
+        long expected = f.hash(data, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE + 1, 3);
+        long actual = f.hashBooleans(data, 1, 3);
+        assertEquals(expected, actual);
+        try {
+            f.hashBooleans(data, 3, 5);
+            fail("Expected IndexOutOfBoundsException for invalid boolean slice");
+        } catch (IndexOutOfBoundsException expectedException) {
+            // expected
+        }
+    }
+
+    @Test
+    public void hashBytesSupportsDirectAndReadOnlyBuffers() {
+        LongHashFunction f = LongHashFunction.city_1_1();
+        byte[] source = {0, 1, 2, 3, 4, 5};
+        long expected = f.hashBytes(source, 1, 4);
+
+        ByteBuffer direct = ByteBuffer.allocateDirect(source.length);
+        direct.put(source);
+        ((Buffer) direct).flip();
+        long directHash = f.hashBytes(direct, 1, 4);
+        assertEquals(expected, directHash);
+
+        ByteBuffer readOnly = ByteBuffer.wrap(source).asReadOnlyBuffer();
+        long readOnlyHash = f.hashBytes(readOnly, 1, 4);
+        assertEquals(expected, readOnlyHash);
+    }
+
+    @Test
+    public void hashCharsSliceMatchesCharArray() {
+        LongHashFunction f = LongHashFunction.city_1_1();
+        String sample = "abcdef";
+        long expected = f.hashChars(sample.toCharArray(), 1, 3);
+        long actual = f.hashChars(sample, 1, 3);
+        assertEquals(expected, actual);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void hashCharsRejectsInvalidSlice() {
+        LongHashFunction f = LongHashFunction.city_1_1();
+        f.hashChars("abc", 2, 2);
     }
 }
