@@ -15,7 +15,7 @@ toc::[]
 This project provides a Java API for hashing any sequence of bytes in Java, including all kinds of
 primitive arrays, buffers, `CharSequence` and more.
 
-Written for Java 7+ under Apache 2.0 license.
+Written for Java 8+ under Apache 2.0 licence.
 
 The key difference compared to other similar projects, e.g.
 https://guava.dev/releases/28.1-jre/api/docs/com/google/common/hash/package-summary.html[Guava hashing],
@@ -47,8 +47,8 @@ order):
 
 These are thoroughly tested with
 *https://www.oracle.com/java/technologies/java-se-support-roadmap.html[LTS JDKs]*
-7, 8, and 11, the latest non-LTS JDKs 16 on both little- and big- endian platforms.
-Other non-LTS JDKs from 9 should also work, but they will not be tested from half year after EOL.
+8, 11, 17, and 21, plus the latest non-LTS JDKs on both little- and big-endian platforms.
+Other non-LTS JDKs from 9 should also work, but they will not be tested from half a year after EOL.
 
 ==== Performance
 
@@ -61,8 +61,8 @@ Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 |FarmHash `uo` |7.2 |7
 |CityHash |7.0 |7
 |MurmurHash |5.3 |12
-|MetroHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] | https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
-|WyHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
+|MetroHash |TODO (see https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[]) | TODO (see https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[])
+|WyHash |TODO (see https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[]) |TODO (see https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[])
 
 |===
 
@@ -85,14 +85,24 @@ To sum up,
     }
 ----
 
- * You need to hash byte sequences of unknown length, for the simpliest example,
+ * You need to hash byte sequences of unknown length, for the simplest example,
    `Iterator<Byte>`.
 
  * You need to transform the byte sequence (e.g. encode or decode it with a specific coding),
    and hash the resulting byte sequence on the way without dumping it to memory.
 
-==== Java Doc
+==== Javadoc
 See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
+
+==== Internal documentation
+* link:src/main/adoc/specifications.adoc[Requirements overview]
+* link:src/main/adoc/architecture-overview.adoc[Architecture overview]
+* link:src/main/adoc/invariants-and-contracts.adoc[Invariants and contracts]
+* link:src/main/adoc/algorithm-profiles.adoc[Algorithm profiles]
+* link:src/main/adoc/testing-strategy.adoc[Testing strategy]
+* link:src/main/adoc/performance-benchmarks.adoc[Performance benchmarks]
+* link:src/main/adoc/unsafe-and-platform-notes.adoc[Unsafe and platform notes]
+* link:src/main/adoc/change-log-template.adoc[Change-log template]
 
 == Quick start
 
@@ -100,7 +110,7 @@ Gradle:
 [source, groovy]
 ----
 dependencies {
-    implementation 'net.openhft:zero-allocation-hashing:0.16'
+    implementation 'net.openhft:zero-allocation-hashing:0.27ea1'
 }
 ----
 
@@ -110,7 +120,7 @@ Or Maven:
 <dependency>
   <groupId>net.openhft</groupId>
   <artifactId>zero-allocation-hashing</artifactId>
-  <version>0.16</version>
+  <version>0.27ea1</version>
 </dependency>
 ----
 
@@ -120,7 +130,7 @@ In Java:
 long hash = LongHashFunction.wy_3().hashChars("hello");
 ----
 
-See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/0.15[JavaDocs]* for more
+See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest[JavaDocs]* for more
 information.
 
 == Contributions are most welcome!

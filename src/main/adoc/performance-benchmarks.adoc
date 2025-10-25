@@ -1,0 +1,23 @@
+== Performance Benchmarks
+Chronicle Software
+
+toc::[]
+
+=== Current Baseline
+* The published README table reports throughput (GB/s) and bootstrap latency (ns) per algorithm. MetroHash and wyHash entries are currently marked TODO pending refreshed measurements (`README.adoc:53-66`).
+* No automated benchmarking harness ships with the repository today. Bench figures are captured offline and copied into the documentation.
+
+=== Measurement Protocol
+* Build the library in release mode (`mvn -q verify`) before running any benchmarks to ensure all classes are compiled and tests have passed.
+* Pin tests to an isolated core and disable extraneous system load; past measurements targeted Intel Core i7-4870HQ @ 2.50 GHz, and new numbers should quote the exact CPU model and frequency.
+* Use a harness that exercises each `LongHashFunction` via the public API (for example, `hashBytes(byte[])`) over representative buffer sizes. Warm up the JVM until results stabilise before sampling throughput.
+* Record:
+  - **Speed (GB/s):** sustained throughput while hashing large buffers in steady state.
+  - **Bootstrap (ns):** per-call overhead measured on very small inputs (e.g., empty or sub-cache-line data).
+* Capture both native and non-native endianness where practical; conversion overhead on big-endian systems should be noted if it materially deviates from little-endian results.
+
+=== Reporting Guidelines
+* Update `README.adoc` with the latest benchmark table, noting the hardware, JVM version, and any JVM flags used during the run.
+* Flag missing data as TODO (as done for MetroHash and wyHash) rather than leaving stale values in place.
+* When an optimisation changes algorithm behaviour or memory access, include before/after data in the pull request description so reviewers can confirm the impact.
+* Archive raw benchmark logs alongside the pull request or link to them from the decision log to ease future regression analysis.
