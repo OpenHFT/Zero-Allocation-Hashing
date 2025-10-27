@@ -493,7 +493,7 @@ public abstract class LongHashFunction implements Serializable {
     public abstract <T> long hash(T input, Access<T> access, long off, long len);
 
     private long unsafeHash(Object input, long off, long len) {
-        return hash(input, UnsafeAccess.INSTANCE, off, len);
+        return hash(input, INSTANCE, off, len);
     }
 
     /**

@@ -3,10 +3,8 @@ package net.openhft.hashing;
 import java.nio.ByteOrder;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static net.openhft.hashing.UnsafeAccess.BYTE_BASE;
 

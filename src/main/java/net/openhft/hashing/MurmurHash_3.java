@@ -60,37 +60,37 @@ class MurmurHash_3 {
             long k2 = 0L;
             switch ((int) remaining) {
                 case 15:
-                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;// fall through
+                    k2 ^= (long) access.u8(input, offset + 14L) << 48;// fall through
                 case 14:
-                    k2 ^= ((long) access.u8(input, offset + 13L)) << 40;// fall through
+                    k2 ^= (long) access.u8(input, offset + 13L) << 40;// fall through
                 case 13:
-                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;// fall through
+                    k2 ^= (long) access.u8(input, offset + 12L) << 32;// fall through
                 case 12:
-                    k2 ^= ((long) access.u8(input, offset + 11L)) << 24;// fall through
+                    k2 ^= (long) access.u8(input, offset + 11L) << 24;// fall through
                 case 11:
-                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;// fall through
+                    k2 ^= (long) access.u8(input, offset + 10L) << 16;// fall through
                 case 10:
-                    k2 ^= ((long) access.u8(input, offset + 9L)) << 8; // fall through
+                    k2 ^= (long) access.u8(input, offset + 9L) << 8; // fall through
                 case 9:
-                    k2 ^= ((long) access.u8(input, offset + 8L)); // fall through
+                    k2 ^= (long) access.u8(input, offset + 8L); // fall through
                 case 8:
                     k1 ^= access.i64(input, offset);
                     break;
                 case 7:
-                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48; // fall through
+                    k1 ^= (long) access.u8(input, offset + 6L) << 48; // fall through
                 case 6:
-                    k1 ^= ((long) access.u8(input, offset + 5L)) << 40; // fall through
+                    k1 ^= (long) access.u8(input, offset + 5L) << 40; // fall through
                 case 5:
-                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32; // fall through
+                    k1 ^= (long) access.u8(input, offset + 4L) << 32; // fall through
                 case 4:
                     k1 ^= access.u32(input, offset);
                     break;
                 case 3:
-                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16; // fall through
+                    k1 ^= (long) access.u8(input, offset + 2L) << 16; // fall through
                 case 2:
-                    k1 ^= ((long) access.u8(input, offset + 1L)) << 8; // fall through
+                    k1 ^= (long) access.u8(input, offset + 1L) << 8; // fall through
                 case 1:
-                    k1 ^= ((long) access.u8(input, offset));
+                    k1 ^= (long) access.u8(input, offset);
                 case 0:
                     break;
                 default:
@@ -115,43 +115,43 @@ class MurmurHash_3 {
 //                        {
 //                            switch ((int) remaining) {
 //                                case 15:
-//                                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;
+//                                    k2 ^= (long) access.u8(input, offset + 14L) << 48;
 //                                case 14:
 //                                    k2 ^= ((long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 12L))) << 32;
+//                                            access.u16(input, offset + 12L)) << 32;
 //                                    break fetch8_11;
 //                                case 13:
-//                                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;
+//                                    k2 ^= (long) access.u8(input, offset + 12L) << 32;
 //                                case 12:
 //                                    break fetch8_11;
 //                                case 11:
-//                                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;
+//                                    k2 ^= (long) access.u8(input, offset + 10L) << 16;
 //                                case 10:
 //                                    k2 ^= (long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 8L));
+//                                            access.u16(input, offset + 8L);
 //                                    break fetch0_7;
 //                                case 9:
-//                                    k2 ^= ((long) access.u8(input, offset + 8L));
+//                                    k2 ^= (long) access.u8(input, offset + 8L);
 //                                case 8:
 //                                    break fetch0_7;
 //                                case 7:
-//                                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48;
+//                                    k1 ^= (long) access.u8(input, offset + 6L) << 48;
 //                                case 6:
 //                                    k1 ^= ((long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 4L))) << 32;
+//                                            access.u16(input, offset + 4L)) << 32;
 //                                    break fetch0_3;
 //                                case 5:
-//                                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32;
+//                                    k1 ^= (long) access.u8(input, offset + 4L) << 32;
 //                                case 4:
 //                                    break fetch0_3;
 //                                case 3:
-//                                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16;
+//                                    k1 ^= (long) access.u8(input, offset + 2L) << 16;
 //                                case 2:
 //                                    k1 ^= (long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset));
+//                                            access.u16(input, offset);
 //                                    break megaSwitch;
 //                                case 1:
-//                                    k1 ^= ((long) access.u8(input, offset));
+//                                    k1 ^= (long) access.u8(input, offset);
 //                                    break megaSwitch;
 //                                default:
 //                                    throw new AssertionError();

@@ -157,7 +157,7 @@ class WyHash {
         @Override
         public long hashInt(int input) {
             input = Primitives.nativeToLittleEndian(input);
-            long longInput = (input & 0xFFFFFFFFL);
+            long longInput = input & 0xFFFFFFFFL;
             return _wymum(_wymum(longInput ^ seed() ^ _wyp0,
                                  longInput ^ seed() ^ _wyp1)
                           ^ seed(), 4 ^ _wyp4);

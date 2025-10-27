@@ -34,10 +34,10 @@ class MetroHash {
                 remaining -= 32;
             } while (remaining >= 32);
 
-            v2 ^= Long.rotateRight(((v0 + v3) * k0) + v1, 37) * k1;
-            v3 ^= Long.rotateRight(((v1 + v2) * k1) + v0, 37) * k0;
-            v0 ^= Long.rotateRight(((v0 + v2) * k0) + v3, 37) * k1;
-            v1 ^= Long.rotateRight(((v1 + v3) * k1) + v2, 37) * k0;
+            v2 ^= Long.rotateRight((v0 + v3) * k0 + v1, 37) * k1;
+            v3 ^= Long.rotateRight((v1 + v2) * k1 + v0, 37) * k0;
+            v0 ^= Long.rotateRight((v0 + v2) * k0 + v3, 37) * k1;
+            v1 ^= Long.rotateRight((v1 + v3) * k1 + v2, 37) * k0;
 
             h += v0 ^ v1;
         }

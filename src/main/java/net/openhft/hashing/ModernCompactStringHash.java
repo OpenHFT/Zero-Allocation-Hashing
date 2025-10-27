@@ -2,7 +2,6 @@ package net.openhft.hashing;
 
 import java.lang.reflect.Field;
 import javax.annotation.ParametersAreNonnullByDefault;
-import static net.openhft.hashing.UnsafeAccess.*;
 import static net.openhft.hashing.Util.*;
 
 @ParametersAreNonnullByDefault
@@ -20,7 +19,7 @@ enum ModernCompactStringHash implements StringHash {
             valueOffset = UnsafeAccess.UNSAFE.objectFieldOffset(valueField);
 
             final byte[] value = (byte[]) UnsafeAccess.UNSAFE.getObject("A", valueOffset);
-            enableCompactStrings = (1 == value.length);
+            enableCompactStrings = value.length == 1;
         } catch (final NoSuchFieldException e) {
             throw new AssertionError(e);
         }

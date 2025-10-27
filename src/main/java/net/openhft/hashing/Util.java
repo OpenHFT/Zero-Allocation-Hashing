@@ -5,7 +5,7 @@ import sun.nio.ch.DirectBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
-import static java.nio.ByteOrder.*;
+
 
 final class Util {
 
@@ -55,6 +55,7 @@ final class Util {
                 stringHash = HotSpotPrior7u6StringHash.INSTANCE;
             }
         } catch (final Throwable ignore) {
+            // Fallback handled in finally
         } finally {
             if (null == stringHash) {
                 VALID_STRING_HASH = UnknownJvmStringHash.INSTANCE;

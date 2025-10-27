@@ -972,7 +972,7 @@ public abstract class LongTupleHashFunction implements Serializable {
     // Internal helper
     //
     @NotNull
-    private static final Access<Object> OBJECT_ACCESS = UnsafeAccess.INSTANCE;
+    private static final Access<Object> OBJECT_ACCESS = INSTANCE;
     @NotNull
     private static final Access<CharSequence> CHAR_SEQ_ACCESS = nativeCharSequenceAccess();
     @NotNull
