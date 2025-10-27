@@ -5,8 +5,6 @@ import sun.nio.ch.DirectBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
-
-
 final class Util {
 
     /* Known java.vm.name list:

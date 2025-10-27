@@ -1,3 +1,6 @@
+/*
+ * Copyright 2014-2025 chronicle.software
+ */
 package net.openhft.hashing;
 
 import org.junit.Test;
