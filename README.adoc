@@ -95,14 +95,14 @@ To sum up,
 See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
 
 ==== Internal documentation
-* link:src/main/adoc/specifications.adoc[Requirements overview]
-* link:src/main/adoc/architecture-overview.adoc[Architecture overview]
-* link:src/main/adoc/invariants-and-contracts.adoc[Invariants and contracts]
-* link:src/main/adoc/algorithm-profiles.adoc[Algorithm profiles]
-* link:src/main/adoc/testing-strategy.adoc[Testing strategy]
-* link:src/main/adoc/performance-benchmarks.adoc[Performance benchmarks]
-* link:src/main/adoc/unsafe-and-platform-notes.adoc[Unsafe and platform notes]
-* link:src/main/adoc/change-log-template.adoc[Change-log template]
+* link:src/main/docs/specifications.adoc[Requirements overview]
+* link:src/main/docs/architecture-overview.adoc[Architecture overview]
+* link:src/main/docs/invariants-and-contracts.adoc[Invariants and contracts]
+* link:src/main/docs/algorithm-profiles.adoc[Algorithm profiles]
+* link:src/main/docs/testing-strategy.adoc[Testing strategy]
+* link:src/main/docs/performance-benchmarks.adoc[Performance benchmarks]
+* link:src/main/docs/unsafe-and-platform-notes.adoc[Unsafe and platform notes]
+* link:src/main/docs/change-log-template.adoc[Change-log template]
 
 == Quick start
 

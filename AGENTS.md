@@ -55,8 +55,8 @@ mvn -q verify
 
 ## Project requirements
 
-See the [Decision Log](src/main/adoc/decision-log.adoc) for the latest project decisions.
-See the [Project Requirements](src/main/adoc/project-requirements.adoc) for details on project requirements.
+See the [Decision Log](src/main/docs/decision-log.adoc) for the latest project decisions.
+See the [Project Requirements](src/main/docs/project-requirements.adoc) for details on project requirements.
 
 ## Elevating the Workflow with Real-Time Documentation
 
