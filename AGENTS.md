@@ -11,8 +11,8 @@ LLM-based agents can accelerate development only if they respect our house rules
 | Requirement                                                                                                                                                                    | Rationale                                                                                                                      |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | **British English** spelling (`organisation`, `licence`, *not* `organization`, `license`) except technical US spellings like `synchronized`                                    | Keeps wording consistent with Chronicle's London HQ and existing docs. See the University of Oxford style guide for reference. |
-| **ASCII-7 only** (code-points 0-127). Avoid smart quotes, non-breaking spaces and accented characters.                                                                         | ASCII-7 survives every toolchain Chronicle uses, incl. low-latency binary wire formats that expect the 8th bit to be 0.        |
-| If a symbol is not available in ASCII-7, use a textual form such as `micro-second`, `>=`, `:alpha:`, `:yes:`. This is the preferred approach and Unicode must not be inserted. | Extended or '8-bit ASCII' variants are *not* portable and are therefore disallowed.                                            |
+| **ISO-8859-1** (code-points 0-255). Avoid smart quotes, non-breaking spaces and accented characters.                                                                         | ISO-8859-1 survives every toolchain Chronicle uses, incl. low-latency binary wire formats that expect the 8th bit to be 0.        |
+| If a symbol is not available in ISO-8859-1, use a textual form such as `micro-second`, `>=`, `:alpha:`, `:yes:`. This is the preferred approach and Unicode must not be inserted. | Extended or '8-bit ASCII' variants are *not* portable and are therefore disallowed.                                            |
 
 ## Javadoc guidelines
 
@@ -92,7 +92,7 @@ This tight loop informs the AI accurately and creates immediate clarity for all 
 When using AI agents to assist with development, please adhere to the following guidelines:
 
 * **Respect the Language & Character-set Policy**: Ensure all AI-generated content follows the British English and
-  ASCII-7 guidelines outlined above.
+  ISO-8859-1 guidelines outlined above.
   Focus on Clarity: AI-generated documentation should be clear and concise and add value beyond what is already present
   in the code or existing documentation.
 * **Avoid Redundancy**: Do not generate content that duplicates existing documentation or code comments unless it
