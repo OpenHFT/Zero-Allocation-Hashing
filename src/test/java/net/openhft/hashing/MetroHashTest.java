@@ -40,32 +40,32 @@ public class MetroHashTest {
         LongHashFunctionTest.test(metro, data, hashesOfLoopingBytes[len]);
     }
 
-/**
- * Test data is output of the following program with metrohash implementation
- * from https://github.com/jandrewrogers/MetroHash
- *
- * #include "metrohash64.h"
- * #include <stdlib.h>
- * #include <stdio.h>
- *
- * int main() {
- *     uint8_t* x = (uint8_t*) malloc(8);
- *     uint8_t* src = (uint8_t*) malloc(1024);
- *     for (int i = 0; i < 1024; i++) {
- *         src[i] = (uint8_t) i;
- *     }
- *     printf("without seeds\n");
- *     for (int i = 0; i <= 1024; i++) {
- *         MetroHash64::Hash(src, i, x);
- *         printf("%lldL,\n", *((long long *)x));
- *     }
- *     printf("with seed 42\n");
- *     for (int i = 0; i <= 1024; i++) {
- *         MetroHash64::Hash(src, i, x, 42);
- *         printf("%lldL,\n", *((long long *)x));
- *     }
- *  }
- */
+    /**
+     * Test data is output of the following program with metrohash implementation
+     * from https://github.com/jandrewrogers/MetroHash
+     * <p>
+     * #include "metrohash64.h"
+     * #include <stdlib.h>
+     * #include <stdio.h>
+     * <p>
+     * int main() {
+     * uint8_t* x = (uint8_t*) malloc(8);
+     * uint8_t* src = (uint8_t*) malloc(1024);
+     * for (int i = 0; i < 1024; i++) {
+     * src[i] = (uint8_t) i;
+     * }
+     * printf("without seeds\n");
+     * for (int i = 0; i <= 1024; i++) {
+     * MetroHash64::Hash(src, i, x);
+     * printf("%lldL,\n", *((long long *)x));
+     * }
+     * printf("with seed 42\n");
+     * for (int i = 0; i <= 1024; i++) {
+     * MetroHash64::Hash(src, i, x, 42);
+     * printf("%lldL,\n", *((long long *)x));
+     * }
+     * }
+     */
 
     public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
             8097384203561113213L,

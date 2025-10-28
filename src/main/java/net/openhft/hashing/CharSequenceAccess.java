@@ -41,7 +41,7 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
                                   int char0Off, int char1Off, int char2Off, int char3Off,
                                   int char4Off, int delta) {
         final int base = ix(offset);
-        if (0 == ((int)offset & 1)) {
+        if (0 == ((int) offset & 1)) {
             final long char0 = input.charAt(base + char0Off);
             final long char1 = input.charAt(base + char1Off);
             final long char2 = input.charAt(base + char2Off);
@@ -60,7 +60,7 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
     protected static long getUnsignedInt(CharSequence input, long offset,
                                          int char0Off, int char1Off, int char2Off, int delta) {
         final int base = ix(offset);
-        if (0 == ((int)offset & 1)) {
+        if (0 == ((int) offset & 1)) {
             final long char0 = input.charAt(base + char0Off);
             final long char1 = input.charAt(base + char1Off);
             return char0 | (char1 << 16);
@@ -74,13 +74,13 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
 
     protected static char getUnsignedShort(CharSequence input,
                                            long offset, int char1Off, int delta) {
-        if (0 == ((int)offset & 1)) {
+        if (0 == ((int) offset & 1)) {
             return input.charAt(ix(offset));
         } else {
             final int base = ix(offset);
             final int char0 = input.charAt(base + delta) >>> 8;
             final int char1 = input.charAt(base + char1Off);
-            return (char)(char0 | (char1 << 8));
+            return (char) (char0 | (char1 << 8));
         }
     }
 
@@ -88,7 +88,8 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         return Primitives.unsignedByte(input.charAt(ix(offset)) >> shift);
     }
 
-    private CharSequenceAccess() {}
+    private CharSequenceAccess() {
+    }
 
     @Override
     public int getInt(CharSequence input, long offset) {
@@ -97,7 +98,7 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
 
     @Override
     public int getShort(CharSequence input, long offset) {
-        return (int)(short)getUnsignedShort(input, offset);
+        return (int) (short) getUnsignedShort(input, offset);
     }
 
     @Override
@@ -109,7 +110,8 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         private static final CharSequenceAccess INSTANCE = new LittleEndianCharSequenceAccess();
         private static final Access<CharSequence> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
-        private LittleEndianCharSequenceAccess() {}
+        private LittleEndianCharSequenceAccess() {
+        }
 
         @Override
         public long getLong(CharSequence input, long offset) {
@@ -146,7 +148,8 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         private static final CharSequenceAccess INSTANCE = new BigEndianCharSequenceAccess();
         private static final Access<CharSequence> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 
-        private BigEndianCharSequenceAccess() {}
+        private BigEndianCharSequenceAccess() {
+        }
 
         @Override
         public long getLong(CharSequence input, long offset) {

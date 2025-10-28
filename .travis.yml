@@ -32,16 +32,16 @@ jobs:
     - arch: s390x
       jdk: openjdk7 # target release on big-endian machine
       install:
-      - wget -O ibmjdk7.bin -q -T 10 -t 5 https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/7.1.4.85/linux/s390x/ibm-java-sdk-7.1-4.85-s390x-archive.bin
-      - echo "6a901bc0b713582a323481d5b41d0c289cbd6fbb265eefb4962080240fe59ff2  ibmjdk7.bin" | sha256sum -c -
-      - chmod +x ibmjdk7.bin
-      - echo "INSTALLER_UI=silent" > response.properties
-      - echo "USER_INSTALL_DIR=$PWD/ibmjdk7" >> response.properties
-      - echo "LICENSE_ACCEPTED=TRUE" >> response.properties
-      - ./ibmjdk7.bin -i silent -f response.properties
-      - export PATH="$PWD/ibmjdk7/bin:$PATH"
-      - export JAVA_HOME="$PWD/ibmjdk7"
-      - java -version
+        - wget -O ibmjdk7.bin -q -T 10 -t 5 https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/7.1.4.85/linux/s390x/ibm-java-sdk-7.1-4.85-s390x-archive.bin
+        - echo "6a901bc0b713582a323481d5b41d0c289cbd6fbb265eefb4962080240fe59ff2  ibmjdk7.bin" | sha256sum -c -
+        - chmod +x ibmjdk7.bin
+        - echo "INSTALLER_UI=silent" > response.properties
+        - echo "USER_INSTALL_DIR=$PWD/ibmjdk7" >> response.properties
+        - echo "LICENSE_ACCEPTED=TRUE" >> response.properties
+        - ./ibmjdk7.bin -i silent -f response.properties
+        - export PATH="$PWD/ibmjdk7/bin:$PATH"
+        - export JAVA_HOME="$PWD/ibmjdk7"
+        - java -version
 
 cache:
   directories:

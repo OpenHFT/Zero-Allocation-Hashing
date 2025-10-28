@@ -33,7 +33,7 @@ public class City64_1_1_Test {
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < 1025; len++) {
-        	data.add(new Object[] {len});
+            data.add(new Object[]{len});
         }
         return data;
     }

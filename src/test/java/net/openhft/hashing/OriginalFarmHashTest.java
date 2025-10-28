@@ -31,6 +31,7 @@ public class OriginalFarmHashTest {
     static final int kDataSize = 1 << 20;
     static final int kTestSize = 300;
     static final byte[] data = new byte[kDataSize];
+
     static {
         long a = 9;
         long b = 777;
@@ -79,10 +80,10 @@ public class OriginalFarmHashTest {
     @Test
     public void testNa() {
         int expectedIndex = 0, i = 0;
-        for ( ; i < kTestSize - 1; i++) {
+        for (; i < kTestSize - 1; i++) {
             expectedIndex = testNa(i * i, i, expectedIndex);
         }
-        for ( ; i < kDataSize; i += i / 7) {
+        for (; i < kDataSize; i += i / 7) {
             expectedIndex = testNa(0, i, expectedIndex);
         }
         testNa(0, kDataSize, expectedIndex);
@@ -110,10 +111,10 @@ public class OriginalFarmHashTest {
     @Test
     public void testUo() {
         int expectedIndex = 0, i = 0;
-        for ( ; i < kTestSize - 1; i++) {
+        for (; i < kTestSize - 1; i++) {
             expectedIndex = testUo(i * i, i, expectedIndex);
         }
-        for ( ; i < kDataSize; i += i / 7) {
+        for (; i < kDataSize; i += i / 7) {
             expectedIndex = testUo(0, i, expectedIndex);
         }
         testUo(0, kDataSize, expectedIndex);
@@ -138,7 +139,7 @@ public class OriginalFarmHashTest {
         for (Object[] g : GOLDEN_64) {
             long hash = (Long) g[0];
             try {
-                byte[] s = ((String)g[1]).getBytes("US-ASCII");
+                byte[] s = ((String) g[1]).getBytes("US-ASCII");
                 Assert.assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);

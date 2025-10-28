@@ -1,35 +1,60 @@
 == Invariants and Contracts
+
 Chronicle Software
 
 toc::[]
 
 === Hash Interface Guarantees
+
 * Every `LongHashFunction` and `LongTupleHashFunction` implementation treats primitives as if they were written to memory using the platform’s native byte order; the API therefore guarantees that `hashLong(v)` equals `hashLongs(new long[] {v})` and similar array forms (`LongHashFunction.java`, `LongTupleHashFunction.java`).
-* All bundled algorithms normalise multi-byte reads to little-endian before mixing, so the same input bytes produce identical hashes on big- and little-endian machines. Performance may differ, but results must not (`CityAndFarmHash_1_1.java`, `XxHash.java`, `XXH3.java`, `WyHash.java`, `MetroHash.java`, `MurmurHash_3.java`).
-* `hash(Object, Access, long off, long len)` assumes the addressed region is contiguous and valid for the requested byte count. Implementations do not insert bounds checks beyond those provided by the chosen `Access` strategy, so callers must uphold the contract (`LongHashFunction.java:548-612`).
-* `hashMemory(long address, long length)` treats the `address` as an absolute memory pointer. Passing invalid or unmapped addresses is undefined behaviour and will surface as JVM crashes or segmentation faults rather than managed exceptions (`LongHashFunction.java:619-643`).
-* `hashVoid()` returns the deterministic hash for an empty byte sequence. Tests rely on this to confirm consistency, so new algorithms must define a stable zero-length value (`LongHashFunction.java`, `LongHashFunctionTest.java:36-45`).
+* All bundled algorithms normalise multi-byte reads to little-endian before mixing, so the same input bytes produce identical hashes on big- and little-endian machines.
+Performance may differ, but results must not (`CityAndFarmHash_1_1.java`, `XxHash.java`, `XXH3.java`, `WyHash.java`, `MetroHash.java`, `MurmurHash_3.java`).
+* `hash(Object, Access, long off, long len)` assumes the addressed region is contiguous and valid for the requested byte count.
+Implementations do not insert bounds checks beyond those provided by the chosen `Access` strategy, so callers must uphold the contract (`LongHashFunction.java:548-612`).
+* `hashMemory(long address, long length)` treats the `address` as an absolute memory pointer.
+Passing invalid or unmapped addresses is undefined behaviour and will surface as JVM crashes or segmentation faults rather than managed exceptions (`LongHashFunction.java:619-643`).
+* `hashVoid()` returns the deterministic hash for an empty byte sequence.
+Tests rely on this to confirm consistency, so new algorithms must define a stable zero-length value (`LongHashFunction.java`, `LongHashFunctionTest.java:36-45`).
 
 === Access Strategy Requirements
-* Custom `Access` implementations must keep `getLong`, `getUnsignedInt`, `getUnsignedShort`, and related methods mutually consistent under the reported `byteOrder`. If the order is wrong or inconsistent the algorithm will observe incoherent data (`Access.java:21-71`).
-* `Access.byteOrder(input, desiredOrder)` may return the same instance or a cached reverse-order delegate. Implementations should avoid allocating per call; use `reverseAccess()` to supply a singleton for the opposite endianness (`Access.java:273-344`).
-* `UnsafeAccess` exposes heap arrays, off-heap memory, and even raw addresses when passed a `null` base plus an absolute offset. Alternative `Access` implementations should document whether they permit null bases or require range checks (`UnsafeAccess.java:50-111`).
+
+* Custom `Access` implementations must keep `getLong`, `getUnsignedInt`, `getUnsignedShort`, and related methods mutually consistent under the reported `byteOrder`.
+If the order is wrong or inconsistent the algorithm will observe incoherent data (`Access.java:21-71`).
+* `Access.byteOrder(input, desiredOrder)` may return the same instance or a cached reverse-order delegate.
+Implementations should avoid allocating per call; use `reverseAccess()` to supply a singleton for the opposite endianness (`Access.java:273-344`).
+* `UnsafeAccess` exposes heap arrays, off-heap memory, and even raw addresses when passed a `null` base plus an absolute offset.
+Alternative `Access` implementations should document whether they permit null bases or require range checks (`UnsafeAccess.java:50-111`).
 
 === Result Buffer Handling
-* `LongTupleHashFunction.hash*(…, long[] result)` requires a pre-sized buffer created via `newResultArray()`. The method throws `NullPointerException` for null buffers and `IllegalArgumentException` for undersized buffers; the helper checks are centralised in `DualHashFunction` (`DualHashFunction.java:12-74`).
-* The allocation-free path is only honoured when callers reuse buffers. The overloads that return `long[]` will always allocate exactly one new array per call by design (`LongTupleHashFunction.java:70-118`).
+
+* `LongTupleHashFunction.hash*(…, long[] result)` requires a pre-sized buffer created via `newResultArray()`.
+The method throws `NullPointerException` for null buffers and `IllegalArgumentException` for undersized buffers; the helper checks are centralised in `DualHashFunction` (`DualHashFunction.java:12-74`).
+* The allocation-free path is only honoured when callers reuse buffers.
+The overloads that return `long[]` will always allocate exactly one new array per call by design (`LongTupleHashFunction.java:70-118`).
 
 === Seed and Determinism Rules
-* Seeded factory methods (for example `LongHashFunction.xx(long seed)`) embed the seed inside immutable instances. The seed influences the entire mixing pipeline, so equality tests must compare the resulting hash values rather than object identity (`LongHashFunction.java:199-282`, `XxHash.java:117-196`).
-* Serialization preserves the chosen algorithm and seed. Several implementations expose singleton seedless instances via `readResolve`, ensuring deserialisation maintains canonical objects where applicable (`XxHash.java:104-116`, `MetroHash.java:95-114`, `WyHash.java:116-138`).
+
+* Seeded factory methods (for example `LongHashFunction.xx(long seed)`) embed the seed inside immutable instances.
+The seed influences the entire mixing pipeline, so equality tests must compare the resulting hash values rather than object identity (`LongHashFunction.java:199-282`, `XxHash.java:117-196`).
+* Serialization preserves the chosen algorithm and seed.
+Several implementations expose singleton seedless instances via `readResolve`, ensuring deserialisation maintains canonical objects where applicable (`XxHash.java:104-116`, `MetroHash.java:95-114`, `WyHash.java:116-138`).
 
 === String Handling
-* `hashChars` and `hash(CharSequence…)` delegate to `Util.VALID_STRING_HASH`, which inspects the running JVM to choose the correct memory layout strategy. Altering char sequence hashing must preserve this runtime detection, or mixed HotSpot/OpenJ9 estates will diverge (`Util.java:29-63`, `ModernCompactStringHash.java`, `ModernHotSpotStringHash.java`, `HotSpotPrior7u6StringHash.java`).
-* Latin-1 compact strings are read through `CompactLatin1CharSequenceAccess`, which reinterprets the backing `byte[]` without allocating. Any change to string support must maintain zero-allocation access for both UTF-16 and compact encodings (`CompactLatin1CharSequenceAccess.java`).
+
+* `hashChars` and `hash(CharSequence…)` delegate to `Util.VALID_STRING_HASH`, which inspects the running JVM to choose the correct memory layout strategy.
+Altering char sequence hashing must preserve this runtime detection, or mixed HotSpot/OpenJ9 estates will diverge (`Util.java:29-63`, `ModernCompactStringHash.java`, `ModernHotSpotStringHash.java`, `HotSpotPrior7u6StringHash.java`).
+* Latin-1 compact strings are read through `CompactLatin1CharSequenceAccess`, which reinterprets the backing `byte[]` without allocating.
+Any change to string support must maintain zero-allocation access for both UTF-16 and compact encodings (`CompactLatin1CharSequenceAccess.java`).
 
 === Array and Buffer Offsets
-* Methods that accept `byte[]` plus `off` and `len` use `Util.checkArrayOffs` for bounds validation. Negative lengths or offsets, or slices that extend past the array end, raise `IndexOutOfBoundsException` immediately (`Util.java:70-77`, `LongHashFunction.java:480-547`).
-* ByteBuffer hashing honours the buffer’s position, limit, and order. The implementation temporarily adjusts `Buffer` state to satisfy IBM JDK 7 quirks, then restores the original markers (`LongHashFunction.java:392-470`, `LongHashFunctionTest.java:120-176`).
+
+* Methods that accept `byte[]` plus `off` and `len` use `Util.checkArrayOffs` for bounds validation.
+Negative lengths or offsets, or slices that extend past the array end, raise `IndexOutOfBoundsException` immediately (`Util.java:70-77`, `LongHashFunction.java:480-547`).
+* ByteBuffer hashing honours the buffer’s position, limit, and order.
+The implementation temporarily adjusts `Buffer` state to satisfy IBM JDK 7 quirks, then restores the original markers (`LongHashFunction.java:392-470`, `LongHashFunctionTest.java:120-176`).
 
 === Thread Safety
-* All public hash function instances are effectively stateless after construction. Concurrent calls share read-only tables (for example, the XXH3 secret) and do not mutate internal fields, so the objects are safe to reuse across threads. Callers remain responsible for protecting the input they provide (`XXH3.java`, `XxHash.java`, `CityAndFarmHash_1_1.java`).
+
+* All public hash function instances are effectively stateless after construction.
+Concurrent calls share read-only tables (for example, the XXH3 secret) and do not mutate internal fields, so the objects are safe to reuse across threads.
+Callers remain responsible for protecting the input they provide (`XXH3.java`, `XxHash.java`, `CityAndFarmHash_1_1.java`).

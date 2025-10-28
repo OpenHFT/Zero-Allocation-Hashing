@@ -1,20 +1,26 @@
 == Zero-Allocation Hashing Architecture Overview
+
 Chronicle Software
 
 toc::[]
 
 === Entry Points
-* `net.openhft.hashing.LongHashFunction` is the primary façade for 64-bit hashes. It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
-* `net.openhft.hashing.LongTupleHashFunction` provides multi-word hash results. It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
+
+* `net.openhft.hashing.LongHashFunction` is the primary façade for 64-bit hashes.
+It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
+* `net.openhft.hashing.LongTupleHashFunction` provides multi-word hash results.
+It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
 * `net.openhft.hashing.DualHashFunction` bridges tuple implementations back into the `LongHashFunction` contract, ensuring seeded XXH128 and similar algorithms can expose both 64-bit and 128-bit variants without duplicating logic (`DualHashFunction.java`).
 
 === Memory Access Abstractions
+
 * All hashing flows rely on `net.openhft.hashing.Access<T>` to read primitive values from arrays, direct buffers, off-heap memory, or custom structures. `Access.byteOrder(input, desiredOrder)` returns a view that matches the algorithm’s expected endianness (`Access.java:273-308`).
 * Concrete strategies cover heap arrays (`UnsafeAccess.INSTANCE`), `ByteBuffer` (`ByteBufferAccess`), `CharSequence` in native or explicit byte order (`CharSequenceAccess`), and compact Latin-1 backed strings (`CompactLatin1CharSequenceAccess`).
 * `UnsafeAccess` wraps `sun.misc.Unsafe` for zero-copy reads, falling back to legacy helpers when `getByte` or `getShort` are absent (e.g., pre-Nougat Android) (`UnsafeAccess.java:40-118`).
 * Reverse-order wrappers are generated automatically through `Access.newDefaultReverseAccess`, allowing algorithms to treat every source as little-endian while still accepting big-endian buffers (`Access.java:295-344`).
 
 === Algorithm Implementations
+
 * Each upstream hash family lives in its own package-private class and exposes seed-aware factories back to the public façade.
 ** `CityAndFarmHash_1_1` adapts CityHash64 1.1 plus FarmHash NA/UO variants, including the short-input specialisations from the original C++ sources.
 ** `MurmurHash_3` contains both 64-bit and 128-bit variants, reusing `DualHashFunction` to provide `LongHashFunction` and `LongTupleHashFunction` accessors.
@@ -24,11 +30,14 @@ toc::[]
 ** `MetroHash` implements the metrohash64_2 variant using four-lane accumulation and deterministic finalisation (`MetroHash.java`).
 
 === Runtime Adaptation
+
 * `net.openhft.hashing.Util.VALID_STRING_HASH` selects the correct `StringHash` strategy at JVM initialisation time by inspecting `java.vm.name` and `java.version`, covering HotSpot, OpenJ9, Zing, and unknown VMs (`Util.java:29-63`).
-* `ModernHotSpotStringHash`, `ModernCompactStringHash`, and `HotSpotPrior7u6StringHash` encode the memory layout differences between pre-compact, compact-string, and legacy HotSpot builds. When the VM cannot be recognised, `UnknownJvmStringHash` provides a defensive fallback.
+* `ModernHotSpotStringHash`, `ModernCompactStringHash`, and `HotSpotPrior7u6StringHash` encode the memory layout differences between pre-compact, compact-string, and legacy HotSpot builds.
+When the VM cannot be recognised, `UnknownJvmStringHash` provides a defensive fallback.
 * Direct buffer hashing uses `sun.nio.ch.DirectBuffer` addresses pulled via `LongHashFunction.hashBytes(ByteBuffer)` and `LongHashFunction.hashMemory(long, long)`; `Util.getDirectBufferAddress` centralises the address extraction (`Util.java:65-68`).
 
 === Supporting Utilities
+
 * `net.openhft.hashing.Primitives` houses byte-order normalisation helpers and unsigned conversions so algorithms can expect canonical little-endian operands even on big-endian hardware (`Primitives.java`).
 * `net.openhft.hashing.Maths` provides low-level arithmetic helpers such as `unsignedLongMulXorFold` used by wyHash and XXH3 for 128-bit cross-products (`Maths.java`).
 * Tests under `src/test/java/net/openhft/hashing` validate the API contract across arrays, primitives, buffers, and custom access strategies, and serve as reference snippets for typical `Access` usage.

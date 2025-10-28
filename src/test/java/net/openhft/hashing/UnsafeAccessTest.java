@@ -6,9 +6,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
-import static java.nio.ByteOrder.BIG_ENDIAN;
-import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static java.nio.ByteOrder.nativeOrder;
+import static java.nio.ByteOrder.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assume.assumeTrue;
@@ -18,7 +16,7 @@ public class UnsafeAccessTest {
 
     @Parameters
     public static Object[] data() {
-        return new Object[] { UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE };
+        return new Object[]{UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE};
     }
 
     @Parameter
@@ -54,7 +52,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) b[0], unsafe.getByte(b, UnsafeAccess.BYTE_BASE));
             assertEquals((int) b[1], unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(b[0]), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE));
@@ -84,7 +82,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }
@@ -112,7 +110,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }

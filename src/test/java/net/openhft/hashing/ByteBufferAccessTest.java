@@ -3,10 +3,10 @@
  */
 package net.openhft.hashing;
 
+import org.junit.Test;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import org.junit.Test;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;

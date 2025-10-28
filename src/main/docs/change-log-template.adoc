@@ -1,7 +1,9 @@
 == Change Log Template
+
 Chronicle Software
 
-Use this skeleton when documenting repository changes, whether in commit messages, pull-request descriptions, or the decision log. Keep the tone factual, favour British English, and ensure every item links back to a requirement tag where possible.
+Use this skeleton when documenting repository changes, whether in commit messages, pull-request descriptions, or the decision log.
+Keep the tone factual, favour British English, and ensure every item links back to a requirement tag where possible.
 
 ----
 Subject: <Imperative summary <= 72 chars>

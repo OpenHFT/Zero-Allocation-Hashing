@@ -551,7 +551,7 @@ class CityAndFarmHash_1_1 {
         a += access.i64(in, off + 8);
         a += access.i64(in, off + 16);
         b += rotateRight(a, 44);
-        v0 =  a + z1;
+        v0 = a + z1;
         v1 = b + c;
 
         long a1 = z + w1;
