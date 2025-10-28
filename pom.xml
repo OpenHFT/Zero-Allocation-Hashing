@@ -40,9 +40,6 @@
         <!-- specify the target Java SE release, at least 7 -->
         <project.target.release>8</project.target.release>
 
-        <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
-        <project.maven.min-version>3.5.0</project.maven.min-version>
-
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>
 
@@ -118,33 +115,6 @@
         </pluginManagement>
 
         <plugins>
-            <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>[${project.maven.min-version},)</version>
-                                </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <version>[${project.jdk.min-version},)</version>
-                                </requireJavaVersion>
-                                <requireProperty>
-                                    <property>project.target.release</property>
-                                    <message>Target Java SE release must be at least 7!</message>
-                                    <regex>^([7-9]|[1-9]\d+)$</regex>
-                                </requireProperty>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
@@ -565,29 +535,6 @@
                         </executions>
                     </plugin>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.5.0</version>
-                        <executions>
-                            <execution>
-                                <id>enforce</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireJavaVersion>
-                                            <version>[${project.jdk.min-version},)</version>
-                                        </requireJavaVersion>
-                                        <requireMavenVersion>
-                                            <version>[${project.maven.min-version},)</version>
-                                        </requireMavenVersion>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
