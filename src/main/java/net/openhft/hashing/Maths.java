@@ -25,6 +25,7 @@ class Maths {
     public static long unsignedLongMulXorFold(final long lhs, final long rhs) {
         return INSTANCE.unsignedLongMulXorFoldImp(lhs, rhs);
     }
+
     public static long unsignedLongMulHigh(final long lhs, final long rhs) {
         return INSTANCE.unsignedLongMulHighImp(lhs, rhs);
     }
@@ -82,6 +83,7 @@ class MathsJDK9 extends Maths {
         final long lower = lhs * rhs;
         return lower ^ upper;
     }
+
     @Override
     long unsignedLongMulHighImp(final long lhs, final long rhs) {
         return invokeExact(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);

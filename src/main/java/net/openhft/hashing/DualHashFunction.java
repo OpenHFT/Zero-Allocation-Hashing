@@ -1,7 +1,8 @@
 package net.openhft.hashing;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 // An internal helper class for casting LongTupleHashFunction as LongHashFunction
@@ -11,6 +12,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     private static final long serialVersionUID = 0L;
 
     private transient final int resultLength = newResultArray().length;
+
     private void checkResult(final long[] result) {
         if (null == result) {
             throw new NullPointerException();
@@ -21,6 +23,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashLong(long input, @Nullable long[] result);
+
     @Override
     public void hashLong(final long input, final long[] result) {
         checkResult(result);
@@ -28,6 +31,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashInt(int input, @Nullable long[] result);
+
     @Override
     public void hashInt(final int input, final long[] result) {
         checkResult(result);
@@ -35,6 +39,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashShort(short input, @Nullable long[] result);
+
     @Override
     public void hashShort(final short input, final long[] result) {
         checkResult(result);
@@ -42,6 +47,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashChar(char input, @Nullable long[] result);
+
     @Override
     public void hashChar(final char input, final long[] result) {
         checkResult(result);
@@ -49,6 +55,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashByte(byte input, @Nullable long[] result);
+
     @Override
     public void hashByte(final byte input, final long[] result) {
         checkResult(result);
@@ -56,6 +63,7 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract long dualHashVoid(@Nullable long[] result);
+
     @Override
     public void hashVoid(final long[] result) {
         checkResult(result);
@@ -63,11 +71,13 @@ abstract class DualHashFunction extends LongTupleHashFunction {
     }
 
     protected abstract <T> long dualHash(@Nullable T input, Access<T> access, long off, long len, @Nullable long[] result);
+
     @Override
     public <T> void hash(@Nullable final T input, final Access<T> access, final long off, final long len, final long[] result) {
         checkResult(result);
         dualHash(input, access, off, len, result);
     }
+
     @Override
     public <T> long[] hash(@Nullable final T input, final Access<T> access, final long off, final long len) {
         final long[] result = newResultArray();

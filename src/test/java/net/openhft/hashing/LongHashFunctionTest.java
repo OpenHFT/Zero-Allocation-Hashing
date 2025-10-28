@@ -21,12 +21,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import static java.nio.ByteOrder.BIG_ENDIAN;
-import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static java.nio.ByteOrder.nativeOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static java.nio.ByteOrder.*;
+import static org.junit.Assert.*;
 
 public class LongHashFunctionTest {
 
@@ -56,7 +52,7 @@ public class LongHashFunctionTest {
     public static void testBoolean(LongHashFunction f, int len) {
         if (len != 1)
             return;
-        for (boolean b : new boolean[] {true, false}) {
+        for (boolean b : new boolean[]{true, false}) {
             boolean[] a = {b};
             long single = f.hashBoolean(b);
             long array = f.hashBooleans(a);
@@ -161,17 +157,17 @@ public class LongHashFunctionTest {
         bb.order(LITTLE_ENDIAN);
         assertEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        ((Buffer)bb2).position(1);
+        ((Buffer) bb2).position(1);
         bb2.put(bb);
         assertEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(BIG_ENDIAN)).clear();
+        ((Buffer) bb.order(BIG_ENDIAN)).clear();
 
         assertEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(nativeOrder())).clear();
+        ((Buffer) bb.order(nativeOrder())).clear();
     }
 
     private static void testCharSequences(LongHashFunction f, long eh, int len, ByteBuffer bb) {
@@ -201,7 +197,7 @@ public class LongHashFunctionTest {
                 long toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                ((Buffer)bb.order(nativeOrder())).clear();
+                ((Buffer) bb.order(nativeOrder())).clear();
             }
         }
     }
@@ -210,7 +206,7 @@ public class LongHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
-        ((Buffer)bb).clear();
+        ((Buffer) bb).clear();
     }
 
     private static void testLatin1String(LongHashFunction f, byte[] data) {
@@ -219,7 +215,7 @@ public class LongHashFunctionTest {
             String inputStr = new String(data, "ISO-8859-1");
             char[] inputCharArray = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
-                inputCharArray[i] = (char)(data[i]&0xFF);
+                inputCharArray[i] = (char) (data[i] & 0xFF);
             }
             assertEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
         } catch (Exception e) {
