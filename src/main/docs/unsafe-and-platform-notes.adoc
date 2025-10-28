@@ -17,9 +17,9 @@ Older HotSpot builds and other JVMs fall back to UTF-16 behaviour through `Moder
 
 * On Java 9 and newer, strong encapsulation may block reflective access to the JDK internals above.
 Add the following opens/exports when running with a strict module layer:
-- `--add-opens java.base/sun.misc=ALL-UNNAMED` (access to `Unsafe.theUnsafe`).
-- `--add-exports java.base/sun.nio.ch=ALL-UNNAMED` (casts to `DirectBuffer`).
-- `--add-opens java.base/java.lang=ALL-UNNAMED` (reading `String.value` for compact strings).
+** `--add-opens java.base/sun.misc=ALL-UNNAMED` (access to `Unsafe.theUnsafe`).
+** `--add-exports java.base/sun.nio.ch=ALL-UNNAMED` (casts to `DirectBuffer`).
+** `--add-opens java.base/java.lang=ALL-UNNAMED` (reading `String.value` for compact strings).
 * The library does not automatically request these permissions.
 Applications embedding Zero-Allocation Hashing must configure the JVM command line or module descriptors accordingly.
 

@@ -18,8 +18,8 @@ Bench figures are captured offline and copied into the documentation.
 * Use a harness that exercises each `LongHashFunction` via the public API (for example, `hashBytes(byte[])`) over representative buffer sizes.
 Warm up the JVM until results stabilise before sampling throughput.
 * Record:
-- **Speed (GB/s):** sustained throughput while hashing large buffers in steady state.
-- **Bootstrap (ns):** per-call overhead measured on very small inputs (e.g., empty or sub-cache-line data).
+** *Speed (GB/s):* sustained throughput while hashing large buffers in steady state.
+** *Bootstrap (ns):* per-call overhead measured on very small inputs (e.g., empty or sub-cache-line data).
 * Capture both native and non-native endianness where practical; conversion overhead on big-endian systems should be noted if it materially deviates from little-endian results.
 
 === Reporting Guidelines
