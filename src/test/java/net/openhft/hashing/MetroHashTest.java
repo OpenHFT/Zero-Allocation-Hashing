@@ -32,7 +32,7 @@ public class MetroHashTest {
         test(LongHashFunction.metro(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    public void test(LongHashFunction metro, long[] hashesOfLoopingBytes) {
+    private void test(LongHashFunction metro, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
@@ -67,7 +67,7 @@ public class MetroHashTest {
  *  }
  */
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
             8097384203561113213L,
             1044577374344929784L,
             -5864552078195947561L,
@@ -1095,7 +1095,7 @@ public class MetroHashTest {
             9003958434955366904L
     };
 
-    public static long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
+    private static long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
             6500896835765953563L,
             -5864898193651956393L,
             -8878504184760441104L,

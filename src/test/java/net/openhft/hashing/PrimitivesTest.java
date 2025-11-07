@@ -10,15 +10,15 @@ import static org.junit.Assume.assumeTrue;
 
 public class PrimitivesTest {
 
-    static final long l = 0x0123456789ABCDEFL;
-    static final int i = 0x01234567;
-    static final short s = 0x0123;
-    static final short c = 0x4567;
+    private static final long l = 0x0123456789ABCDEFL;
+    private static final int i = 0x01234567;
+    private static final short s = 0x0123;
+    private static final short c = 0x4567;
 
-    static final long rl = 0xEFCDAB8967452301L;
-    static final int ri = 0x67452301;
-    static final short rs = 0x2301;
-    static final short rc = 0x6745;
+    private static final long rl = 0xEFCDAB8967452301L;
+    private static final int ri = 0x67452301;
+    private static final short rs = 0x2301;
+    private static final short rc = 0x6745;
 
     @Test
     public void testLE() {

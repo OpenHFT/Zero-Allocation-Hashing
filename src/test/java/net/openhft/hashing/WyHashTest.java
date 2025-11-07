@@ -31,7 +31,7 @@ public class WyHashTest {
         test(LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    public void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
+    private void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
@@ -66,7 +66,7 @@ public class WyHashTest {
      * }
      * <\pre>
      */
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
         0L,
         -1498634010482895780L,
         6867524088326895660L,
@@ -1094,7 +1094,7 @@ public class WyHashTest {
         -1455749094773635190L
     };
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
         0L,
         -5489459004343878315L,
         7503380622199085724L,

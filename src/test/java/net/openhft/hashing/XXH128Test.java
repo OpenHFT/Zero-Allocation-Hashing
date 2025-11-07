@@ -52,7 +52,7 @@ public class XXH128Test {
         test(LongTupleHashFunction.xx128(42L), LongHashFunction.xx128low(42L), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    public void test(LongTupleHashFunction h, LongHashFunction hl, long[][] hashesOfLoopingBytes) {
+    private void test(LongTupleHashFunction h, LongHashFunction hl, long[][] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;

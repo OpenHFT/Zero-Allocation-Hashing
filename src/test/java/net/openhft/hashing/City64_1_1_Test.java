@@ -51,7 +51,7 @@ public class City64_1_1_Test {
         test(LongHashFunction.city_1_1(0L, 0L), HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0);
     }
 
-    public void test(LongHashFunction city, long[] hashesOfLoopingBytes) {
+    private void test(LongHashFunction city, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
@@ -81,7 +81,7 @@ public class City64_1_1_Test {
 //        }
 //    }
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS = {
             -7286425919675154353L,
             -4728684028706075820L,
             -4422457430495752843L,
@@ -1109,7 +1109,7 @@ public class City64_1_1_Test {
             -7169091905545403953L,
     };
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0 = new long[]{
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0 = new long[]{
             6665653827947065942L,
             -5789604048565922719L,
             -3544073118936500090L,

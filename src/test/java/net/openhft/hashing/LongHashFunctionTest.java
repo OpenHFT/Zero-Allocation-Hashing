@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
-public class LongHashFunctionTest {
+class LongHashFunctionTest {
 
     private static ByteOrder nonNativeOrder() {
         return nativeOrder() == LITTLE_ENDIAN ? BIG_ENDIAN : LITTLE_ENDIAN;
@@ -53,7 +53,7 @@ public class LongHashFunctionTest {
             assertEquals("void", eh, f.hashVoid());
     }
 
-    public static void testBoolean(LongHashFunction f, int len) {
+    private static void testBoolean(LongHashFunction f, int len) {
         if (len != 1)
             return;
         for (boolean b : new boolean[] {true, false}) {
