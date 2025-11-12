@@ -42,7 +42,7 @@ Key traits ::
 Factories ::
 `LongHashFunction.murmur_3()`, `.murmur_3(long)` for 64-bit (`LongHashFunction.java:245-268`); `LongTupleHashFunction.murmur_3()`, `.murmur_3(long)` for 128-bit (`LongTupleHashFunction.java:35-69`).
 Implementation ::
-`net.openhft.hashing.MurmurHash_3` adapts Austin Appleby's x64 variants.
+`net.openhft.hashing.MurmurHash3` adapts Austin Appleby's x64 variants.
 It extends `DualHashFunction` so the 128-bit engine also exposes the low 64 bits through `LongHashFunction`.
 Key traits ::
 * Little-endian canonicalisation via `Access.byteOrder`.
