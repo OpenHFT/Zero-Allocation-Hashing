@@ -1,0 +1,33 @@
+== Unsafe and Platform Notes
+
+Chronicle Software
+
+toc::[]
+
+=== Internal API Usage
+
+* `UnsafeAccess` reflects on `sun.misc.Unsafe.theUnsafe` to obtain the singleton and uses it for raw array access, field offsets, and direct memory loads (`UnsafeAccess.java:40-118`).
+This keeps hashing allocation-free but depends on the `jdk.unsupported` module.
+* Direct buffer handling casts to `sun.nio.ch.DirectBuffer` to retrieve native addresses for `hashBytes(ByteBuffer)` and `hashMemory` (`Util.java:65-68`, `LongHashFunction.java:430-470`).
+The code path assumes the buffer is direct; heap buffers are copied through array access instead.
+* String hashing inspects `java.lang.String.value` and, on compact-string VMs, treats the backing `byte[]` as Latin-1 using `CompactLatin1CharSequenceAccess` (`ModernCompactStringHash.java:10-62`).
+Older HotSpot builds and other JVMs fall back to UTF-16 behaviour through `ModernHotSpotStringHash` or `HotSpotPrior7u6StringHash`.
+
+=== JVM Configuration
+
+* On Java 9 and newer, strong encapsulation may block reflective access to the JDK internals above.
+Add the following opens/exports when running with a strict module layer:
+** `--add-opens java.base/sun.misc=ALL-UNNAMED` (access to `Unsafe.theUnsafe`).
+** `--add-exports java.base/sun.nio.ch=ALL-UNNAMED` (casts to `DirectBuffer`).
+** `--add-opens java.base/java.lang=ALL-UNNAMED` (reading `String.value` for compact strings).
+* The library does not automatically request these permissions.
+Applications embedding Zero-Allocation Hashing must configure the JVM command line or module descriptors accordingly.
+
+=== Platform Behaviour
+
+* All algorithms canonicalise multi-byte reads to little-endian using `Access.byteOrder` and `Primitives.nativeToLittleEndian`.
+Hash outputs therefore match across architectures, but big-endian CPUs incur additional byte swap overhead (see `XxHash.java:14-19`, `XXH3.java:23-28`, `WyHash.java:9-15`).
+* When targeting non-HotSpot JVMs, `Util.VALID_STRING_HASH` falls back to a conservative implementation (`UnknownJvmStringHash`) if the VM name or version is unrecognised.
+This ensures correctness at the cost of potential performance; review the decision log before altering the detection logic (`Util.java:29-63`).
+* Passing invalid pointers to `hashMemory` or misreporting `Access` byte order is undefined and can crash the JVM.
+Always validate foreign memory addresses and keep access strategies consistent with the underlying storage layout.

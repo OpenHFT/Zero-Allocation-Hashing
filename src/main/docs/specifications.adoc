@@ -1,0 +1,49 @@
+== Zero-Allocation Hashing Specification
+
+Chronicle Software
+
+toc::[]
+
+=== DOC-001 Scope
+
+* Provides zero-allocation hashing utilities for byte-oriented inputs in Java.
+* Focuses on deterministic, cross-platform hash outputs across little- and big-endian architectures.
+* Excludes POJO graph hashing and streaming transforms that require reallocating data.
+
+=== FN-101 Functional Requirements
+
+* Expose hashing entry points for `long` and `long[]` return types covering 64-bit and 128-bit output families.
+* Support primitive arrays, `ByteBuffer`, direct memory regions, and `CharSequence` inputs without intermediate object creation.
+* Offer algorithm selectors that remain stable across releases to preserve backward compatibility for stored digests.
+* Provide predictable hashing irrespective of JVM byte order; the API must normalise endianness internally.
+
+=== NF-P-201 Performance Characteristics
+
+* Hashing calls must avoid heap allocations during steady-state use; initial static initialisation may allocate.
+* Hot-path hashing should remain branch-light to minimise CPU misprediction on modern x86 and ARM cores.
+* Benchmark coverage to include `xxHash`, `FarmHash na`, `FarmHash uo`, `CityHash`, `MurmurHash3`, `MetroHash`, and `wyHash`.
+* TODO Gather refreshed MetroHash and wyHash throughput and bootstrap metrics (tracked in https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[]).
+
+=== NF-O-301 Operability Expectations
+
+* Library compiles with Maven using `mvn -q verify` on JDK 8 through JDK 21.
+* Maintain Apache 2.0 licencing headers across source and documentation artefacts.
+* Provide published Javadoc via https://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest[] that reflects the released API surface.
+
+=== TEST-401 Quality Assurance
+
+* Unit tests must validate hashing consistency against known-good vectors for each algorithm.
+* Cross-endian verification to compare outputs between little-endian and big-endian environments.
+* Regression suites should cover null handling, bounds checking, and alignment-sensitive code paths.
+
+=== DOC-501 Documentation Obligations
+
+* Keep `README.adoc` aligned with the latest release version and supported JDK matrix.
+* Update this specification whenever algorithms, performance guarantees, or platform support change.
+* Record notable decisions in the project decision log with appropriate Nine-Box tags.
+
+=== OPS-601 Release Checklist
+
+* Confirm `mvn -q verify` passes on the targeted JDK matrix prior to tagging a release.
+* Ensure SonarCloud analysis is green before publishing artefacts.
+* Publish release notes summarising changes, performance impacts, and compatibility considerations.
