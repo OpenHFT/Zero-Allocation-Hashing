@@ -21,11 +21,11 @@ class WyHash {
     public static final long _wyp3 = 0x589965cc75374cc3L;
     public static final long _wyp4 = 0x1d8e4e27c47d124fL;
 
-    private static long _wymum(final long lhs, final long rhs) {
+    private static long wyMum(final long lhs, final long rhs) {
         return Maths.unsignedLongMulXorFold(lhs, rhs);
     }
 
-    private static <T> long _wyr3(final Access<T> access, T in, final long index, long k) {
+    private static <T> long wyR3(final Access<T> access, T in, final long index, long k) {
         return ((long) access.u8(in, index) << 16) |
                ((long) access.u8(in, index + (k >>> 1)) << 8) |
                ((long) access.u8(in, index + k - 1));
@@ -49,86 +49,88 @@ class WyHash {
         if(length <= 0)
             return 0;
         else if(length<4)
-            return _wymum(_wymum(_wyr3(access, input,off,length)^seed^_wyp0,
+            return wyMum(wyMum(wyR3(access, input,off,length)^seed^_wyp0,
                                  seed^_wyp1)^seed,length^_wyp4);
         else if(length<=8)
-            return _wymum(_wymum(access.u32(input, off) ^ seed ^ _wyp0,
+            return wyMum(wyMum(access.u32(input, off) ^ seed ^ _wyp0,
                                  access.u32(input, off + length - 4) ^ seed ^ _wyp1)
                           ^ seed, length ^ _wyp4);
         else if(length<=16)
-            return _wymum(_wymum(u64Rorate32(access, input,off)^seed^_wyp0,
+            return wyMum(wyMum(u64Rorate32(access, input,off)^seed^_wyp0,
                                  u64Rorate32(access, input,off+length-8)^seed^_wyp1)
                           ^seed,length^_wyp4);
         else if(length<=24)
-            return _wymum(_wymum(u64Rorate32(access, input,off)^seed^_wyp0,
+            return wyMum(wyMum(u64Rorate32(access, input,off)^seed^_wyp0,
                                  u64Rorate32(access, input,off+8)^seed^_wyp1)^
-                          _wymum(u64Rorate32(access, input,off+length-8)
+                          wyMum(u64Rorate32(access, input,off+length-8)
                                  ^seed^_wyp2,seed^_wyp3),length^_wyp4);
         else if(length<=32)
-            return _wymum(_wymum(u64Rorate32(access, input,off)^seed^_wyp0,
+            return wyMum(wyMum(u64Rorate32(access, input,off)^seed^_wyp0,
                                  u64Rorate32(access, input,off+8)^seed^_wyp1)
-                          ^_wymum(u64Rorate32(access, input,off+16)^seed^_wyp2,
+                          ^wyMum(u64Rorate32(access, input,off+16)^seed^_wyp2,
                                   u64Rorate32(access, input,off+length-8)^seed^_wyp3),length^_wyp4);
-        long see1=seed; long i=length, p=off;
+        long see1 = seed;
+        long i = length;
+        long p = off;
         for(;i>256;i-=256,p+=256){
-            seed = _wymum(access.i64(input, p) ^ seed ^ _wyp0,
+            seed = wyMum(access.i64(input, p) ^ seed ^ _wyp0,
                           access.i64(input, p + 8) ^ seed ^ _wyp1) ^
-                   _wymum(access.i64(input, p + 16) ^ seed ^ _wyp2,
+                   wyMum(access.i64(input, p + 16) ^ seed ^ _wyp2,
                           access.i64(input, p + 24) ^ seed ^ _wyp3);
-            see1 = _wymum(access.i64(input, p + 32) ^ see1 ^ _wyp1,
+            see1 = wyMum(access.i64(input, p + 32) ^ see1 ^ _wyp1,
                           access.i64(input, p + 40) ^ see1 ^ _wyp2) ^
-                   _wymum(access.i64(input, p + 48) ^ see1 ^ _wyp3,
+                   wyMum(access.i64(input, p + 48) ^ see1 ^ _wyp3,
                           access.i64(input, p + 56) ^ see1 ^ _wyp0);
-            seed = _wymum(access.i64(input, p + 64) ^ seed ^ _wyp0,
+            seed = wyMum(access.i64(input, p + 64) ^ seed ^ _wyp0,
                           access.i64(input, p + 72) ^ seed ^ _wyp1) ^
-                   _wymum(access.i64(input, p + 80) ^ seed ^ _wyp2,
+                   wyMum(access.i64(input, p + 80) ^ seed ^ _wyp2,
                           access.i64(input, p + 88) ^ seed ^ _wyp3);
-            see1 = _wymum(access.i64(input, p + 96) ^ see1 ^ _wyp1,
+            see1 = wyMum(access.i64(input, p + 96) ^ see1 ^ _wyp1,
                           access.i64(input, p + 104) ^ see1 ^ _wyp2) ^
-                   _wymum(access.i64(input, p + 112) ^ see1 ^ _wyp3,
+                   wyMum(access.i64(input, p + 112) ^ see1 ^ _wyp3,
                           access.i64(input, p + 120) ^ see1 ^ _wyp0);
-            seed = _wymum(access.i64(input, p + 128) ^ seed ^ _wyp0,
+            seed = wyMum(access.i64(input, p + 128) ^ seed ^ _wyp0,
                           access.i64(input, p + 136) ^ seed ^ _wyp1) ^
-                   _wymum(access.i64(input, p + 144) ^ seed ^ _wyp2,
+                   wyMum(access.i64(input, p + 144) ^ seed ^ _wyp2,
                           access.i64(input, p + 152) ^ seed ^ _wyp3);
-            see1 = _wymum(access.i64(input, p + 160) ^ see1 ^ _wyp1,
+            see1 = wyMum(access.i64(input, p + 160) ^ see1 ^ _wyp1,
                           access.i64(input, p + 168) ^ see1 ^ _wyp2) ^
-                   _wymum(access.i64(input, p + 176) ^ see1 ^ _wyp3,
+                   wyMum(access.i64(input, p + 176) ^ see1 ^ _wyp3,
                           access.i64(input, p + 184) ^ see1 ^ _wyp0);
-            seed = _wymum(access.i64(input, p + 192) ^ seed ^ _wyp0,
+            seed = wyMum(access.i64(input, p + 192) ^ seed ^ _wyp0,
                           access.i64(input, p + 200) ^ seed ^ _wyp1) ^
-                   _wymum(access.i64(input, p + 208) ^ seed ^ _wyp2,
+                   wyMum(access.i64(input, p + 208) ^ seed ^ _wyp2,
                           access.i64(input, p + 216) ^ seed ^ _wyp3);
-            see1 = _wymum(access.i64(input, p + 224) ^ see1 ^ _wyp1,
+            see1 = wyMum(access.i64(input, p + 224) ^ see1 ^ _wyp1,
                           access.i64(input, p + 232) ^ see1 ^ _wyp2) ^
-                   _wymum(access.i64(input, p + 240) ^ see1 ^ _wyp3,
+                   wyMum(access.i64(input, p + 240) ^ see1 ^ _wyp3,
                           access.i64(input, p + 248) ^ see1 ^ _wyp0);
         }
         for (; i > 32; i -= 32, p += 32) {
-            seed = _wymum(access.i64(input, p) ^ seed ^ _wyp0,
+            seed = wyMum(access.i64(input, p) ^ seed ^ _wyp0,
                           access.i64(input, p + 8) ^ seed ^ _wyp1);
-            see1 = _wymum(access.i64(input, p + 16) ^ see1 ^ _wyp2,
+            see1 = wyMum(access.i64(input, p + 16) ^ see1 ^ _wyp2,
                           access.i64(input, p + 24) ^ see1 ^ _wyp3);
         }
         if (i < 4) {
-            seed = _wymum(_wyr3(access, input, p, i) ^ seed ^ _wyp0, seed ^ _wyp1);
+            seed = wyMum(wyR3(access, input, p, i) ^ seed ^ _wyp0, seed ^ _wyp1);
         } else if (i <= 8) {
-            seed = _wymum(access.u32(input, p) ^ seed ^ _wyp0,
+            seed = wyMum(access.u32(input, p) ^ seed ^ _wyp0,
                           access.u32(input, p + i - 4) ^ seed ^ _wyp1);
         } else if (i <= 16) {
-            seed = _wymum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
+            seed = wyMum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
                           u64Rorate32(access, input, p + i - 8) ^ seed ^ _wyp1);
         } else if (i <= 24) {
-            seed = _wymum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
+            seed = wyMum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
                           u64Rorate32(access, input, p + 8) ^ seed ^ _wyp1);
-            see1 = _wymum(u64Rorate32(access, input, p + i - 8) ^ see1 ^ _wyp2, see1 ^ _wyp3);
+            see1 = wyMum(u64Rorate32(access, input, p + i - 8) ^ see1 ^ _wyp2, see1 ^ _wyp3);
         } else {
-            seed = _wymum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
+            seed = wyMum(u64Rorate32(access, input, p) ^ seed ^ _wyp0,
                           u64Rorate32(access, input, p + 8) ^ seed ^ _wyp1);
-            see1 = _wymum(u64Rorate32(access, input, p + 16) ^ see1 ^ _wyp2,
+            see1 = wyMum(u64Rorate32(access, input, p + 16) ^ see1 ^ _wyp2,
                           u64Rorate32(access, input, p + i - 8) ^ see1 ^ _wyp3);
         }
-        return _wymum(seed ^ see1, length ^ _wyp4);
+        return wyMum(seed ^ see1, length ^ _wyp4);
     }
 
     static LongHashFunction asLongHashFunctionWithoutSeed() {
@@ -152,7 +154,7 @@ class WyHash {
             input = Primitives.nativeToLittleEndian(input);
             long hi = input & 0xFFFFFFFFL;
             long lo = (input >>> 32) & 0xFFFFFFFFL;
-            return _wymum(_wymum(hi ^ seed() ^ _wyp0,
+            return wyMum(wyMum(hi ^ seed() ^ _wyp0,
                           lo ^ seed() ^ _wyp1)
                    ^ seed(), 8 ^ _wyp4);
         }
@@ -161,7 +163,7 @@ class WyHash {
         public long hashInt(int input) {
             input = Primitives.nativeToLittleEndian(input);
             long longInput = (input & 0xFFFFFFFFL);
-            return _wymum(_wymum(longInput ^ seed() ^ _wyp0,
+            return wyMum(wyMum(longInput ^ seed() ^ _wyp0,
                                  longInput ^ seed() ^ _wyp1)
                           ^ seed(), 4 ^ _wyp4);
         }
@@ -171,7 +173,7 @@ class WyHash {
             input = Primitives.nativeToLittleEndian(input);
             long hi = (input >>> 8) & 0xFFL;
             long wyr3 = hi | hi << 8 | (input & 0xFFL) << 16;
-            return _wymum(_wymum(wyr3 ^ seed() ^ _wyp0,
+            return wyMum(wyMum(wyr3 ^ seed() ^ _wyp0,
                                  seed() ^ _wyp1) ^ seed(), 2 ^ _wyp4);
         }
 
@@ -184,7 +186,7 @@ class WyHash {
         public long hashByte(final byte input) {
             long hi = input & 0xFFL;
             long wyr3 = hi | hi << 8 | hi << 16;
-            return _wymum(_wymum(wyr3 ^ seed() ^ _wyp0,
+            return wyMum(wyMum(wyr3 ^ seed() ^ _wyp0,
                                  seed() ^ _wyp1) ^ seed(), 1 ^ _wyp4);
         }
 

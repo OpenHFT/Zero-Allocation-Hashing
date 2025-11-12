@@ -24,7 +24,7 @@ It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the singl
 
 * Each upstream hash family lives in its own package-private class and exposes seed-aware factories back to the public façade.
 ** `CityAndFarmHash_1_1` adapts CityHash64 1.1 plus FarmHash NA/UO variants, including the short-input specialisations from the original C{pp} sources.
-** `MurmurHash_3` contains both 64-bit and 128-bit variants, reusing `DualHashFunction` to provide `LongHashFunction` and `LongTupleHashFunction` accessors.
+** `MurmurHash3` contains both 64-bit and 128-bit variants, reusing `DualHashFunction` to provide `LongHashFunction` and `LongTupleHashFunction` accessors.
 ** `XxHash` implements XXH64 with the upstream prime constants and treats all inputs as little-endian via `Access.byteOrder` (`XxHash.java`).
 ** `XXH3` delivers XXH3 64-bit and 128-bit functions, including the FARSH-derived secret and block-stripe accumulation strategy (`XXH3.java`).
 ** `WyHash` ports wyHash v3, including the 256-byte streaming loop and `_wymum` mixing helper built on `Maths.unsignedLongMulXorFold` (`WyHash.java`).

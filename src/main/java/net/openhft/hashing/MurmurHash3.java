@@ -5,6 +5,7 @@ package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
@@ -16,7 +17,7 @@ import static net.openhft.hashing.Primitives.unsignedShort;
  * /guava/src/com/google/common/hash/Murmur3_128HashFunction.java
  */
 @ParametersAreNonnullByDefault
-class MurmurHash_3 {
+class MurmurHash3 {
     private static final long C1 = 0x87c37b91114253d5L;
     private static final long C2 = 0x4cf5ad432745937fL;
 
@@ -26,14 +27,15 @@ class MurmurHash_3 {
         long remaining = length;
         while (remaining >= 16L) {
             long k1 = access.i64(input, offset);
-            long k2 = access.i64(input, offset + 8L);
-            offset += 16L;
-            remaining -= 16L;
             h1 ^= mixK1(k1);
 
             h1 = Long.rotateLeft(h1, 27);
             h1 += h2;
             h1 = h1 * 5L + 0x52dce729L;
+
+            long k2 = access.i64(input, offset + 8L);
+            offset += 16L;
+            remaining -= 16L;
 
             h2 ^= mixK2(k2);
 
@@ -89,72 +91,72 @@ class MurmurHash_3 {
 
         // This version appears to be working slower
 
-//        if (remaining > 0L) {
-//            long k1 = 0L;
-//            long k2 = 0L;
-//            megaSwitch:
-//            {
-//                fetch0_7:
-//                {
-//                    fetch8_11:
-//                    {
-//                        fetch0_3:
-//                        {
-//                            switch ((int) remaining) {
-//                                case 15:
-//                                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;
-//                                case 14:
-//                                    k2 ^= ((long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 12L))) << 32;
-//                                    break fetch8_11;
-//                                case 13:
-//                                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;
-//                                case 12:
-//                                    break fetch8_11;
-//                                case 11:
-//                                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;
-//                                case 10:
-//                                    k2 ^= (long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 8L));
-//                                    break fetch0_7;
-//                                case 9:
-//                                    k2 ^= ((long) access.u8(input, offset + 8L));
-//                                case 8:
-//                                    break fetch0_7;
-//                                case 7:
-//                                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48;
-//                                case 6:
-//                                    k1 ^= ((long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset + 4L))) << 32;
-//                                    break fetch0_3;
-//                                case 5:
-//                                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32;
-//                                case 4:
-//                                    break fetch0_3;
-//                                case 3:
-//                                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16;
-//                                case 2:
-//                                    k1 ^= (long) Primitives.nativeToLittleEndian(
-//                                            access.u16(input, offset));
-//                                    break megaSwitch;
-//                                case 1:
-//                                    k1 ^= ((long) access.u8(input, offset));
-//                                    break megaSwitch;
-//                                default:
-//                                    throw new AssertionError();
-//                            }
-//                        } // fetch0_3
-//                        k1 ^= access.u32(input, offset);
-//                        break megaSwitch;
-//                    } // fetch8_11
-//                    k2 ^= access.u32(input, offset + 8L);
-//                } // fetch0_7
-//                k1 ^= access.i64(input, offset);
-//            } // megaSwitch
-//
-//            h1 ^= mixK1(k1);
-//            h2 ^= mixK2(k2);
-//        }
+        //        if (remaining > 0L) {
+        //            long k1 = 0L;
+        //            long k2 = 0L;
+        //            megaSwitch:
+        //            {
+        //                fetch0_7:
+        //                {
+        //                    fetch8_11:
+        //                    {
+        //                        fetch0_3:
+        //                        {
+        //                            switch ((int) remaining) {
+        //                                case 15:
+        //                                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;
+        //                                case 14:
+        //                                    k2 ^= ((long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 12L))) << 32;
+        //                                    break fetch8_11;
+        //                                case 13:
+        //                                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;
+        //                                case 12:
+        //                                    break fetch8_11;
+        //                                case 11:
+        //                                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;
+        //                                case 10:
+        //                                    k2 ^= (long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 8L));
+        //                                    break fetch0_7;
+        //                                case 9:
+        //                                    k2 ^= ((long) access.u8(input, offset + 8L));
+        //                                case 8:
+        //                                    break fetch0_7;
+        //                                case 7:
+        //                                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48;
+        //                                case 6:
+        //                                    k1 ^= ((long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 4L))) << 32;
+        //                                    break fetch0_3;
+        //                                case 5:
+        //                                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32;
+        //                                case 4:
+        //                                    break fetch0_3;
+        //                                case 3:
+        //                                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16;
+        //                                case 2:
+        //                                    k1 ^= (long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset));
+        //                                    break megaSwitch;
+        //                                case 1:
+        //                                    k1 ^= ((long) access.u8(input, offset));
+        //                                    break megaSwitch;
+        //                                default:
+        //                                    throw new AssertionError();
+        //                            }
+        //                        } // fetch0_3
+        //                        k1 ^= access.u32(input, offset);
+        //                        break megaSwitch;
+        //                    } // fetch8_11
+        //                    k2 ^= access.u32(input, offset + 8L);
+        //                } // fetch0_7
+        //                k1 ^= access.i64(input, offset);
+        //            } // megaSwitch
+        //
+        //            h1 ^= mixK1(k1);
+        //            h2 ^= mixK2(k2);
+        //        }
 
         return finalize(length, h1, h2, result);
     }
@@ -230,7 +232,7 @@ class MurmurHash_3 {
         protected long hashNativeLong(long nativeLong, long len, @Nullable long[] result) {
             long h1 = mixK1(nativeLong);
             long h2 = 0L;
-            return MurmurHash_3.finalize(len, h1, h2, result);
+            return MurmurHash3.finalize(len, h1, h2, result);
         }
 
         @Override
@@ -270,7 +272,7 @@ class MurmurHash_3 {
         @Override
         public <T> long dualHash(@Nullable T input, Access<T> access, long off, long len, @Nullable long[] result) {
             long seed = seed();
-            return MurmurHash_3.hash(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
+            return MurmurHash3.hash(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
         }
     }
 
@@ -292,7 +294,7 @@ class MurmurHash_3 {
 
         private AsLongTupleHashFunctionSeeded(long seed) {
             this.seed = seed;
-            MurmurHash_3.finalize(0L, seed, seed, voidHash);
+            MurmurHash3.finalize(0L, seed, seed, voidHash);
         }
 
         @Override
@@ -305,7 +307,7 @@ class MurmurHash_3 {
             long seed = this.seed;
             long h1 = seed ^ mixK1(nativeLong);
             long h2 = seed;
-            return MurmurHash_3.finalize(len, h1, h2, result);
+            return MurmurHash3.finalize(len, h1, h2, result);
         }
 
         @Override
