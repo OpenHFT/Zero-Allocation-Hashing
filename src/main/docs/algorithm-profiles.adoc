@@ -1,8 +1,8 @@
 = Algorithm Profiles
+:pp: ++
 :toc:
 :lang: en-GB
 :source-highlighter: rouge
-:pp: ++
 
 Chronicle Software
 
