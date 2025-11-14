@@ -1,5 +1,4 @@
 = Zero-Allocation Hashing Architecture Overview
-:pp: ++
 :toc:
 :lang: en-GB
 :source-highlighter: rouge
@@ -16,7 +15,7 @@ It currently delivers 128-bit MurmurHash_3 and XXH3 outputs and mirrors the sing
 
 === Memory Access Abstractions
 
-* All hashing flows rely on `net.openhft.hashing.Access<T>` to read primitive values from arrays, direct buffers, off-heap memory, or custom structures. `Access.byteOrder(input, desiredOrder)` returns a view that matches the algorithm’s expected endianness (`Access.java:273-308`).
+* All hashing flows rely on `net.openhft.hashing.Access<T>` to read primitive values from arrays, direct buffers, off-heap memory, or custom structures. `Access.byteOrder(input, desiredOrder)` returns a view that matches the algorithm's expected endianness (`Access.java:273-308`).
 * Concrete strategies cover heap arrays (`UnsafeAccess.INSTANCE`), `ByteBuffer` (`ByteBufferAccess`), `CharSequence` in native or explicit byte order (`CharSequenceAccess`), and compact Latin-1 backed strings (`CompactLatin1CharSequenceAccess`).
 * `UnsafeAccess` wraps `sun.misc.Unsafe` for zero-copy reads, falling back to legacy helpers when `getByte` or `getShort` are absent (e.g., pre-Nougat Android) (`UnsafeAccess.java:40-118`).
 * Reverse-order wrappers are generated automatically through `Access.newDefaultReverseAccess`, allowing algorithms to treat every source as little-endian while still accepting big-endian buffers (`Access.java:295-344`).
