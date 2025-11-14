@@ -8,9 +8,9 @@ toc::[]
 === Entry Points
 
 * `net.openhft.hashing.LongHashFunction` is the primary façade for 64-bit hashes.
-It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
+It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash_3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
 * `net.openhft.hashing.LongTupleHashFunction` provides multi-word hash results.
-It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
+It currently delivers 128-bit MurmurHash_3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
 * `net.openhft.hashing.DualHashFunction` bridges tuple implementations back into the `LongHashFunction` contract, ensuring seeded XXH128 and similar algorithms can expose both 64-bit and 128-bit variants without duplicating logic (`DualHashFunction.java`).
 
 === Memory Access Abstractions
@@ -24,7 +24,7 @@ It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the singl
 
 * Each upstream hash family lives in its own package-private class and exposes seed-aware factories back to the public façade.
 ** `CityAndFarmHash_1_1` adapts CityHash64 1.1 plus FarmHash NA/UO variants, including the short-input specialisations from the original C{pp} sources.
-** `MurmurHash3` contains both 64-bit and 128-bit variants, reusing `DualHashFunction` to provide `LongHashFunction` and `LongTupleHashFunction` accessors.
+** `MurmurHash_3` contains both 64-bit and 128-bit variants, reusing `DualHashFunction` to provide `LongHashFunction` and `LongTupleHashFunction` accessors.
 ** `XxHash` implements XXH64 with the upstream prime constants and treats all inputs as little-endian via `Access.byteOrder` (`XxHash.java`).
 ** `XXH3` delivers XXH3 64-bit and 128-bit functions, including the FARSH-derived secret and block-stripe accumulation strategy (`XXH3.java`).
 ** `WyHash` ports wyHash v3, including the 256-byte streaming loop and `_wymum` mixing helper built on `Maths.unsignedLongMulXorFold` (`WyHash.java`).

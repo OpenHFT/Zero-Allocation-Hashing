@@ -8,7 +8,7 @@ toc::[]
 
 * Every `LongHashFunction` and `LongTupleHashFunction` implementation treats primitives as if they were written to memory using the platform’s native byte order; the API therefore guarantees that `hashLong(v)` equals `hashLongs(new long[] {v})` and similar array forms (`LongHashFunction.java`, `LongTupleHashFunction.java`).
 * All bundled algorithms normalise multi-byte reads to little-endian before mixing, so the same input bytes produce identical hashes on big- and little-endian machines.
-Performance may differ, but results must not (`CityAndFarmHash_1_1.java`, `XxHash.java`, `XXH3.java`, `WyHash.java`, `MetroHash.java`, `MurmurHash3.java`).
+Performance may differ, but results must not (`CityAndFarmHash_1_1.java`, `XxHash.java`, `XXH3.java`, `WyHash.java`, `MetroHash.java`, `MurmurHash_3.java`).
 * `hash(Object, Access, long off, long len)` assumes the addressed region is contiguous and valid for the requested byte count.
 Implementations do not insert bounds checks beyond those provided by the chosen `Access` strategy, so callers must uphold the contract (`LongHashFunction.java:548-612`).
 * `hashMemory(long address, long length)` treats the `address` as an absolute memory pointer.
