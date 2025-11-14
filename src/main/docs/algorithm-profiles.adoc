@@ -1,9 +1,10 @@
-== Algorithm Profiles
+= Algorithm Profiles
 :pp: ++
+:toc:
+:lang: en-GB
+:source-highlighter: rouge
 
 Chronicle Software
-
-toc::[]
 
 === CityHash 1.1
 
