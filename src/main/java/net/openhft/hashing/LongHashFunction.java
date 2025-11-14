@@ -231,7 +231,7 @@ public abstract class LongHashFunction implements Serializable {
      */
     @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3() {
-        return MurmurHash3.asLongHashFunctionWithoutSeed();
+        return MurmurHash_3.asLongHashFunctionWithoutSeed();
     }
 
     /**
@@ -247,7 +247,7 @@ public abstract class LongHashFunction implements Serializable {
      */
     @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3(long seed) {
-        return MurmurHash3.asLongHashFunctionWithSeed(seed);
+        return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
 
     /**

@@ -77,7 +77,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      */
     @NotNull
     public static LongTupleHashFunction murmur_3() {
-        return MurmurHash3.asLongTupleHashFunctionWithoutSeed();
+        return MurmurHash_3.asLongTupleHashFunctionWithoutSeed();
     }
 
     /**
@@ -91,7 +91,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      */
     @NotNull
     public static LongTupleHashFunction murmur_3(final long seed) {
-        return MurmurHash3.asLongTupleHashFunctionWithSeed(seed);
+        return MurmurHash_3.asLongTupleHashFunctionWithSeed(seed);
     }
 
     /**
