@@ -1,5 +1,4 @@
 = Zero-Allocation Hashing Architecture Overview
-:pp: ++
 :toc:
 :lang: en-GB
 :source-highlighter: rouge

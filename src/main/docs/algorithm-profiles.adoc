@@ -1,5 +1,4 @@
 = Algorithm Profiles
-:pp: ++
 :toc:
 :lang: en-GB
 :source-highlighter: rouge
@@ -55,7 +54,7 @@ Factories ::
 Implementation ::
 `net.openhft.hashing.XxHash` ports the official XXH64 reference and keeps the unsigned prime constants as signed Java longs.
 Key traits ::
-* Uses four-lane accumulation for >= 32 byte inputs, matching upstream behaviour bit-for-bit.
+* Uses four-lane accumulation for >=32 byte inputs, matching upstream behaviour bit-for-bit.
 * Applies the canonical avalanche round in `XxHash.finalize` for all lengths.
 * Seeded and seedless instances differ only by the stored `seed()` override; serialisation preserves both forms.
 
