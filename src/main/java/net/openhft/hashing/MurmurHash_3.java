@@ -1,0 +1,331 @@
+/*
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
+ */
+package net.openhft.hashing;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+import static net.openhft.hashing.Primitives.unsignedInt;
+import static net.openhft.hashing.Primitives.unsignedShort;
+
+/**
+ * Derived from https://github.com/google/guava/blob/fa95e381e665d8ee9639543b99ed38020c8de5ef
+ * /guava/src/com/google/common/hash/Murmur3_128HashFunction.java
+ */
+@ParametersAreNonnullByDefault
+class MurmurHash_3 {
+    private static final long C1 = 0x87c37b91114253d5L;
+    private static final long C2 = 0x4cf5ad432745937fL;
+
+    private static <T> long hash(long seed, @Nullable T input, Access<T> access, long offset, long length, @Nullable long[] result) {
+        long h1 = seed;
+        long h2 = seed;
+        long remaining = length;
+        while (remaining >= 16L) {
+            long k1 = access.i64(input, offset);
+            h1 ^= mixK1(k1);
+
+            h1 = Long.rotateLeft(h1, 27);
+            h1 += h2;
+            h1 = h1 * 5L + 0x52dce729L;
+
+            long k2 = access.i64(input, offset + 8L);
+            offset += 16L;
+            remaining -= 16L;
+
+            h2 ^= mixK2(k2);
+
+            h2 = Long.rotateLeft(h2, 31);
+            h2 += h1;
+            h2 = h2 * 5L + 0x38495ab5L;
+        }
+
+        if (remaining > 0L) {
+            long k1 = 0L;
+            long k2 = 0L;
+            switch ((int) remaining) {
+                case 15:
+                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;// fall through
+                case 14:
+                    k2 ^= ((long) access.u8(input, offset + 13L)) << 40;// fall through
+                case 13:
+                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;// fall through
+                case 12:
+                    k2 ^= ((long) access.u8(input, offset + 11L)) << 24;// fall through
+                case 11:
+                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;// fall through
+                case 10:
+                    k2 ^= ((long) access.u8(input, offset + 9L)) << 8; // fall through
+                case 9:
+                    k2 ^= ((long) access.u8(input, offset + 8L)); // fall through
+                case 8:
+                    k1 ^= access.i64(input, offset);
+                    break;
+                case 7:
+                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48; // fall through
+                case 6:
+                    k1 ^= ((long) access.u8(input, offset + 5L)) << 40; // fall through
+                case 5:
+                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32; // fall through
+                case 4:
+                    k1 ^= access.u32(input, offset);
+                    break;
+                case 3:
+                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16; // fall through
+                case 2:
+                    k1 ^= ((long) access.u8(input, offset + 1L)) << 8; // fall through
+                case 1:
+                    k1 ^= ((long) access.u8(input, offset));
+                case 0:
+                    break;
+                default:
+                    throw new AssertionError("Should never get here.");
+            }
+            h1 ^= mixK1(k1);
+            h2 ^= mixK2(k2);
+        }
+
+        // This version appears to be working slower
+
+        //        if (remaining > 0L) {
+        //            long k1 = 0L;
+        //            long k2 = 0L;
+        //            megaSwitch:
+        //            {
+        //                fetch0_7:
+        //                {
+        //                    fetch8_11:
+        //                    {
+        //                        fetch0_3:
+        //                        {
+        //                            switch ((int) remaining) {
+        //                                case 15:
+        //                                    k2 ^= ((long) access.u8(input, offset + 14L)) << 48;
+        //                                case 14:
+        //                                    k2 ^= ((long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 12L))) << 32;
+        //                                    break fetch8_11;
+        //                                case 13:
+        //                                    k2 ^= ((long) access.u8(input, offset + 12L)) << 32;
+        //                                case 12:
+        //                                    break fetch8_11;
+        //                                case 11:
+        //                                    k2 ^= ((long) access.u8(input, offset + 10L)) << 16;
+        //                                case 10:
+        //                                    k2 ^= (long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 8L));
+        //                                    break fetch0_7;
+        //                                case 9:
+        //                                    k2 ^= ((long) access.u8(input, offset + 8L));
+        //                                case 8:
+        //                                    break fetch0_7;
+        //                                case 7:
+        //                                    k1 ^= ((long) access.u8(input, offset + 6L)) << 48;
+        //                                case 6:
+        //                                    k1 ^= ((long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset + 4L))) << 32;
+        //                                    break fetch0_3;
+        //                                case 5:
+        //                                    k1 ^= ((long) access.u8(input, offset + 4L)) << 32;
+        //                                case 4:
+        //                                    break fetch0_3;
+        //                                case 3:
+        //                                    k1 ^= ((long) access.u8(input, offset + 2L)) << 16;
+        //                                case 2:
+        //                                    k1 ^= (long) Primitives.nativeToLittleEndian(
+        //                                            access.u16(input, offset));
+        //                                    break megaSwitch;
+        //                                case 1:
+        //                                    k1 ^= ((long) access.u8(input, offset));
+        //                                    break megaSwitch;
+        //                                default:
+        //                                    throw new AssertionError();
+        //                            }
+        //                        } // fetch0_3
+        //                        k1 ^= access.u32(input, offset);
+        //                        break megaSwitch;
+        //                    } // fetch8_11
+        //                    k2 ^= access.u32(input, offset + 8L);
+        //                } // fetch0_7
+        //                k1 ^= access.i64(input, offset);
+        //            } // megaSwitch
+        //
+        //            h1 ^= mixK1(k1);
+        //            h2 ^= mixK2(k2);
+        //        }
+
+        return finalize(length, h1, h2, result);
+    }
+
+    private static long finalize(long length, long h1, long h2, @Nullable long[] result) {
+        h1 ^= length;
+        h2 ^= length;
+
+        h1 += h2;
+        h2 += h1;
+
+        h1 = fmix64(h1);
+        h2 = fmix64(h2);
+
+        if (null != result) {
+            h1 += h2;
+            result[0] = h1;
+            result[1] = h1 + h2;
+            return h1;
+        } else {
+            return h1 + h2;
+        }
+    }
+
+    private static long fmix64(long k) {
+        k ^= k >>> 33;
+        k *= 0xff51afd7ed558ccdL;
+        k ^= k >>> 33;
+        k *= 0xc4ceb9fe1a85ec53L;
+        k ^= k >>> 33;
+        return k;
+    }
+
+    private static long mixK1(long k1) {
+        k1 *= C1;
+        k1 = Long.rotateLeft(k1, 31);
+        k1 *= C2;
+        return k1;
+    }
+
+    private static long mixK2(long k2) {
+        k2 *= C2;
+        k2 = Long.rotateLeft(k2, 33);
+        k2 *= C1;
+        return k2;
+    }
+
+    private static class AsLongTupleHashFunction extends DualHashFunction {
+        private static final long serialVersionUID = 0L;
+        @NotNull
+        private static final AsLongTupleHashFunction SEEDLESS_INSTANCE = new AsLongTupleHashFunction();
+        @NotNull
+        private static final LongHashFunction SEEDLESS_INSTANCE_LONG = SEEDLESS_INSTANCE.asLongHashFunction();
+
+        private Object readResolve() {
+            return SEEDLESS_INSTANCE;
+        }
+
+        @Override
+        public int bitsLength() {
+            return 128;
+        }
+        @Override
+        @NotNull
+        public long[] newResultArray() {
+            return new long[2]; // override for a little performance
+        }
+
+        long seed() {
+            return 0L;
+        }
+
+        protected long hashNativeLong(long nativeLong, long len, @Nullable long[] result) {
+            long h1 = mixK1(nativeLong);
+            long h2 = 0L;
+            return MurmurHash_3.finalize(len, h1, h2, result);
+        }
+
+        @Override
+        public long dualHashLong(long input, @Nullable long[] result) {
+            return hashNativeLong(Primitives.nativeToLittleEndian(input), 8L, result);
+        }
+
+        @Override
+        public long dualHashInt(int input, @Nullable long[] result) {
+            return hashNativeLong(unsignedInt(Primitives.nativeToLittleEndian(input)), 4L, result);
+        }
+
+        @Override
+        public long dualHashShort(short input, @Nullable long[] result) {
+            return hashNativeLong(unsignedShort(Primitives.nativeToLittleEndian(input)), 2L, result);
+        }
+
+        @Override
+        public long dualHashChar(char input, @Nullable long[] result) {
+            return hashNativeLong(unsignedShort(Primitives.nativeToLittleEndian(input)), 2L, result);
+        }
+
+        @Override
+        public long dualHashByte(byte input, @Nullable long[] result) {
+            return hashNativeLong(Primitives.unsignedByte((int) input), 1L, result);
+        }
+
+        @Override
+        public long dualHashVoid(@Nullable long[] result) {
+            if (null != result) {
+                result[0] = 0;
+                result[1] = 0;
+            }
+            return 0;
+        }
+
+        @Override
+        public <T> long dualHash(@Nullable T input, Access<T> access, long off, long len, @Nullable long[] result) {
+            long seed = seed();
+            return MurmurHash_3.hash(seed, input, access.byteOrder(input, LITTLE_ENDIAN), off, len, result);
+        }
+    }
+
+    @NotNull
+    static LongTupleHashFunction asLongTupleHashFunctionWithoutSeed() {
+        return AsLongTupleHashFunction.SEEDLESS_INSTANCE;
+    }
+    @NotNull
+    static LongHashFunction asLongHashFunctionWithoutSeed() {
+        return AsLongTupleHashFunction.SEEDLESS_INSTANCE_LONG;
+    }
+
+    private static class AsLongTupleHashFunctionSeeded extends AsLongTupleHashFunction {
+        private static final long serialVersionUID = 0L;
+
+        private final long seed;
+        @NotNull
+        private final transient long[] voidHash = newResultArray();
+
+        private AsLongTupleHashFunctionSeeded(long seed) {
+            this.seed = seed;
+            MurmurHash_3.finalize(0L, seed, seed, voidHash);
+        }
+
+        @Override
+        long seed() {
+            return seed;
+        }
+
+        @Override
+        protected long hashNativeLong(long nativeLong, long len, @Nullable long[] result) {
+            long seed = this.seed;
+            long h1 = seed ^ mixK1(nativeLong);
+            long h2 = seed;
+            return MurmurHash_3.finalize(len, h1, h2, result);
+        }
+
+        @Override
+        public long dualHashVoid(@Nullable long[] result) {
+            if (null != result) {
+                result[0] = voidHash[0];
+                result[1] = voidHash[1];
+            }
+            return voidHash[0];
+        }
+    }
+
+    @NotNull
+    static LongTupleHashFunction asLongTupleHashFunctionWithSeed(long seed) {
+        return new AsLongTupleHashFunctionSeeded(seed);
+    }
+    @NotNull
+    static LongHashFunction asLongHashFunctionWithSeed(long seed) {
+        return new AsLongTupleHashFunctionSeeded(seed).asLongHashFunction();
+    }
+}
