@@ -105,6 +105,7 @@ class CityAndFarmHash_1_1 {
     }
 
     static <T> long cityHash64(Access<T> access, T in, long off, long len) {
+        // CHECKSTYLE:OFF
         // This method is a close translation of the upstream CityHash reference implementation.
         // Variable declaration placement and naming are preserved for clarity against the original.
         if (len <= 32L) {
@@ -117,12 +118,15 @@ class CityAndFarmHash_1_1 {
             return cityHashLen33To64(access, in, off, len);
         }
 
-        long x = access.i64(in, off + len - 40L);
-        long y = access.i64(in, off + len - 16L) + access.i64(in, off + len - 56L);
-        long z = hashLen16(access.i64(in, off + len - 48L) + len,
+        final long x = access.i64(in, off + len - 40L);
+        final long y = access.i64(in, off + len - 16L) + access.i64(in, off + len - 56L);
+        final long z = hashLen16(access.i64(in, off + len - 48L) + len,
                 access.i64(in, off + len - 24L));
 
-        long vFirst, vSecond, wFirst, wSecond;
+        long vFirst;
+        long vSecond;
+        long wFirst;
+        long wSecond;
 
         // This and following 3 blocks are produced by a single-click inline-function refactoring.
         // IntelliJ IDEA ftw
@@ -205,6 +209,7 @@ class CityAndFarmHash_1_1 {
         } while (len != 0);
         return hashLen16(hashLen16(vFirst, wFirst) + shiftMix(y) * K1 + z,
                 hashLen16(vSecond, wSecond) + x);
+        // CHECKSTYLE:ON
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
