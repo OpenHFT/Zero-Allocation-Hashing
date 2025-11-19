@@ -139,10 +139,10 @@ class XxHash {
         @Override
         public long hashLong(long input) {
             input = Primitives.nativeToLittleEndian(input);
-            long hash = seed() + P5 + 8;
             input *= P2;
             input = Long.rotateLeft(input, 31);
             input *= P1;
+            long hash = seed() + P5 + 8;
             hash ^= input;
             hash = Long.rotateLeft(hash, 27) * P1 + P4;
             return XxHash.finalize(hash);
