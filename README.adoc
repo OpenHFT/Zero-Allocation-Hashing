@@ -1,7 +1,6 @@
 == Zero-Allocation Hashing
-:pp: ++
 
-Chronicle Software
+Chronicle Software :lang: en-GB :source-highlighter: rouge :pp: ++
 
 image:https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing/badge.svg[caption="",link=https://maven-badges.herokuapp.com/maven-central/net.openhft/zero-allocation-hashing]
 image:https://javadoc.io/badge2/net.openhft/zero-allocation-hashing/javadoc.svg[link="https://www.javadoc.io/doc/net.openhft/zero-allocation-hashing/latest/index.html"]
