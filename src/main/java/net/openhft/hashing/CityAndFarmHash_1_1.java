@@ -105,7 +105,6 @@ class CityAndFarmHash_1_1 {
     }
 
     static <T> long cityHash64(Access<T> access, T in, long off, long len) {
-        // CHECKSTYLE:OFF
         // This method is a close translation of the upstream CityHash reference implementation.
         // Variable declaration placement and naming are preserved for clarity against the original.
         if (len <= 32L) {
@@ -209,7 +208,6 @@ class CityAndFarmHash_1_1 {
         } while (len != 0);
         return hashLen16(hashLen16(vFirst, wFirst) + shiftMix(y) * K1 + z,
                 hashLen16(vSecond, wSecond) + x);
-        // CHECKSTYLE:ON
     }
 
     private static class AsLongHashFunction extends LongHashFunction {
