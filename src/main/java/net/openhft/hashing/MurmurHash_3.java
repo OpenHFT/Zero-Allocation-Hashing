@@ -5,6 +5,7 @@ package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
@@ -26,14 +27,15 @@ class MurmurHash_3 {
         long remaining = length;
         while (remaining >= 16L) {
             long k1 = access.i64(input, offset);
-            long k2 = access.i64(input, offset + 8L);
-            offset += 16L;
-            remaining -= 16L;
             h1 ^= mixK1(k1);
 
             h1 = Long.rotateLeft(h1, 27);
             h1 += h2;
             h1 = h1 * 5L + 0x52dce729L;
+
+            long k2 = access.i64(input, offset + 8L);
+            offset += 16L;
+            remaining -= 16L;
 
             h2 ^= mixK2(k2);
 

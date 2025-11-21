@@ -119,9 +119,9 @@ public abstract class Access<T> {
      *
      * @param backingOrder the byte order of {@code char} reads backing
      * {@code CharSequences} to access
+     * @param <T>          the {@code CharSequence} subtype to access
      * @return the {@code Access} to {@link CharSequence}s backed by {@code char} reads made in
      * the specified byte order
-     * @param <T> the {@code CharSequence} subtype to access
      * @see #toNativeCharSequence()
      */
     @SuppressWarnings("unchecked")
