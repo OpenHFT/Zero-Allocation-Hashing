@@ -345,9 +345,9 @@
             </build>
         </profile>
         <profile>
-            <id>jdk21-profile</id>
+            <id>jdk17-profile</id>
             <activation>
-                <jdk>[21,)</jdk>
+                <jdk>[17,)</jdk>
             </activation>
             <properties>
                 <maven.compiler.release>8</maven.compiler.release>
