@@ -56,7 +56,6 @@ import static net.openhft.hashing.Util.checkArrayOffs;
 public abstract class LongHashFunction implements Serializable {
     private static final long serialVersionUID = 0L;
 
-    // CHECKSTYLE:OFF: MethodName
     /**
      * Returns a {@code LongHashFunction} that implements the
      * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
@@ -361,7 +360,6 @@ public abstract class LongHashFunction implements Serializable {
     public static LongHashFunction wy_3(long seed) {
         return WyHash.asLongHashFunctionWithSeed(seed);
     }
-    // CHECKSTYLE:ON: MethodName
 
     /**
      * Returns a hash function implementing the 64 bit version of
