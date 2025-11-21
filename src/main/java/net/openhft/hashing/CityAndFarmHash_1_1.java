@@ -117,9 +117,9 @@ class CityAndFarmHash_1_1 {
             return cityHashLen33To64(access, in, off, len);
         }
 
-        final long x = access.i64(in, off + len - 40L);
-        final long y = access.i64(in, off + len - 16L) + access.i64(in, off + len - 56L);
-        final long z = hashLen16(access.i64(in, off + len - 48L) + len,
+        long x = access.i64(in, off + len - 40L);
+        long y = access.i64(in, off + len - 16L) + access.i64(in, off + len - 56L);
+        long z = hashLen16(access.i64(in, off + len - 48L) + len,
                 access.i64(in, off + len - 24L));
 
         long vFirst, vSecond, wFirst, wSecond;
