@@ -1,21 +1,21 @@
-== Zero-Allocation Hashing Architecture Overview
-:pp: ++
+= Zero-Allocation Hashing Architecture Overview
+:toc:
+:lang: en-GB
+:source-highlighter: rouge
 
 Chronicle Software
-
-toc::[]
 
 === Entry Points
 
 * `net.openhft.hashing.LongHashFunction` is the primary façade for 64-bit hashes.
-It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
+It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash_3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
 * `net.openhft.hashing.LongTupleHashFunction` provides multi-word hash results.
-It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
+It currently delivers 128-bit MurmurHash_3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
 * `net.openhft.hashing.DualHashFunction` bridges tuple implementations back into the `LongHashFunction` contract, ensuring seeded XXH128 and similar algorithms can expose both 64-bit and 128-bit variants without duplicating logic (`DualHashFunction.java`).
 
 === Memory Access Abstractions
 
-* All hashing flows rely on `net.openhft.hashing.Access<T>` to read primitive values from arrays, direct buffers, off-heap memory, or custom structures. `Access.byteOrder(input, desiredOrder)` returns a view that matches the algorithm’s expected endianness (`Access.java:273-308`).
+* All hashing flows rely on `net.openhft.hashing.Access<T>` to read primitive values from arrays, direct buffers, off-heap memory, or custom structures. `Access.byteOrder(input, desiredOrder)` returns a view that matches the algorithm's expected endianness (`Access.java:273-308`).
 * Concrete strategies cover heap arrays (`UnsafeAccess.INSTANCE`), `ByteBuffer` (`ByteBufferAccess`), `CharSequence` in native or explicit byte order (`CharSequenceAccess`), and compact Latin-1 backed strings (`CompactLatin1CharSequenceAccess`).
 * `UnsafeAccess` wraps `sun.misc.Unsafe` for zero-copy reads, falling back to legacy helpers when `getByte` or `getShort` are absent (e.g., pre-Nougat Android) (`UnsafeAccess.java:40-118`).
 * Reverse-order wrappers are generated automatically through `Access.newDefaultReverseAccess`, allowing algorithms to treat every source as little-endian while still accepting big-endian buffers (`Access.java:295-344`).

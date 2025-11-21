@@ -1,0 +1,62 @@
+= Project Requirements
+:toc:
+:lang: en-GB
+:source-highlighter: rouge
+
+Chronicle Software
+
+== 1. Overview
+
+The **Zero-Allocation Hashing** project aims to provide a high-performance, Java-based API for hashing various input sources (byte arrays, buffers, memory addresses) without incurring garbage collection overhead during the hashing process. It serves as a drop-in, allocation-free alternative to libraries like Guava Hashing for performance-critical applications.
+
+== 2. Functional Requirements
+
+=== 2.1. Core Hashing Capabilities
+* **FR-001:** The library must provide implementations for 64-bit hashing via the `LongHashFunction` interface.
+* **FR-002:** The library must provide implementations for 128-bit (and potentially higher) hashing via the `LongTupleHashFunction` interface.
+* **FR-003:** The library must allow hashing of the following input types without intermediate object allocation:
+** Primitive values (`long`, `int`, `short`, `char`, `byte`).
+** Primitive arrays.
+** `java.nio.ByteBuffer` (both heap and direct).
+** `java.lang.CharSequence` (Strings, StringBuilders).
+** Raw memory addresses (off-heap memory).
+* **FR-004:** The library must support an empty input (Void), returning a deterministic constant for the specific algorithm.
+
+=== 2.2. Algorithms
+The library must implement the following non-cryptographic hash algorithms:
+* **FR-005:** CityHash (v1.1).
+* **FR-006:** FarmHash (variants `na` and `uo`).
+* **FR-007:** MurmurHash3 (128-bit and low 64-bit).
+* **FR-008:** xxHash (XXH64).
+* **FR-009:** XXH3 (64-bit and 128-bit).
+* **FR-010:** WyHash (v3).
+* **FR-011:** MetroHash (64-bit, variant 2).
+
+=== 2.3. Seeding
+* **FR-012:** Algorithms must provide factory methods for unseeded (default seed) instances.
+* **FR-013:** Algorithms supporting seeds must provide factory methods for single-seed and, where applicable, dual-seed instances.
+
+=== 2.4. Determinism and Endianness
+* **FR-014:** Hash outputs must be deterministic. The same input sequence must produce the same hash code on every invocation.
+* **FR-015:** Hash outputs must be cross-platform consistent. The library must normalize byte order internally (typically to Little-Endian) to ensure that Big-Endian architectures (e.g., s390x) produce the exact same hash values as Little-Endian architectures (e.g., x86_64).
+
+== 3. Non-Functional Requirements
+
+=== 3.1. Performance (Latency and Allocation)
+* **NFR-001:** **Zero Allocation:** Steady-state hashing operations must not allocate objects on the Java Heap.
+* **NFR-002:** **Throughput:** Algorithms should demonstrate multi-GB/s throughput on modern hardware (Baseline: Core i7-4870HQ benchmarks).
+* **NFR-003:** **Bootstrap:** Static initialization overhead should be minimized, though one-time allocation during class loading is permitted.
+
+=== 3.2. Reliability and Safety
+* **NFR-004:** **Thread Safety:** Hash function instances must be immutable and thread-safe.
+* **NFR-005:** **Memory Safety:** While `Unsafe` is used internally, the API must validate array offsets and lengths where standard Java arrays are used (via `Util.checkArrayOffs`) to prevent SIGSEGV/crashes on heap access. Note: Raw memory hashing assumes the caller validates addresses.
+
+=== 3.3. Compatibility
+* **NFR-006:** **JDK Version:** The library must support JDK 8 through the current LTS (JDK 21+).
+* **NFR-007:** **Module System:** The library must function in Java 9+ environments, providing documentation on required `--add-opens` or `--add-exports` flags for accessing `sun.misc.Unsafe` and `sun.nio.ch.DirectBuffer`.
+* **NFR-008:** **VM Support:** The library must support major JVMs including HotSpot, OpenJDK, and OpenJ9/IBM J9.
+
+== 4. Interface Constraints
+
+* **C-001:** The API must not depend on `ThreadLocal` variables to avoid memory leaks in containerized environments.
+* **C-002:** The `Access` pattern must be extensible to allow users to define custom access strategies for proprietary data structures.

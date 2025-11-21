@@ -1,0 +1,78 @@
+= Decision Log
+:toc:
+:lang: en-GB
+:source-highlighter: rouge
+
+Chronicle Software
+
+== ADR-001: Usage of `sun.misc.Unsafe` for Memory Access
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | To achieve the "Zero-Allocation" goal and maximize throughput, standard Java array access checks and byte-by-byte reading overhead are prohibitive.
+| Decision | Use `sun.misc.Unsafe` (`UnsafeAccess.java`) to perform raw memory reads (getLong, getInt) directly from heap arrays and off-heap addresses.
+| Consequences |
+* **Positive:** Maximal performance; enables "type punning" (reading bytes as longs) efficiently.
+* **Negative:** Depends on internal JDK APIs. Requires specific `--add-opens` flags on modularized JDKs (Java 9+).
+|===
+
+== ADR-002: Little-Endian Canonicalization
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | Different hardware architectures store multibyte primitives in different orders (Little-Endian vs Big-Endian). Hashing algorithms (often ported from C++) usually assume a specific order (mostly LE).
+| Decision | All implementations must normalize input to Little-Endian before processing (`Primitives.nativeToLittleEndian`, `Access.byteOrder`). The `Access` abstraction handles the detection and necessary byte swapping.
+| Consequences |
+* **Positive:** Guarantees identical hash results for the same byte sequence regardless of the hardware platform (x86 vs s390x).
+* **Negative:** Incurs a performance penalty on Big-Endian platforms due to the overhead of byte-swapping during reads.
+|===
+
+== ADR-003: Abstraction via `Access<T>` Strategy pattern
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | The library needs to hash data residing in various formats: `byte[]`, `ByteBuffer`, `CharSequence`, and raw memory addresses, without duplicating the complex hashing logic for each source.
+| Decision | Implement an `Access<T>` strategy pattern. The hashing algorithms are written against the `Access` interface, which defines how to read 1 to 8 bytes from a given object `T` at a specific offset.
+| Consequences |
+* **Positive:** Eliminates code duplication; a single algorithm implementation supports all input types. Allows users to implement custom `Access` for their own POJOs.
+* **Negative:** Virtual method dispatch could theoretically introduce overhead, though HotSpot inlining generally mitigates this.
+|===
+
+== ADR-004: Reflective String Value Access (Compact Strings)
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | Java 9 introduced "Compact Strings" (JEP 254), changing the internal representation of Strings from `char[]` (UTF-16) to `byte[]` (Latin-1 or UTF-16). Standard `CharSequence` methods involve copying or decoding overhead.
+| Decision | Use reflection and `Unsafe` to inspect the internal `value` field of `java.lang.String`. Detect if the JVM uses compact strings and, if the string is Latin-1, use `CompactLatin1CharSequenceAccess` to treat the backing byte array directly.
+| Consequences |
+* **Positive:** Zero-copy, zero-allocation hashing for Strings on modern JVMs.
+* **Negative:** Extremely brittle; depends on private implementation details of `java.lang.String`. Requires defensive fallbacks (`UnknownJvmStringHash`) for non-HotSpot or future JVMs.
+|===
+
+== ADR-005: Stateless Immutable Hash Functions
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | Hash functions are often used in concurrent environments (e.g., web servers, high-frequency trading).
+| Decision | `LongHashFunction` instances are fully stateless and immutable. Seeds are baked in at construction time.
+| Consequences |
+* **Positive:** Instances are inherently thread-safe and can be stored in `static final` fields or singletons. No need for synchronization or `ThreadLocal`.
+* **Negative:** To change a seed, a new object must be allocated (though this is typically a setup-time cost, not a runtime cost).
+|===
+
+== ADR-006: Handling 128-bit Hashes via `LongTupleHashFunction`
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Context | Java primitives are limited to 64 bits (`long`). Algorithms like MurmurHash3 and XXH128 produce 128-bit output.
+| Decision | Introduce `LongTupleHashFunction` which accepts a `long[]` buffer to write the results into. Provide `DualHashFunction` to allow viewing the 128-bit function as a 64-bit function (returning the lower 64 bits).
+| Consequences |
+* **Positive:** Supports >64-bit hashes without allocating an Object wrapper (like `BigInteger` or a custom class).
+* **Negative:** The `long[]` result array must be managed/reused by the caller to maintain the "zero-allocation" promise.
+|===
