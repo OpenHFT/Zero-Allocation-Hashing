@@ -14,7 +14,6 @@ package sun.nio.ch;
  * - Only used methods are exported.
  * - In test and production runtime, the real class is loaded from boot classpath.
  */
-
 public interface DirectBuffer {
     public long address();
 }

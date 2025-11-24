@@ -7,9 +7,13 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// An internal helper class for casting LongTupleHashFunction as LongHashFunction
-
 @ParametersAreNonnullByDefault
+/**
+ * Internal base class that exposes a tuple hash as both tuple and single-value
+ * {@link LongHashFunction}. Subclasses implement the dualHash* variants; this
+ * wrapper handles result-array checks and caches a single-value view to avoid
+ * repeated allocation.
+ */
 abstract class DualHashFunction extends LongTupleHashFunction {
     private static final long serialVersionUID = 0L;
 
