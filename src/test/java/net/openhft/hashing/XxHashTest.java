@@ -69,7 +69,6 @@ public class XxHashTest {
  *     }
  * }
  */
-
     private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
         -1205034819632174695L,
         -1642502924627794072L,

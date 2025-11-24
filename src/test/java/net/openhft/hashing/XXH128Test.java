@@ -80,7 +80,6 @@ int main()
     printf("}\n");
 }
  */
-
 class XXH128Test_HASHES {
     public static final long[][] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
         { 6918025063187695999L, -7374073936536430376L },

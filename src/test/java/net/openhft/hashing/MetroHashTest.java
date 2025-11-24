@@ -69,7 +69,6 @@ public class MetroHashTest {
  *     }
  *  }
  */
-
     private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
             8097384203561113213L,
             1044577374344929784L,

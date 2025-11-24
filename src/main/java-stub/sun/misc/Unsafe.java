@@ -11,7 +11,6 @@ package sun.misc;
  * - Only used methods are exported.
  * - In test and production runtime, the real class is loaded from boot classpath.
  */
-
 public final class Unsafe {
     public native Object  getObject( Object o, long offset);
     public native int     getInt(    Object o, long offset);
