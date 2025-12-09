@@ -35,13 +35,13 @@ public class UnsafeAccessTest {
     @Test
     public void testUnsafeAccess() {
         {
-            final long[] l = new long[]{0xFEDCBA9876543210L, 0x123456789ABCDEFL};
+            final long[] l = {0xFEDCBA9876543210L, 0x123456789ABCDEFL};
             assertEquals(l[0], unsafe.getLong(l, UnsafeAccess.LONG_BASE));
             assertEquals(l[1], unsafe.getLong(l, UnsafeAccess.LONG_BASE + 8));
         }
 
         {
-            final int[] i = new int[]{0xFEDCBA98, 0x1234567};
+            final int[] i = {0xFEDCBA98, 0x1234567};
             assertEquals(i[0], unsafe.getInt(i, UnsafeAccess.INT_BASE));
             assertEquals(i[1], unsafe.getInt(i, UnsafeAccess.INT_BASE + 4));
             assertEquals(Primitives.unsignedInt(i[0]), unsafe.getUnsignedInt(i, UnsafeAccess.INT_BASE));
@@ -49,7 +49,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final short[] s = new short[]{(short) 0xF466, 0x227A};
+            final short[] s = {(short) 0xF466, 0x227A};
             assertEquals((int) s[0], unsafe.getShort(s, UnsafeAccess.SHORT_BASE));
             assertEquals((int) s[1], unsafe.getShort(s, UnsafeAccess.SHORT_BASE + 2));
             assertEquals(Primitives.unsignedShort(s[0]), unsafe.getUnsignedShort(s, UnsafeAccess.SHORT_BASE));
@@ -57,7 +57,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = {(byte) 0xF4, 0x5D};
             assertEquals((int) b[0], unsafe.getByte(b, UnsafeAccess.BYTE_BASE));
             assertEquals((int) b[1], unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(b[0]), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE));
@@ -70,25 +70,25 @@ public class UnsafeAccessTest {
         assumeTrue(nativeOrder() == LITTLE_ENDIAN);
 
         {
-            final long[] l = new long[]{0xFEDCBA9876543210L, 0x123456789ABCDEFL};
+            final long[] l = {0xFEDCBA9876543210L, 0x123456789ABCDEFL};
             assertEquals(0xEFFEDCBA98765432L, unsafe.getLong(l, UnsafeAccess.LONG_BASE + 1));
         }
 
         {
-            final int[] i = new int[]{0xFEDCBA98, 0x1234567};
+            final int[] i = {0xFEDCBA98, 0x1234567};
             assertEquals(0x67FEDCBA, unsafe.getInt(i, UnsafeAccess.INT_BASE + 1));
             assertEquals(Primitives.unsignedInt(0x67FEDCBA), unsafe.getUnsignedInt(i, UnsafeAccess.INT_BASE + 1));
         }
 
         {
-            final short[] s = new short[]{(short) 0xF466, 0x227A};
-            assertEquals((int) 0x7AF4, unsafe.getShort(s, UnsafeAccess.SHORT_BASE + 1));
+            final short[] s = {(short) 0xF466, 0x227A};
+            assertEquals(0x7AF4, unsafe.getShort(s, UnsafeAccess.SHORT_BASE + 1));
             assertEquals(Primitives.unsignedShort(0x7AF4), unsafe.getUnsignedShort(s, UnsafeAccess.SHORT_BASE + 1));
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
-            assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
+            final byte[] b = {(byte) 0xF4, 0x5D};
+            assertEquals(0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }
     }
@@ -98,25 +98,25 @@ public class UnsafeAccessTest {
         assumeTrue(nativeOrder() == BIG_ENDIAN);
 
         {
-            final long[] l = new long[]{0xFEDCBA9876543210L, 0x123456789ABCDEF0L};
+            final long[] l = {0xFEDCBA9876543210L, 0x123456789ABCDEF0L};
             assertEquals(0xDCBA987654321012L, unsafe.getLong(l, UnsafeAccess.LONG_BASE + 1));
         }
 
         {
-            final int[] i = new int[]{0xFEDCBA98, 0x12345670};
+            final int[] i = {0xFEDCBA98, 0x12345670};
             assertEquals(0xDCBA9812, unsafe.getInt(i, UnsafeAccess.INT_BASE + 1));
             assertEquals(Primitives.unsignedInt(0xDCBA9812), unsafe.getUnsignedInt(i, UnsafeAccess.INT_BASE + 1));
         }
 
         {
-            final short[] s = new short[]{(short) 0xF466, 0x227A};
-            assertEquals((int) 0x6622, unsafe.getShort(s, UnsafeAccess.SHORT_BASE + 1));
+            final short[] s = {(short) 0xF466, 0x227A};
+            assertEquals(0x6622, unsafe.getShort(s, UnsafeAccess.SHORT_BASE + 1));
             assertEquals(Primitives.unsignedShort(0x6622), unsafe.getUnsignedShort(s, UnsafeAccess.SHORT_BASE + 1));
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
-            assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
+            final byte[] b = {(byte) 0xF4, 0x5D};
+            assertEquals(0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }
     }

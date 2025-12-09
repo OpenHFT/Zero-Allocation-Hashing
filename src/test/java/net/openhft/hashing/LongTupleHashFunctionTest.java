@@ -6,6 +6,7 @@ package net.openhft.hashing;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class LongTupleHashFunctionTest {
 
     private static ByteOrder nonNativeOrder() {
@@ -49,7 +51,7 @@ class LongTupleHashFunctionTest {
     private static void testBits(LongTupleHashFunction f) {
         assertTrue("bits should be more than 64", f.bitsLength() > 64);
         assertEquals("tuple length", (f.bitsLength() + 63) / 64, f.newResultArray().length);
-        assertTrue("mutiple of 8", f.bitsLength() % 8 == 0);
+        assertEquals("multiple of 8", 0, f.bitsLength() % 8);
     }
 
     private static void testException(LongTupleHashFunction f) {
@@ -59,7 +61,7 @@ class LongTupleHashFunctionTest {
         } catch (NullPointerException expected) {
             ok = true;
         } catch (Throwable e) {
-            fail("unexpected exception: " + e.toString());
+            fail("unexpected exception: " + e);
         }
         assertTrue("should throw NullPointerException", ok);
 
@@ -69,7 +71,7 @@ class LongTupleHashFunctionTest {
         } catch (IllegalArgumentException expected) {
             ok = true;
         } catch (Throwable e) {
-            fail("unexpected exception: " + e.toString());
+            fail("unexpected exception: " + e);
         }
         assertTrue("should throw IllegalArgumentException", ok);
 
@@ -200,17 +202,17 @@ class LongTupleHashFunctionTest {
         bb.order(LITTLE_ENDIAN);
         assertArrayEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        ((Buffer)bb2).position(1);
+        bb2.position(1);
         bb2.put(bb);
         assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(BIG_ENDIAN)).clear();
+        bb.order(BIG_ENDIAN).clear();
 
         assertArrayEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertArrayEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(nativeOrder())).clear();
+        bb.order(nativeOrder()).clear();
     }
 
     private static void testCharSequences(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
@@ -227,7 +229,7 @@ class LongTupleHashFunctionTest {
             assertArrayEquals("string builder off len", eh, f.hashChars(sb, 1, len / 2));
 
             // Test for OpenJDK < 7u6, where substring wasn't copied char[] array
-            assertArrayEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
+            assertArrayEquals("substring", eh, f.hashChars(sb.substring(1, len / 2 + 1)));
 
             if (len >= 2) {
                 bb.order(nonNativeOrder());
@@ -240,7 +242,7 @@ class LongTupleHashFunctionTest {
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertArrayEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                ((Buffer)bb.order(nativeOrder())).clear();
+                bb.order(nativeOrder()).clear();
             }
         }
     }
@@ -249,13 +251,13 @@ class LongTupleHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
-        ((Buffer)bb).clear();
+        bb.clear();
     }
 
     private static void testLatin1String(LongTupleHashFunction f, byte[] data) {
         // test for compact string from JDK 9
         try {
-            String inputStr = new String(data, "ISO-8859-1");
+            String inputStr = new String(data, StandardCharsets.ISO_8859_1);
             char[] inputCharArray = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
                 inputCharArray[i] = (char)(data[i]&0xFF);
@@ -266,7 +268,7 @@ class LongTupleHashFunctionTest {
             }
             assertArrayEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
         } catch (Exception e) {
-            fail("exception when test latin1 string:" + e.toString());
+            fail("exception when test latin1 string:" + e);
         }
     }
 }

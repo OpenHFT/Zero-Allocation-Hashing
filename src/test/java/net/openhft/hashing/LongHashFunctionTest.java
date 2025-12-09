@@ -6,6 +6,7 @@ package net.openhft.hashing;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class LongHashFunctionTest {
 
     private static ByteOrder nonNativeOrder() {
@@ -148,17 +150,17 @@ class LongHashFunctionTest {
         bb.order(LITTLE_ENDIAN);
         assertEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        ((Buffer)bb2).position(1);
+        bb2.position(1);
         bb2.put(bb);
         assertEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(BIG_ENDIAN)).clear();
+        bb.order(BIG_ENDIAN).clear();
 
         assertEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer)bb.order(nativeOrder())).clear();
+        bb.order(nativeOrder()).clear();
     }
 
     private static void testCharSequences(LongHashFunction f, long eh, int len, ByteBuffer bb) {
@@ -175,7 +177,7 @@ class LongHashFunctionTest {
             assertEquals("string builder off len", eh, f.hashChars(sb, 1, len / 2));
 
             // Test for OpenJDK < 7u6, where substring wasn't copied char[] array
-            assertEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
+            assertEquals("substring", eh, f.hashChars(sb.substring(1, len / 2 + 1)));
 
             if (len >= 2) {
                 bb.order(nonNativeOrder());
@@ -188,7 +190,7 @@ class LongHashFunctionTest {
                 long toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                ((Buffer)bb.order(nativeOrder())).clear();
+                bb.order(nativeOrder()).clear();
             }
         }
     }
@@ -197,13 +199,13 @@ class LongHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
-        ((Buffer)bb).clear();
+        bb.clear();
     }
 
     private static void testLatin1String(LongHashFunction f, byte[] data) {
         // test for compact string from JDK 9
         try {
-            String inputStr = new String(data, "ISO-8859-1");
+            String inputStr = new String(data, StandardCharsets.ISO_8859_1);
             char[] inputCharArray = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
                 inputCharArray[i] = (char)(data[i]&0xFF);

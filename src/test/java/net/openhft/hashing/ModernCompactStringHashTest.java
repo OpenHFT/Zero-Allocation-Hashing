@@ -127,6 +127,7 @@ public class ModernCompactStringHashTest {
     private static final class RecordingLongHashFunction extends LongHashFunction {
         static final long HASH_RESULT = 0x1234L;
         static final long HASH_VOID_RESULT = 0x5678L;
+        private static final long serialVersionUID = 1L;
 
         Access<?> lastAccess;
         long lastOffset;
@@ -179,6 +180,7 @@ public class ModernCompactStringHashTest {
     private static final class RecordingLongTupleHashFunction extends LongTupleHashFunction {
         static final long RESULT_VALUE = 0x2233L;
         static final long VOID_RESULT_VALUE = 0x3344L;
+        private static final long serialVersionUID = 1L;
 
         Access<?> lastAccess;
         long lastOffset;

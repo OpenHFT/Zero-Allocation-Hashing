@@ -11,18 +11,16 @@ import java.lang.reflect.Method;
 
 class Maths {
     @NotNull
-    private static final Maths INSTANCE;
+    private static final Maths INSTANCE = createInstance();
 
-    static {
-        Maths maths = null;
+    private static Maths createInstance() {
         try {
             Method multiplyHigh = Math.class.getDeclaredMethod("multiplyHigh", int.class, int.class);
             MethodHandle multiplyHighMH = MethodHandles.lookup().unreflect(multiplyHigh);
-            maths = new MathsJDK9(multiplyHighMH);
+            return new MathsJDK9(multiplyHighMH);
         } catch (final Throwable ignore) {
-            maths = new Maths();
+            return new Maths();
         }
-        INSTANCE = maths;
     }
 
     public static long unsignedLongMulXorFold(final long lhs, final long rhs) {

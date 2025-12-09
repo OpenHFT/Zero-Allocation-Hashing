@@ -21,7 +21,7 @@ The source programs used to generate those vectors are embedded in each test for
 
 === Endianness Validation
 
-* Every algorithm test is executed under both native and non-native byte orders by virtue of the `LongHashFunctionTest` helper, which rewrites `ByteBuffer` order and exercises the `Access.byteOrder` adaptation code paths.
+* Every algorithm test is executed under both native and non-native byte orders by virtue of the `LongHashFunctionTestUtils` helper, which rewrites `ByteBuffer` order and exercises the `Access.byteOrder` adaptation code paths.
 * Dedicated tests such as `LongHashFunctionTest.testNegativePrimitives` confirm that signed primitive hashes match the equivalent unsigned byte sequences, catching regressions in `Primitives.nativeToLittleEndian`.
 
 === Adding or Modifying Algorithms
@@ -29,7 +29,7 @@ The source programs used to generate those vectors are embedded in each test for
 . Generate authoritative reference hashes using the upstream implementation (the existing tests include example C or C{pp} snippets).
 . Create or extend a parameterised JUnit test that iterates over message lengths (the standard pattern covers lengths `[0, N]` with `N` at least 1024).
 . Feed the new vectors through `LongHashFunctionTest.test` (or the tuple equivalent) to validate all API entry points.
-. Augment `LongHashFunctionTest` if the algorithm exposes new surface area (for example, additional primitive types or new `Access` strategies).
+. Augment `LongHashFunctionTestUtils` if the algorithm exposes new surface area (for example, additional primitive types or new `Access` strategies).
 
 === Build and Verification
 

@@ -1096,7 +1096,7 @@ public class City64_1_1_Test {
             -7169091905545403953L,
     };
 
-    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0 = new long[]{
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0 = {
             6665653827947065942L,
             -5789604048565922719L,
             -3544073118936500090L,
