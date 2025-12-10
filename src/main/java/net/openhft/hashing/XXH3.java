@@ -45,6 +45,9 @@ class XXH3 {
     private static final long nbStripesPerBlock = (192 - 64) / 8;
     private static final long block_len = 64 * nbStripesPerBlock;
 
+    /**
+     * Final XXH64 avalanche phase that scrambles the accumulator for uniform output.
+     */
     private static long xxh64Avalanche(long h64) {
         h64 ^= h64 >>> 33;
         h64 *= XXH_PRIME64_2;
@@ -52,11 +55,19 @@ class XXH3 {
         h64 *= XXH_PRIME64_3;
         return h64 ^ (h64 >>> 32);
     }
+
+    /**
+     * Final XXH3 avalanche for 64-bit outputs.
+     */
     private static long xxh3Avalanche(long h64) {
         h64 ^= h64 >>> 37;
         h64 *= 0x165667919E3779F9L;
         return h64 ^ (h64 >>> 32);
     }
+
+    /**
+     * Rounds the accumulator for very short inputs, incorporating the message length.
+     */
     private static long xxh3Rrmxmx(long h64, final long length) {
         h64 ^= Long.rotateLeft(h64, 49) ^ Long.rotateLeft(h64, 24);
         h64 *= 0x9FB21C651E98DF25L;
@@ -65,6 +76,9 @@ class XXH3 {
         return h64 ^ (h64 >>> 28);
     }
 
+    /**
+     * Mixes a 16 byte stripe with a secret and seed to update the accumulator.
+     */
     private static <T> long xxh3Mix16B(final long seed, final T input, final Access<T> access, final long offIn, final long offSec) {
         final long inputLo = access.i64(input, offIn);
         final long inputHi = access.i64(input, offIn + 8);
@@ -77,6 +91,10 @@ class XXH3 {
     /*
      * A bit slower than xxh3Mix16B, but handles multiply by zero better.
      */
+
+    /**
+     * Mixes two 16 byte lanes in one pass for the 128-bit variant.
+     */
     private static long xxh128Mix32BOnce(final long seed, final long offSec, long acc, final long input0, final long input1, final long input2, final long input3) {
         acc += unsignedLongMulXorFold(
             input0 ^ (unsafeLE.i64(XXH3_kSecret, offSec) + seed),
@@ -84,12 +102,18 @@ class XXH3 {
         return acc ^ (input2 + input3);
     }
 
+    /**
+     * Fuses two partial accumulators with the secret to progress the main state.
+     */
     private static long xxh3Mix2Accs(final long accLeft, final long accRight, final byte[] secret, final long offSec) {
         return unsignedLongMulXorFold(
             accLeft ^ unsafeLE.i64(secret, offSec),
             accRight ^ unsafeLE.i64(secret, offSec + 8));
     }
 
+    /**
+     * Core 64-bit XXH3 implementation shared by array and buffer wrappers.
+     */
     private static <T> long xxh364BitsInternal(final long seed, final byte[] secret, final T input, final Access<T> access, final long off, final long length) {
         if (length <= 16) {
             // XXH3_len_0to16_64b
@@ -105,7 +129,7 @@ class XXH3 {
             if (length >= 4) {
                 // XXH3_len_4to8_64b
                 long s = seed ^ Long.reverseBytes(seed & 0xFFFFFFFFL);
-                final long input1 = (long)access.i32(input, off); // high int will be shifted
+                final long input1 = access.i32(input, off); // high int will be shifted
                 final long input2 = access.u32(input, off + length - 4);
                 final long bitflip = (unsafeLE.i64(XXH3_kSecret, 8+BYTE_BASE) ^ unsafeLE.i64(XXH3_kSecret, 16+BYTE_BASE)) - s;
                 final long keyed = (input2 + (input1 << 32)) ^ bitflip;
@@ -113,7 +137,7 @@ class XXH3 {
             }
             if (length != 0) {
                 // XXH3_len_1to3_64b
-                final int c1 = access.u8(input, off + 0);
+                final int c1 = access.u8(input, off);
                 final int c2 = access.i8(input, off + (length >> 1)); // high 3 bytes will be shifted
                 final int c3 = access.u8(input, off + length - 1);
                 final long combined = Primitives.unsignedInt((c1 << 16) | (c2  << 24) | c3 | ((int)length << 8));
@@ -149,12 +173,12 @@ class XXH3 {
             final int nbRounds = (int)length / 16;
             int i = 0;
             for (; i < 8; ++i) {
-                acc += xxh3Mix16B(seed, input, access, off + 16*i, BYTE_BASE + 16*i);
+                acc += xxh3Mix16B(seed, input, access, off + 16L *i, BYTE_BASE + 16L *i);
             }
             acc = xxh3Avalanche(acc);
 
             for (; i < nbRounds; ++i) {
-                acc += xxh3Mix16B(seed, input, access, off + 16*i, BYTE_BASE + 16*(i-8) + 3);
+                acc += xxh3Mix16B(seed, input, access, off + 16L *i, BYTE_BASE + 16L *(i-8) + 3);
             }
 
             /* last bytes */
@@ -182,10 +206,10 @@ class XXH3 {
                 final long offStripe = offBlock + s * 64;
                 final long offSec = s * 8;
                 {
-                    final long data_val_0 = access.i64(input, offStripe + 8*0);
-                    final long data_val_1 = access.i64(input, offStripe + 8*1);
-                    final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-                    final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+                    final long data_val_0 = access.i64(input, offStripe);
+                    final long data_val_1 = access.i64(input, offStripe + 8);
+                    final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+                    final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
                     /* swap adjacent lanes */
                     acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
                     acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -221,8 +245,8 @@ class XXH3 {
 
             // XXH3_scrambleAcc_scalar
             final long offSec = BYTE_BASE + 192 - 64;
-            acc0 = (acc0 ^ (acc0 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*0)) * XXH_PRIME32_1;
-            acc1 = (acc1 ^ (acc1 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*1)) * XXH_PRIME32_1;
+            acc0 = (acc0 ^ (acc0 >>> 47) ^ unsafeLE.i64(secret, offSec)) * XXH_PRIME32_1;
+            acc1 = (acc1 ^ (acc1 >>> 47) ^ unsafeLE.i64(secret, offSec + 8)) * XXH_PRIME32_1;
             acc2 = (acc2 ^ (acc2 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*2)) * XXH_PRIME32_1;
             acc3 = (acc3 ^ (acc3 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*3)) * XXH_PRIME32_1;
             acc4 = (acc4 ^ (acc4 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*4)) * XXH_PRIME32_1;
@@ -239,10 +263,10 @@ class XXH3 {
             final long offStripe = offBlock + s * 64;
             final long offSec = s * 8;
             {
-                final long data_val_0 = access.i64(input, offStripe + 8*0);
-                final long data_val_1 = access.i64(input, offStripe + 8*1);
-                final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-                final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+                final long data_val_0 = access.i64(input, offStripe);
+                final long data_val_1 = access.i64(input, offStripe + 8);
+                final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+                final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
                 /* swap adjacent lanes */
                 acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
                 acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -281,10 +305,10 @@ class XXH3 {
         final long offStripe = off + length - 64;
         final long offSec = 192 - 64 - 7;
         {
-            final long data_val_0 = access.i64(input, offStripe + 8*0);
-            final long data_val_1 = access.i64(input, offStripe + 8*1);
-            final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-            final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+            final long data_val_0 = access.i64(input, offStripe);
+            final long data_val_1 = access.i64(input, offStripe + 8);
+            final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+            final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
             /* swap adjacent lanes */
             acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
             acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -327,6 +351,9 @@ class XXH3 {
         return xxh3Avalanche(result64);
     }
 
+    /**
+     * Core 128-bit XXH3 implementation; writes the two 64-bit lanes into {@code result} when provided.
+     */
     private static <T> long xxh3128BitsInternal(final long seed, final byte[] secret, final T input, final Access<T> access, final long off, final long length, final long[] result) {
         if (length <= 16) {
             // XXH3_len_0to16_128b
@@ -354,7 +381,7 @@ class XXH3 {
                 // XXH3_len_4to8_128b
                 long s = seed ^ Long.reverseBytes(seed & 0xFFFFFFFFL);
                 final long inputLo = access.u32(input, off);
-                final long inputHi = (long)access.i32(input, off + length - 4); // high int will be shifted
+                final long inputHi = access.i32(input, off + length - 4); // high int will be shifted
 
                 final long bitflip = (unsafeLE.i64(XXH3_kSecret, 16+BYTE_BASE) ^ unsafeLE.i64(XXH3_kSecret, 24+BYTE_BASE)) + s;
                 final long keyed = (inputLo + (inputHi << 32)) ^ bitflip;
@@ -376,7 +403,7 @@ class XXH3 {
             }
             if (length != 0) {
                 // XXH3_len_1to3_128b
-                final int c1 = access.u8(input, off + 0);
+                final int c1 = access.u8(input, off);
                 final int c2 = access.i8(input, off + (length >> 1)); // high 3 bytes will be shifted
                 final int c3 = access.u8(input, off + length - 1);
                 final int combinedl = (c1 << 16) | (c2  << 24) | c3 | ((int)length << 8);
@@ -426,8 +453,8 @@ class XXH3 {
                 acc0 = xxh128Mix32BOnce(seed, BYTE_BASE + 32,      acc0, input0, input1, input2, input3);
                 acc1 = xxh128Mix32BOnce(seed, BYTE_BASE + 32 + 16, acc1, input2, input3, input0, input1);
             }
-            final long input0 = access.i64(input, off + 0);
-            final long input1 = access.i64(input, off + 0 + 8);
+            final long input0 = access.i64(input, off);
+            final long input1 = access.i64(input, off + 8);
             final long input2 = access.i64(input, off + length - 16);
             final long input3 = access.i64(input, off + length - 16 + 8);
             acc0 = xxh128Mix32BOnce(seed, BYTE_BASE,      acc0, input0, input1, input2, input3);
@@ -448,23 +475,23 @@ class XXH3 {
             long acc1 = 0;
             int i = 0;
             for (; i < 4; ++i) {
-                final long input0 = access.i64(input, off + 32*i);
-                final long input1 = access.i64(input, off + 32*i + 8);
-                final long input2 = access.i64(input, off + 32*i + 16);
-                final long input3 = access.i64(input, off + 32*i + 24);
-                acc0 = xxh128Mix32BOnce(seed, BYTE_BASE + 32*i,      acc0, input0, input1, input2, input3);
-                acc1 = xxh128Mix32BOnce(seed, BYTE_BASE + 32*i + 16, acc1, input2, input3, input0, input1);
+                final long input0 = access.i64(input, off + 32L *i);
+                final long input1 = access.i64(input, off + 32L *i + 8);
+                final long input2 = access.i64(input, off + 32L *i + 16);
+                final long input3 = access.i64(input, off + 32L *i + 24);
+                acc0 = xxh128Mix32BOnce(seed, BYTE_BASE + 32L *i,      acc0, input0, input1, input2, input3);
+                acc1 = xxh128Mix32BOnce(seed, BYTE_BASE + 32L *i + 16, acc1, input2, input3, input0, input1);
             }
             acc0 = xxh3Avalanche(acc0);
             acc1 = xxh3Avalanche(acc1);
 
             for (; i < nbRounds; ++i) {
-                final long input0 = access.i64(input, off + 32*i);
-                final long input1 = access.i64(input, off + 32*i + 8);
-                final long input2 = access.i64(input, off + 32*i + 16);
-                final long input3 = access.i64(input, off + 32*i + 24);
-                acc0 = xxh128Mix32BOnce(seed, BYTE_BASE + 3 + 32*(i-4),      acc0, input0, input1, input2, input3);
-                acc1 = xxh128Mix32BOnce(seed, BYTE_BASE + 3 + 32*(i-4) + 16, acc1, input2, input3, input0, input1);
+                final long input0 = access.i64(input, off + 32L *i);
+                final long input1 = access.i64(input, off + 32L *i + 8);
+                final long input2 = access.i64(input, off + 32L *i + 16);
+                final long input3 = access.i64(input, off + 32L *i + 24);
+                acc0 = xxh128Mix32BOnce(seed, BYTE_BASE + 3 + 32L *(i-4),      acc0, input0, input1, input2, input3);
+                acc1 = xxh128Mix32BOnce(seed, BYTE_BASE + 3 + 32L *(i-4) + 16, acc1, input2, input3, input0, input1);
             }
 
             /* last bytes */
@@ -503,10 +530,10 @@ class XXH3 {
                 final long offStripe = offBlock + s * 64;
                 final long offSec = s * 8;
                 {
-                    final long data_val_0 = access.i64(input, offStripe + 8*0);
-                    final long data_val_1 = access.i64(input, offStripe + 8*1);
-                    final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-                    final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+                    final long data_val_0 = access.i64(input, offStripe);
+                    final long data_val_1 = access.i64(input, offStripe + 8);
+                    final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+                    final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
                     /* swap adjacent lanes */
                     acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
                     acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -542,8 +569,8 @@ class XXH3 {
 
             // XXH3_scrambleAcc_scalar
             final long offSec = BYTE_BASE + 192 - 64;
-            acc0 = (acc0 ^ (acc0 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*0)) * XXH_PRIME32_1;
-            acc1 = (acc1 ^ (acc1 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*1)) * XXH_PRIME32_1;
+            acc0 = (acc0 ^ (acc0 >>> 47) ^ unsafeLE.i64(secret, offSec)) * XXH_PRIME32_1;
+            acc1 = (acc1 ^ (acc1 >>> 47) ^ unsafeLE.i64(secret, offSec + 8)) * XXH_PRIME32_1;
             acc2 = (acc2 ^ (acc2 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*2)) * XXH_PRIME32_1;
             acc3 = (acc3 ^ (acc3 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*3)) * XXH_PRIME32_1;
             acc4 = (acc4 ^ (acc4 >>> 47) ^ unsafeLE.i64(secret, offSec + 8*4)) * XXH_PRIME32_1;
@@ -560,10 +587,10 @@ class XXH3 {
             final long offStripe = offBlock + s * 64;
             final long offSec = s * 8;
             {
-                final long data_val_0 = access.i64(input, offStripe + 8*0);
-                final long data_val_1 = access.i64(input, offStripe + 8*1);
-                final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-                final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+                final long data_val_0 = access.i64(input, offStripe);
+                final long data_val_1 = access.i64(input, offStripe + 8);
+                final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+                final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
                 /* swap adjacent lanes */
                 acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
                 acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -602,10 +629,10 @@ class XXH3 {
         final long offStripe = off + length - 64;
         final long offSec = 192 - 64 - 7;
         {
-            final long data_val_0 = access.i64(input, offStripe + 8*0);
-            final long data_val_1 = access.i64(input, offStripe + 8*1);
-            final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*0);
-            final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8*1);
+            final long data_val_0 = access.i64(input, offStripe);
+            final long data_val_1 = access.i64(input, offStripe + 8);
+            final long data_key_0 = data_val_0 ^ unsafeLE.i64(secret, BYTE_BASE + offSec);
+            final long data_key_1 = data_val_1 ^ unsafeLE.i64(secret, BYTE_BASE + offSec + 8);
             /* swap adjacent lanes */
             acc0 += data_val_1 + (0xFFFFFFFFL & data_key_0) * (data_key_0 >>> 32);
             acc1 += data_val_0 + (0xFFFFFFFFL & data_key_1) * (data_key_1 >>> 32);
@@ -655,13 +682,16 @@ class XXH3 {
         return low;
     }
 
+    /**
+     * Derives a per-seed secret, preserving byte order expectations of the reference implementation.
+     */
     private static void xxh3InitCustomSecret(final byte[] customSecret, final long seed64) {
         final int nbRounds = 192 / 16;
         final ByteBuffer bb = ByteBuffer.wrap(customSecret).order(LITTLE_ENDIAN);
         for (int i=0; i < nbRounds; i++) {
             final long lo = unsafeLE.i64(XXH3_kSecret, BYTE_BASE + 16*i)     + seed64;
             final long hi = unsafeLE.i64(XXH3_kSecret, BYTE_BASE + 16*i + 8) - seed64;
-            bb.putLong(16 * i + 0, lo);
+            bb.putLong(16 * i, lo);
             bb.putLong(16 * i + 8, hi);
         }
     }
@@ -859,7 +889,7 @@ class XXH3 {
         public long dualHashByte(byte input, final long[] result) {
             final int c1 = Primitives.unsignedByte(input);
             //final int c2 = c1;
-            final int c2 = (byte)input;
+            final int c2 = input;
             final int c3 = c1;
             final int combinedl = (c1 << 16) | (c2  << 24) | c3 | (1 << 8);
             final int combinedh = Integer.rotateLeft(Integer.reverseBytes(combinedl), 13);

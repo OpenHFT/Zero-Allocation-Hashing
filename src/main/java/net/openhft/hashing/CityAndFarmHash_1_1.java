@@ -55,6 +55,9 @@ class CityAndFarmHash_1_1 {
         return hashLen16(c, d, mul);
     }
 
+    /**
+     * Hashes inputs up to 16 bytes using the small-block CityHash variant.
+     */
     private static <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
             long a = access.i64(in, off);
@@ -73,6 +76,9 @@ class CityAndFarmHash_1_1 {
         return K2;
     }
 
+    /**
+     * Hashes 17 to 32 byte inputs using the intermediate CityHash path.
+     */
     private static <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = access.i64(in, off) * K1;
@@ -83,6 +89,9 @@ class CityAndFarmHash_1_1 {
                 a + rotateRight(b + K2, 18) + c, mul);
     }
 
+    /**
+     * Hashes 33 to 64 byte inputs using the large-block CityHash path.
+     */
     private static <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = access.i64(in, off) * K2;
@@ -246,7 +255,7 @@ class CityAndFarmHash_1_1 {
 
         @Override
         public long hashChar(char input) {
-            int unsignedInput = (int) input;
+            int unsignedInput = input;
             int firstByte = (unsignedInput >> FIRST_SHORT_BYTE_SHIFT) & FIRST_SHORT_BYTE_MASK;
             int secondByte = (unsignedInput >> SECOND_SHORT_BYTE_SHIFT) & SECOND_SHORT_BYTE_MASK;
             long hash = hash1To3Bytes(2, firstByte, secondByte, secondByte);

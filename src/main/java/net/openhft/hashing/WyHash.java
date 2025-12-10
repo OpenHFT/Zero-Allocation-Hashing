@@ -21,10 +21,16 @@ class WyHash {
     public static final long _wyp3 = 0x589965cc75374cc3L;
     public static final long _wyp4 = 0x1d8e4e27c47d124fL;
 
+    /**
+     * Core wyhash mix step that multiplies two words and folds the 128-bit product.
+     */
     private static long wyMum(final long lhs, final long rhs) {
         return Maths.unsignedLongMulXorFold(lhs, rhs);
     }
 
+    /**
+     * Packs up to three trailing bytes into a word for short-input hashing.
+     */
     private static <T> long wyR3(final Access<T> access, T in, final long index, long k) {
         return ((long) access.u8(in, index) << 16) |
                ((long) access.u8(in, index + (k >>> 1)) << 8) |

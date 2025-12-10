@@ -9,10 +9,19 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 
+/**
+ * Internal maths helpers for hashing implementations. Chooses a JDK-specific implementation at
+ * class-load time to take advantage of {@code Math.multiplyHigh} when available while keeping a
+ * zero-allocation fallback for older runtimes.
+ */
 class Maths {
     @NotNull
     private static final Maths INSTANCE = createInstance();
 
+    /**
+     * Selects the best available implementation. On JDK 9+ this wraps the intrinsified
+     * {@code Math.multiplyHigh(int,int)}; otherwise it falls back to the pure Java implementation.
+     */
     private static Maths createInstance() {
         try {
             Method multiplyHigh = Math.class.getDeclaredMethod("multiplyHigh", int.class, int.class);

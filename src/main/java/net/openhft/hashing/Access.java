@@ -213,7 +213,7 @@ public abstract class Access<T> {
      * order}, widened to {@code int}
      */
     public int getShort(T input, long offset) {
-        return (int) (short) getUnsignedShort(input, offset);
+        return (short) getUnsignedShort(input, offset);
     }
 
     /**
@@ -240,30 +240,52 @@ public abstract class Access<T> {
     public abstract int getByte(T input, long offset);
 
     // short names
+
+    /**
+     * Reads eight bytes at {@code offset} using {@link #getLong(Object, long)}; kept to mirror reference hashing code.
+     */
     public long i64(final T input, final long offset) {
         return getLong(input, offset);
     }
 
+    /**
+     * Reads four bytes as an unsigned 32-bit value using {@link #getUnsignedInt(Object, long)}.
+     */
     public long u32(final T input, final long offset) {
         return getUnsignedInt(input, offset);
     }
 
+    /**
+     * Reads four bytes as a signed 32-bit value using {@link #getInt(Object, long)}.
+     */
     public int i32(final T input, final long offset) {
         return getInt(input, offset);
     }
 
+    /**
+     * Reads two bytes as an unsigned 16-bit value using {@link #getUnsignedShort(Object, long)}.
+     */
     public int u16(final T input, final long offset) {
         return getUnsignedShort(input, offset);
     }
 
+    /**
+     * Reads two bytes as a signed 16-bit value using {@link #getShort(Object, long)}.
+     */
     public int i16(final T input, final long offset) {
         return getShort(input, offset);
     }
 
+    /**
+     * Reads a single byte as an unsigned value using {@link #getUnsignedByte(Object, long)}.
+     */
     public int u8(final T input, final long offset) {
         return getUnsignedByte(input, offset);
     }
 
+    /**
+     * Reads a single byte as a signed value using {@link #getByte(Object, long)}.
+     */
     public int i8(final T input, final long offset) {
         return getByte(input, offset);
     }

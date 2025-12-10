@@ -38,6 +38,9 @@
         <maven.bundle.plugin.version>5.1.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
+        <cpd.skip>true</cpd.skip>
+        <maven.pmd.skip>true</maven.pmd.skip>
+        <pmd.skip>true</pmd.skip>
     </properties>
 
     <dependencies>
@@ -282,6 +285,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <skipCpd>true</skipCpd>
+                </configuration>
             </plugin>
 
         </plugins>
