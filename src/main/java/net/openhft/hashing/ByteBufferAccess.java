@@ -6,7 +6,13 @@ package net.openhft.hashing;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * {@link Access} implementation for {@link ByteBuffer}-backed data.
+ */
 public final class ByteBufferAccess extends Access<ByteBuffer> {
+    /**
+     * Shared instance for default byte order.
+     */
     public static final ByteBufferAccess INSTANCE = new ByteBufferAccess();
     private static final Access<ByteBuffer> INSTANCE_REVERSE = Access.newDefaultReverseAccess(INSTANCE);
 

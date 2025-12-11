@@ -74,6 +74,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * little-endian.
      *
      * @see #murmur_3(long)
+     * @return 128-bit MurmurHash3 function with default seed
      */
     @NotNull
     public static LongTupleHashFunction murmur_3() {
@@ -88,6 +89,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * than on little-endian.
      *
      * @see #murmur_3()
+     * @param seed seed to initialise the hash
+     * @return 128-bit MurmurHash3 function with the supplied seed
      */
     @NotNull
     public static LongTupleHashFunction murmur_3(final long seed) {
@@ -102,6 +105,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * little-endian.
      *
      * @see #xx128(long)
+     * @return XXH3 128-bit function with default seed
      */
     @NotNull
     public static LongTupleHashFunction xx128() {
@@ -115,6 +119,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * {@link ByteOrder}, but is slower on big-endian platforms than on little-endian.
      *
      * @see #xx128()
+     * @param seed seed to initialise the hash
+     * @return XXH3 128-bit function with the supplied seed
      */
     @NotNull
     public static LongTupleHashFunction xx128(final long seed) {
@@ -131,6 +137,8 @@ public abstract class LongTupleHashFunction implements Serializable {
 
     /**
      * Returns the actual number of bits in a result array; a positive multiple of 8.
+     *
+     * @return number of bits produced by this hash function
      */
     public abstract int bitsLength();
 
@@ -139,6 +147,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * <p>
      * If {@code bitsLength()} returns non-multiple of 64, the implementation of this method should
      * round-up the length to a multiple of 64 for allocating the {@code long} array.
+     *
+     * @return freshly allocated result array sized for {@link #bitsLength()}
      */
     @NotNull
     public long[] newResultArray() {
@@ -158,6 +168,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * elements of the array will not be touched when
      * {@code result.length > newResultArray().length]}.
      *
+     * @param input 64-bit value to hash
+     * @param result destination array created via {@link #newResultArray()}
      * @throws NullPointerException if {@code result == null}
      * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      */
@@ -167,6 +179,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashLong(long, long[])
+     * @param input value to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashLong(final long input) {
@@ -188,6 +202,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * elements of the array will not be touched when
      * {@code result.length > newResultArray().length]}.
      *
+     * @param input 32-bit value to hash
+     * @param result destination array created via {@link #newResultArray()}
      * @throws NullPointerException if {@code result == null}
      * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      */
@@ -197,6 +213,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashInt(int, long[])
+     * @param input value to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashInt(final int input) {
@@ -227,6 +245,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashShort(short, long[])
+     * @param input value to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashShort(final short input) {
@@ -257,6 +277,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashChar(char, long[])
+     * @param input value to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashChar(final char input) {
@@ -286,6 +308,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashByte(byte, long[])
+     * @param input value to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashByte(final byte input) {
@@ -313,6 +337,7 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashVoid(long[])
+     * @return hash tuple for an empty input
      */
     @NotNull
     public long[] hashVoid() {
@@ -368,6 +393,9 @@ public abstract class LongTupleHashFunction implements Serializable {
      * Note that this is not necessarily equal to
      * {@code hashByte(input ? (byte) 1 : (byte) 0, result)}, because booleans could be stored
      * differently in this JVM.
+     *
+     * @param input  boolean to hash
+     * @param result destination array sized via {@link #newResultArray()}
      */
     public void hashBoolean(final boolean input, final long[] result) {
         hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE, result);
@@ -377,6 +405,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashBoolean(boolean, long[])
+     * @param input boolean to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashBoolean(final boolean input) {
@@ -387,6 +417,9 @@ public abstract class LongTupleHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashBooleans(boolean[], int, int, long[]) hashBooleans(input, 0, input.length, result)}.
+     *
+     * @param input boolean array to hash
+     * @param result destination array sized via {@link #newResultArray()}
      */
     public void hashBooleans(final boolean[] input, final long[] result) {
         unsafeHash(this, input, BOOLEAN_BASE, input.length, result);
@@ -396,6 +429,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashBooleans(boolean[], long[])
+     * @param input boolean array to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashBooleans(final boolean[] input) {
@@ -436,6 +471,10 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly.
      *
      * @see #hashBooleans(boolean[], int, int, long[])
+     * @param input boolean array to hash
+     * @param off   starting index
+     * @param len   number of elements to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashBooleans(final boolean[] input, final int off, final int len) {
@@ -447,6 +486,9 @@ public abstract class LongTupleHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashBytes(byte[], int, int, long[]) hashBytes(input, 0, input.length, result)}.
+     *
+     * @param input  byte array to hash
+     * @param result destination array sized via {@link #newResultArray()}
      */
     public void hashBytes(final byte[] input, final long[] result) {
         unsafeHash(this, input, BYTE_BASE, input.length, result);
@@ -456,6 +498,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * The result array is allocated on the fly, and no exceptions will be thrown.
      *
      * @see #hashBytes(byte[], long[])
+     * @param input byte array to hash
+     * @return hash tuple
      */
     @NotNull
     public long[] hashBytes(final byte[] input) {

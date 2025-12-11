@@ -243,6 +243,10 @@ public abstract class Access<T> {
 
     /**
      * Reads eight bytes at {@code offset} using {@link #getLong(Object, long)}; kept to mirror reference hashing code.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return 64-bit value read at the offset
      */
     public long i64(final T input, final long offset) {
         return getLong(input, offset);
@@ -250,6 +254,10 @@ public abstract class Access<T> {
 
     /**
      * Reads four bytes as an unsigned 32-bit value using {@link #getUnsignedInt(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return unsigned 32-bit value widened to long
      */
     public long u32(final T input, final long offset) {
         return getUnsignedInt(input, offset);
@@ -257,6 +265,10 @@ public abstract class Access<T> {
 
     /**
      * Reads four bytes as a signed 32-bit value using {@link #getInt(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return signed 32-bit value
      */
     public int i32(final T input, final long offset) {
         return getInt(input, offset);
@@ -264,6 +276,10 @@ public abstract class Access<T> {
 
     /**
      * Reads two bytes as an unsigned 16-bit value using {@link #getUnsignedShort(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return unsigned 16-bit value widened to int
      */
     public int u16(final T input, final long offset) {
         return getUnsignedShort(input, offset);
@@ -271,6 +287,10 @@ public abstract class Access<T> {
 
     /**
      * Reads two bytes as a signed 16-bit value using {@link #getShort(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return signed 16-bit value
      */
     public int i16(final T input, final long offset) {
         return getShort(input, offset);
@@ -278,6 +298,10 @@ public abstract class Access<T> {
 
     /**
      * Reads a single byte as an unsigned value using {@link #getUnsignedByte(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return unsigned byte value widened to int
      */
     public int u8(final T input, final long offset) {
         return getUnsignedByte(input, offset);
@@ -285,6 +309,10 @@ public abstract class Access<T> {
 
     /**
      * Reads a single byte as a signed value using {@link #getByte(Object, long)}.
+     *
+     * @param input  object to read from
+     * @param offset byte offset into the input
+     * @return signed byte value
      */
     public int i8(final T input, final long offset) {
         return getByte(input, offset);
@@ -315,6 +343,11 @@ public abstract class Access<T> {
     /**
      * Get the {@code Access} object with a different byte order. This method should
      * always return a fixed reference.
+     */
+    /**
+     * Access view that reads with the opposite byte order.
+     *
+     * @return access using reversed endianness
      */
     protected abstract Access<T> reverseAccess();
 

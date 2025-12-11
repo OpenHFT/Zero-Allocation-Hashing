@@ -15,5 +15,10 @@ package sun.nio.ch;
  * - In test and production runtime, the real class is loaded from boot classpath.
  */
 public interface DirectBuffer {
-    public long address();
+    /**
+     * Returns the starting memory address of the underlying direct buffer.
+     *
+     * @return native address of the buffer contents
+     */
+    long address();
 }

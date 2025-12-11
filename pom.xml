@@ -215,15 +215,17 @@
 
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <!-- Suppress doclint to allow stubs and compact access helpers to build -->
+                    <doclint>none</doclint>
+                    <excludePackageNames>java.*,sun.*</excludePackageNames>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <excludePackageNames>java.*,sun.*</excludePackageNames>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

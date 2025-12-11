@@ -8,14 +8,26 @@ import java.nio.ByteOrder;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
+/**
+ * {@link Access} implementation for UTF-16 {@link CharSequence} sources, handling both endian modes.
+ */
 public abstract class CharSequenceAccess extends Access<CharSequence> {
 
+    /**
+     * Returns the access implementation for the requested byte order.
+     *
+     * @param order desired byte order
+     * @return access that reads chars using the specified order
+     */
     static CharSequenceAccess charSequenceAccess(ByteOrder order) {
         return order == LITTLE_ENDIAN ?
                 LittleEndianCharSequenceAccess.INSTANCE :
                 BigEndianCharSequenceAccess.INSTANCE;
     }
 
+    /**
+     * @return access using the platform native byte order
+     */
     static CharSequenceAccess nativeCharSequenceAccess() {
         return charSequenceAccess(ByteOrder.nativeOrder());
     }
@@ -24,6 +36,19 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         return (int) (offset >> 1);
     }
 
+    /**
+     * Reads a 64-bit little- or big-endian value from a UTF-16 char sequence starting at {@code offset/2}.
+     *
+     * @param input    source sequence
+     * @param offset   byte-aligned offset (each char = 2 bytes)
+     * @param char0Off index offset for the first char
+     * @param char1Off index offset for the second char
+     * @param char2Off index offset for the third char
+     * @param char3Off index offset for the fourth char
+     * @param char4Off index offset for the fifth char (used when unaligned)
+     * @param delta    adjustment applied when starting on an odd byte
+     * @return 64-bit value read in the requested endianness
+     */
     protected static long getLong(CharSequence input, long offset,
                                   int char0Off, int char1Off, int char2Off, int char3Off,
                                   int char4Off, int delta) {
@@ -44,6 +69,17 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         }
     }
 
+    /**
+     * Reads a 32-bit unsigned value from a UTF-16 char sequence starting at {@code offset/2}.
+     *
+     * @param input    source sequence
+     * @param offset   byte-aligned offset (each char = 2 bytes)
+     * @param char0Off index offset for the first char
+     * @param char1Off index offset for the second char
+     * @param char2Off index offset for the third char (when unaligned)
+     * @param delta    adjustment applied when starting on an odd byte
+     * @return 32-bit unsigned value
+     */
     protected static long getUnsignedInt(CharSequence input, long offset,
                                          int char0Off, int char1Off, int char2Off, int delta) {
         final int base = ix(offset);
@@ -59,6 +95,15 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         }
     }
 
+    /**
+     * Reads a 16-bit unsigned value from a UTF-16 char sequence starting at {@code offset/2}.
+     *
+     * @param input    source sequence
+     * @param offset   byte-aligned offset (each char = 2 bytes)
+     * @param char1Off index offset for the second char when unaligned
+     * @param delta    adjustment applied when starting on an odd byte
+     * @return 16-bit unsigned value
+     */
     protected static char getUnsignedShort(CharSequence input,
                                            long offset, int char1Off, int delta) {
         if (0 == ((int)offset & 1)) {
@@ -71,6 +116,14 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
         }
     }
 
+    /**
+     * Reads an unsigned byte from a UTF-16 char sequence starting at {@code offset/2}.
+     *
+     * @param input  source sequence
+     * @param offset byte-aligned offset (each char = 2 bytes)
+     * @param shift  shift (0 or 8) used to select the correct byte
+     * @return unsigned byte value
+     */
     protected static int getUnsignedByte(CharSequence input, long offset, int shift) {
         return Primitives.unsignedByte(input.charAt(ix(offset)) >> shift);
     }
@@ -84,12 +137,12 @@ public abstract class CharSequenceAccess extends Access<CharSequence> {
 
     @Override
     public int getShort(CharSequence input, long offset) {
-        return (int)(short)getUnsignedShort(input, offset);
+        return (short)getUnsignedShort(input, offset);
     }
 
     @Override
     public int getByte(CharSequence input, long offset) {
-        return (int) (byte) getUnsignedByte(input, offset);
+        return (byte) getUnsignedByte(input, offset);
     }
 
     private static class LittleEndianCharSequenceAccess extends CharSequenceAccess {
