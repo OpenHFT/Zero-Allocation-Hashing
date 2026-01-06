@@ -3,17 +3,18 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DualHashFunctionTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void hashLongRejectsTooSmallResultArray() {
         LongTupleHashFunction tuple = XXH3.asLongTupleHashFunctionWithoutSeed();
-        tuple.hashLong(17L, new long[0]);
+        assertThrows(IllegalArgumentException.class, () -> tuple.hashLong(17L, new long[0]), "hashLong rejects too small result array");
     }
 
     @Test
@@ -25,8 +26,8 @@ public class DualHashFunctionTest {
         long[] reuse = new long[viaAllocation.length];
         tuple.hashLong(value, reuse);
 
-        assertArrayEquals(viaAllocation, reuse);
+        assertArrayEquals(viaAllocation, reuse, "tuple hashLong reuse matches allocation form");
         long asLong = ((DualHashFunction) tuple).asLongHashFunction().hashLong(value);
-        assertEquals(viaAllocation[0], asLong);
+        assertEquals(viaAllocation[0], asLong, "asLongHashFunction matches tuple low word");
     }
 }

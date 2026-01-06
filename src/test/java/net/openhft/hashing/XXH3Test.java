@@ -3,48 +3,45 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
 public class XXH3Test {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
+    static IntStream lengths() {
         final int maxLen = Math.min(XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED.length,
                                     XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for (int len = 0; len < maxLen; len++) {
-            data.add(new Object[]{len});
-        }
-        return data;
+        return IntStream.range(0, maxLen);
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testXXH3WithoutSeeds() {
-        test(LongHashFunction.xx3(), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testXXH3WithoutSeeds(int len) {
+        LongHashFunction xxh3 = LongHashFunction.xx3();
+        long actual = test(xxh3, XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED, len);
+        assertEquals(XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED[len], actual, "XXH3 without seed len=" + len);
     }
 
-    @Test
-    public void testXXH3WithOneSeed() {
-        test(LongHashFunction.xx3(42L), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testXXH3WithOneSeed(int len) {
+        LongHashFunction xxh3 = LongHashFunction.xx3(42L);
+        long actual = test(xxh3, XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42, len);
+        assertEquals(XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42[len], actual, "XXH3 seed=42 len=" + len);
     }
 
-    private void test(LongHashFunction h, long[] hashesOfLoopingBytes) {
+    private long test(LongHashFunction h, long[] hashesOfLoopingBytes, int len) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
-        LongHashFunctionTest.test(h, data, hashesOfLoopingBytes[len]);
+        long expected = hashesOfLoopingBytes[len];
+        LongHashFunctionChecks.test(h, data, expected);
+        return h.hashBytes(data);
     }
 }
 /**

@@ -3,12 +3,12 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XxHashCollisionTest {
 
@@ -24,12 +24,12 @@ public class XxHashCollisionTest {
         sequence.putLong(0, 1 + 0xBA79078168D4BAFL);
         sequence.putLong(32, 2 + 0x9C90005B80000000L);
         long h2 = LongHashFunction.xx().hashBytes(sequence);
-        assertEquals(h1, h2);
+        assertEquals(h1, h2, "xxHash collision case 1");
 
         sequence.putLong(0, 1 + 0xBA79078168D4BAFL * 2);
         sequence.putLong(32, 2 + 0x9C90005B80000000L * 2);
 
         long h3 = LongHashFunction.xx().hashBytes(sequence);
-        assertEquals(h2, h3);
+        assertEquals(h2, h3, "xxHash collision case 2");
     }
 }

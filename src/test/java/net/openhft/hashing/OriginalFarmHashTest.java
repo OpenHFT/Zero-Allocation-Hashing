@@ -3,13 +3,13 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import static net.openhft.hashing.CityAndFarmHash_1_1.K0;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Based on https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc
@@ -72,24 +72,25 @@ public class OriginalFarmHashTest {
         for ( ; i < kDataSize; i += i / 7) {
             expectedIndex = testNa(0, i, expectedIndex);
         }
-        testNa(0, kDataSize, expectedIndex);
+        expectedIndex = testNa(0, kDataSize, expectedIndex);
+        assertEquals(NA_EXPECTED.length, expectedIndex, "farmNa expected values consumed");
     }
 
     private static int testNa(int offset, int len, int expectedIndex) {
         LongHashFunction f = LongHashFunction.farmNa(SEED0(offset), SEED1(offset));
         long h = f.hashBytes(data, offset, len);
-        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32);
-        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32);
+        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32, "farmNa seeds=SEED0/SEED1 hi32");
+        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32, "farmNa seeds=SEED0/SEED1 lo32");
 
         f = LongHashFunction.farmNa(SEED(offset));
         h = f.hashBytes(data, offset, len);
-        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32);
-        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32);
+        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32, "farmNa seed=SEED hi32");
+        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32, "farmNa seed=SEED lo32");
 
         f = LongHashFunction.farmNa();
         h = f.hashBytes(data, offset, len);
-        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32);
-        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32);
+        assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32, "farmNa no seed hi32");
+        assertEquals(NA_EXPECTED[expectedIndex++], (h << 32) >>> 32, "farmNa no seed lo32");
 
         return expectedIndex;
     }
@@ -103,19 +104,20 @@ public class OriginalFarmHashTest {
         for ( ; i < kDataSize; i += i / 7) {
             expectedIndex = testUo(0, i, expectedIndex);
         }
-        testUo(0, kDataSize, expectedIndex);
+        expectedIndex = testUo(0, kDataSize, expectedIndex);
+        assertEquals(UO_EXPECTED.length, expectedIndex, "farmUo expected values consumed");
     }
 
     private static int testUo(int offset, int len, int expectedIndex) {
         LongHashFunction f = LongHashFunction.farmUo(SEED(offset));
         long h = f.hashBytes(data, offset, len);
-        assertEquals(UO_EXPECTED[expectedIndex++], h >>> 32);
-        assertEquals(UO_EXPECTED[expectedIndex++], (h << 32) >>> 32);
+        assertEquals(UO_EXPECTED[expectedIndex++], h >>> 32, "farmUo seed=SEED hi32");
+        assertEquals(UO_EXPECTED[expectedIndex++], (h << 32) >>> 32, "farmUo seed=SEED lo32");
 
         f = LongHashFunction.farmUo();
         h = f.hashBytes(data, offset, len);
-        assertEquals(UO_EXPECTED[expectedIndex++], h >>> 32);
-        assertEquals(UO_EXPECTED[expectedIndex++], (h << 32) >>> 32);
+        assertEquals(UO_EXPECTED[expectedIndex++], h >>> 32, "farmUo no seed hi32");
+        assertEquals(UO_EXPECTED[expectedIndex++], (h << 32) >>> 32, "farmUo no seed lo32");
 
         return expectedIndex;
     }
@@ -124,12 +126,8 @@ public class OriginalFarmHashTest {
     public void testUoGo() {
         for (Object[] g : GOLDEN_64) {
             long hash = (Long) g[0];
-            try {
-                byte[] s = ((String)g[1]).getBytes("US-ASCII");
-                Assert.assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
+            byte[] s = ((String)g[1]).getBytes(StandardCharsets.US_ASCII);
+            assertEquals(hash, LongHashFunction.farmUo().hashBytes(s), "farmUo golden '" + g[1] + "'");
         }
     }
 

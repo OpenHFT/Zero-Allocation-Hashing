@@ -3,49 +3,44 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
 public class XXH128Test {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
+    static IntStream lengths() {
         final int maxLen = Math.min(XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED.length,
                                     XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for (int len = 0; len < maxLen; len++) {
-            data.add(new Object[]{len});
-        }
-        return data;
+        return IntStream.range(0, maxLen);
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testXXH3WithoutSeeds() {
-        test(LongTupleHashFunction.xx128(), LongHashFunction.xx128low(), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testXXH3WithoutSeeds(int len) {
+        long actual = test(LongTupleHashFunction.xx128(), LongHashFunction.xx128low(), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED, len);
+        assertEquals(XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED[len][0], actual, "XXH128 low64 without seed len=" + len);
     }
 
-    @Test
-    public void testXXH128WithOneSeed() {
-        test(LongTupleHashFunction.xx128(42L), LongHashFunction.xx128low(42L), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testXXH128WithOneSeed(int len) {
+        long actual = test(LongTupleHashFunction.xx128(42L), LongHashFunction.xx128low(42L), XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42, len);
+        assertEquals(XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42[len][0], actual, "XXH128 low64 seed=42 len=" + len);
     }
 
-    private void test(LongTupleHashFunction h, LongHashFunction hl, long[][] hashesOfLoopingBytes) {
+    private long test(LongTupleHashFunction h, LongHashFunction hl, long[][] hashesOfLoopingBytes, int len) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
-        LongTupleHashFunctionTest.test(h, data, hashesOfLoopingBytes[len]);
-        LongHashFunctionTest.test(hl, data, hashesOfLoopingBytes[len][0]);
+        long[] expected = hashesOfLoopingBytes[len];
+        LongTupleHashFunctionChecks.test(h, data, expected);
+        LongHashFunctionChecks.test(hl, data, expected[0]);
+        return hl.hashBytes(data);
     }
 }
 /**

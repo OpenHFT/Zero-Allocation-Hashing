@@ -3,44 +3,43 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.IntStream;
 
-@RunWith(Parameterized.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class MetroHashTest {
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for (int len = 0; len < 1025; len++) {
-            data.add(new Object[]{len});
-        }
-        return data;
+    static IntStream lengths() {
+        return IntStream.range(0, 1025);
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testMetroWithoutSeeds() {
-        test(LongHashFunction.metro(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testMetroWithoutSeeds(int len) {
+        LongHashFunction metro = LongHashFunction.metro();
+        long actual = test(metro, HASHES_OF_LOOPING_BYTES_WITHOUT_SEED, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITHOUT_SEED[len], actual, "MetroHash64 without seed len=" + len);
     }
 
-    @Test
-    public void testMetroWithSeeds() {
-        test(LongHashFunction.metro(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testMetroWithSeeds(int len) {
+        LongHashFunction metro = LongHashFunction.metro(42L);
+        long actual = test(metro, HASHES_OF_LOOPING_BYTES_WITH_SEED_42, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITH_SEED_42[len], actual, "MetroHash64 seed=42 len=" + len);
     }
 
-    private void test(LongHashFunction metro, long[] hashesOfLoopingBytes) {
+    private long test(LongHashFunction metro, long[] hashesOfLoopingBytes, int len) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
-        LongHashFunctionTest.test(metro, data, hashesOfLoopingBytes[len]);
+        long expected = hashesOfLoopingBytes[len];
+        LongHashFunctionChecks.test(metro, data, expected);
+        return metro.hashBytes(data);
     }
 
 /**
@@ -1097,7 +1096,7 @@ public class MetroHashTest {
             9003958434955366904L
     };
 
-    private static long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
             6500896835765953563L,
             -5864898193651956393L,
             -8878504184760441104L,

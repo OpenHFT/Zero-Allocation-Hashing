@@ -3,43 +3,42 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.IntStream;
 
-@RunWith(Parameterized.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class WyHashTest {
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for (int len = 0; len < 1025; len++) {
-            data.add(new Object[]{len});
-        }
-        return data;
+    static IntStream lengths() {
+        return IntStream.range(0, 1025);
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testWyHashWithoutSeeds() {
-        test(LongHashFunction.wy_3(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testWyHashWithoutSeeds(int len) {
+        LongHashFunction wyHash = LongHashFunction.wy_3();
+        long actual = test(wyHash, HASHES_OF_LOOPING_BYTES_WITHOUT_SEED, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITHOUT_SEED[len], actual, "WyHash64 without seed len=" + len);
     }
 
-    @Test
-    public void testWyHasWithOneSeed() {
-        test(LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testWyHasWithOneSeed(int len) {
+        LongHashFunction wyHash = LongHashFunction.wy_3(42L);
+        long actual = test(wyHash, HASHES_OF_LOOPING_BYTES_WITH_SEED_42, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITH_SEED_42[len], actual, "WyHash64 seed=42 len=" + len);
     }
 
-    private void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
+    private long test(LongHashFunction wyHash, long[] hashesOfLoopingBytes, int len) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
-        LongHashFunctionTest .test(wyHash, data, hashesOfLoopingBytes[len]);
+        long expected = hashesOfLoopingBytes[len];
+        LongHashFunctionChecks.test(wyHash, data, expected);
+        return wyHash.hashBytes(data);
     }
 
     /**

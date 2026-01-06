@@ -3,47 +3,43 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.IntStream;
 
-import static org.junit.runners.Parameterized.Parameter;
-import static org.junit.runners.Parameterized.Parameters;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(Parameterized.class)
 public class City64_1_1_Test {
 
-    @Parameters
-    public static Collection<Object[]> data() {
-        ArrayList<Object[]> data = new ArrayList<Object[]>();
-        for (int len = 0; len < 1025; len++) {
-        	data.add(new Object[] {len});
-        }
-        return data;
+    static IntStream lengths() {
+        return IntStream.range(0, 1025);
     }
 
-    @Parameter
-    public int len;
-
-    @Test
-    public void testCityWithoutSeeds() {
-        test(LongHashFunction.city_1_1(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testCityWithoutSeeds(int len) {
+        LongHashFunction city = LongHashFunction.city_1_1();
+        long actual = test(city, HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS[len], actual, "CityHash64 without seeds len=" + len);
     }
 
-    @Test
-    public void testCityWithOneSeed() {
-        test(LongHashFunction.city_1_1(0L, 0L), HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0);
+    @ParameterizedTest(name = "len={0}")
+    @MethodSource("lengths")
+    public void testCityWithOneSeed(int len) {
+        LongHashFunction city = LongHashFunction.city_1_1(0L, 0L);
+        long actual = test(city, HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0, len);
+        assertEquals(HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0[len], actual, "CityHash64 seeds=0,0 len=" + len);
     }
 
-    private void test(LongHashFunction city, long[] hashesOfLoopingBytes) {
+    private long test(LongHashFunction city, long[] hashesOfLoopingBytes, int len) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
         }
-        LongHashFunctionTest.test(city, data, hashesOfLoopingBytes[len]);
+        long expected = hashesOfLoopingBytes[len];
+        LongHashFunctionChecks.test(city, data, expected);
+        return city.hashBytes(data);
     }
 
 // The following numbers is the result of compiling & running this program

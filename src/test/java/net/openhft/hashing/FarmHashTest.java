@@ -3,7 +3,9 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This tests coherence of supporting functions like hashInt(), hashLong(), hashChars etc.
@@ -19,13 +21,25 @@ public class FarmHashTest {
                 data[i] = (byte) i;
             }
             LongHashFunction f = LongHashFunction.farmUo();
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            long expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmUo hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
 
             f = LongHashFunction.farmUo(42);
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmUo seed=42 hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
 
             f = LongHashFunction.farmUo(42, 123);
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmUo seeds=42,123 hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
         }
     }
 
@@ -37,13 +51,25 @@ public class FarmHashTest {
                 data[i] = (byte) i;
             }
             LongHashFunction f = LongHashFunction.farmNa();
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            long expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmNa hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
 
             f = LongHashFunction.farmNa(42);
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmNa seed=42 hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
 
             f = LongHashFunction.farmNa(42, 123);
-            LongHashFunctionTest.test(f, data, f.hashBytes(data));
+            expected = f.hashBytes(data);
+            if (len == 0) {
+                assertEquals(expected, f.hashVoid(), "farmNa seeds=42,123 hashVoid matches hashBytes(empty)");
+            }
+            LongHashFunctionChecks.test(f, data, expected);
         }
     }
 }

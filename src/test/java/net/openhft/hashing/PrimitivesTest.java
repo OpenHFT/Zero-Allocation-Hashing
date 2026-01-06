@@ -3,13 +3,13 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class PrimitivesTest {
 
@@ -27,29 +27,29 @@ public class PrimitivesTest {
     public void testLE() {
         assumeTrue(nativeOrder() == LITTLE_ENDIAN);
 
-        assertEquals(l, Primitives.nativeToLittleEndian(l));
-        assertEquals(i, Primitives.nativeToLittleEndian(i));
-        assertEquals(s, Primitives.nativeToLittleEndian(s));
-        assertEquals(c, Primitives.nativeToLittleEndian(c));
+        assertEquals(l, Primitives.nativeToLittleEndian(l), "LE nativeToLittleEndian(long)");
+        assertEquals(i, Primitives.nativeToLittleEndian(i), "LE nativeToLittleEndian(int)");
+        assertEquals(s, Primitives.nativeToLittleEndian(s), "LE nativeToLittleEndian(short)");
+        assertEquals(c, Primitives.nativeToLittleEndian(c), "LE nativeToLittleEndian(char)");
 
-        assertEquals(rl, Primitives.nativeToBigEndian(l));
-        assertEquals(ri, Primitives.nativeToBigEndian(i));
-        assertEquals(rs, Primitives.nativeToBigEndian(s));
-        assertEquals(rc, Primitives.nativeToBigEndian(c));
+        assertEquals(rl, Primitives.nativeToBigEndian(l), "LE nativeToBigEndian(long)");
+        assertEquals(ri, Primitives.nativeToBigEndian(i), "LE nativeToBigEndian(int)");
+        assertEquals(rs, Primitives.nativeToBigEndian(s), "LE nativeToBigEndian(short)");
+        assertEquals(rc, Primitives.nativeToBigEndian(c), "LE nativeToBigEndian(char)");
     }
 
     @Test
     public void testBE() {
         assumeTrue(nativeOrder() == BIG_ENDIAN);
 
-        assertEquals(rl, Primitives.nativeToLittleEndian(l));
-        assertEquals(ri, Primitives.nativeToLittleEndian(i));
-        assertEquals(rs, Primitives.nativeToLittleEndian(s));
-        assertEquals(rc, Primitives.nativeToLittleEndian(c));
+        assertEquals(rl, Primitives.nativeToLittleEndian(l), "BE nativeToLittleEndian(long)");
+        assertEquals(ri, Primitives.nativeToLittleEndian(i), "BE nativeToLittleEndian(int)");
+        assertEquals(rs, Primitives.nativeToLittleEndian(s), "BE nativeToLittleEndian(short)");
+        assertEquals(rc, Primitives.nativeToLittleEndian(c), "BE nativeToLittleEndian(char)");
 
-        assertEquals(l, Primitives.nativeToBigEndian(l));
-        assertEquals(i, Primitives.nativeToBigEndian(i));
-        assertEquals(s, Primitives.nativeToBigEndian(s));
-        assertEquals(c, Primitives.nativeToBigEndian(c));
+        assertEquals(l, Primitives.nativeToBigEndian(l), "BE nativeToBigEndian(long)");
+        assertEquals(i, Primitives.nativeToBigEndian(i), "BE nativeToBigEndian(int)");
+        assertEquals(s, Primitives.nativeToBigEndian(s), "BE nativeToBigEndian(short)");
+        assertEquals(c, Primitives.nativeToBigEndian(c), "BE nativeToBigEndian(char)");
     }
 }
