@@ -353,7 +353,7 @@
                     <plugin>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
-                            <failOnWarning>false</failOnWarning>
+                            <failOnWarning>${quality.enforced}</failOnWarning>
                         </configuration>
                     </plugin>
                     <plugin>
