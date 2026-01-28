@@ -218,6 +218,7 @@
     
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M4</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
@@ -324,7 +325,7 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>-XX:-CompactStrings</argLine>
+                                    <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
