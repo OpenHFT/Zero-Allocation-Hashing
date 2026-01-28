@@ -325,7 +325,7 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>-XX:-CompactStrings</argLine>
+                                    <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
