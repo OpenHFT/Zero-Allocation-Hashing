@@ -3,17 +3,14 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@RunWith(Parameterized.class)
 public class MetroHashTest {
 
-    @Parameterized.Parameters
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < 1025; len++) {
@@ -22,20 +19,19 @@ public class MetroHashTest {
         return data;
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testMetroWithoutSeeds() {
-        test(LongHashFunction.metro(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testMetroWithoutSeeds(int len) {
+        test(len, LongHashFunction.metro(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
-    @Test
-    public void testMetroWithSeeds() {
-        test(LongHashFunction.metro(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testMetroWithSeeds(int len) {
+        test(len, LongHashFunction.metro(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    private void test(LongHashFunction metro, long[] hashesOfLoopingBytes) {
+    private void test(int len, LongHashFunction metro, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;

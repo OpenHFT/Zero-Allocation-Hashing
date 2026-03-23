@@ -11,9 +11,7 @@ import java.util.Arrays;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LongHashFunctionTest {
 
@@ -37,7 +35,7 @@ class LongHashFunctionTest {
 
     private static void testVoid(LongHashFunction f, long eh, int len) {
         if (len == 0)
-            assertEquals("void", eh, f.hashVoid());
+            assertEquals(eh, f.hashVoid(), "void");
     }
 
     private static void testBoolean(LongHashFunction f, int len) {
@@ -56,23 +54,23 @@ class LongHashFunctionTest {
         long actual;
         if (len == 1) {
             actual = f.hashByte(bb.get(0));
-            assertEquals("byte hash", eh, actual);
+            assertEquals(eh, actual, "byte hash");
         }
 
         if (len == 2) {
             actual = f.hashShort(bb.getShort(0));
-            assertEquals("short hash", eh, actual);
+            assertEquals(eh, actual, "short hash");
             actual = f.hashChar(bb.getChar(0));
-            assertEquals("char hash", eh, actual);
+            assertEquals(eh, actual, "char hash");
         }
 
         if (len == 4) {
             actual = f.hashInt(bb.getInt(0));
-            assertEquals("int hash", eh, actual);
+            assertEquals(eh, actual, "int hash");
         }
         if (len == 8) {
             actual = f.hashLong(bb.getLong(0));
-            assertEquals("long hash", eh, actual);
+            assertEquals(eh, actual, "long hash");
         }
     }
 
@@ -83,61 +81,61 @@ class LongHashFunctionTest {
         long twoByteExpected = f.hashBytes(bytes, 0, 2);
         long fourByteExpected = f.hashBytes(bytes, 0, 4);
         long eightByteExpected = f.hashBytes(bytes);
-        assertEquals("byte hash neg", oneByteExpected, f.hashByte((byte) -1));
-        assertEquals("short hash neg", twoByteExpected, f.hashShort((short) -1));
-        assertEquals("char hash neg", twoByteExpected, f.hashChar((char) -1));
-        assertEquals("int hash neg", fourByteExpected, f.hashInt(-1));
-        assertEquals("long hash neg", eightByteExpected, f.hashLong(-1L));
+        assertEquals(oneByteExpected, f.hashByte((byte) -1), "byte hash neg");
+        assertEquals(twoByteExpected, f.hashShort((short) -1), "short hash neg");
+        assertEquals(twoByteExpected, f.hashChar((char) -1), "char hash neg");
+        assertEquals(fourByteExpected, f.hashInt(-1), "int hash neg");
+        assertEquals(eightByteExpected, f.hashLong(-1L), "long hash neg");
     }
 
     private static void testArrays(LongHashFunction f, byte[] data, long eh, int len,
                                    ByteBuffer bb) {
-        assertEquals("byte array", eh, f.hashBytes(data));
+        assertEquals(eh, f.hashBytes(data), "byte array");
 
         byte[] data2 = new byte[len + 2];
         System.arraycopy(data, 0, data2, 1, len);
-        assertEquals("byte array off len", eh, f.hashBytes(data2, 1, len));
+        assertEquals(eh, f.hashBytes(data2, 1, len), "byte array off len");
 
         if ((len & 1) == 0) {
             int shortLen = len / 2;
 
             short[] shorts = new short[shortLen];
             bb.asShortBuffer().get(shorts);
-            assertEquals("short array", eh, f.hashShorts(shorts));
+            assertEquals(eh, f.hashShorts(shorts), "short array");
 
             short[] shorts2 = new short[shortLen + 2];
             System.arraycopy(shorts, 0, shorts2, 1, shortLen);
-            assertEquals("short array off len", eh, f.hashShorts(shorts2, 1, shortLen));
+            assertEquals(eh, f.hashShorts(shorts2, 1, shortLen), "short array off len");
 
             char[] chars = new char[shortLen];
             bb.asCharBuffer().get(chars);
-            assertEquals("char array", eh, f.hashChars(chars));
+            assertEquals(eh, f.hashChars(chars), "char array");
 
             char[] chars2 = new char[shortLen + 2];
             System.arraycopy(chars, 0, chars2, 1, shortLen);
-            assertEquals("char array off len", eh, f.hashChars(chars2, 1, shortLen));
+            assertEquals(eh, f.hashChars(chars2, 1, shortLen), "char array off len");
         }
 
         if ((len & 3) == 0) {
             int intLen = len / 4;
             int[] ints = new int[intLen];
             bb.asIntBuffer().get(ints);
-            assertEquals("int array", eh, f.hashInts(ints));
+            assertEquals(eh, f.hashInts(ints), "int array");
 
             int[] ints2 = new int[intLen + 2];
             System.arraycopy(ints, 0, ints2, 1, intLen);
-            assertEquals("int array off len", eh, f.hashInts(ints2, 1, intLen));
+            assertEquals(eh, f.hashInts(ints2, 1, intLen), "int array off len");
         }
 
         if ((len & 7) == 0) {
             int longLen = len / 8;
             long[] longs = new long[longLen];
             bb.asLongBuffer().get(longs);
-            assertEquals("long array", eh, f.hashLongs(longs));
+            assertEquals(eh, f.hashLongs(longs), "long array");
 
             long[] longs2 = new long[longLen + 2];
             System.arraycopy(longs, 0, longs2, 1, longLen);
-            assertEquals("long array off len", eh, f.hashLongs(longs2, 1, longLen));
+            assertEquals(eh, f.hashLongs(longs2, 1, longLen), "long array off len");
         }
     }
 
@@ -146,17 +144,17 @@ class LongHashFunctionTest {
         // object need to be invoked from a parent Buffer object explicitly.
 
         bb.order(LITTLE_ENDIAN);
-        assertEquals("byte buffer little endian", eh, f.hashBytes(bb));
+        assertEquals(eh, f.hashBytes(bb), "byte buffer little endian");
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
         ((Buffer)bb2).position(1);
         bb2.put(bb);
-        assertEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
+        assertEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer little endian off len");
 
         ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
-        assertEquals("byte buffer big endian", eh, f.hashBytes(bb));
+        assertEquals(eh, f.hashBytes(bb), "byte buffer big endian");
         bb2.order(BIG_ENDIAN);
-        assertEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
+        assertEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer big endian off len");
 
         ((Buffer)bb.order(nativeOrder())).clear();
     }
@@ -164,18 +162,18 @@ class LongHashFunctionTest {
     private static void testCharSequences(LongHashFunction f, long eh, int len, ByteBuffer bb) {
         if ((len & 1) == 0) {
             String s = bb.asCharBuffer().toString();
-            assertEquals("string", eh, f.hashChars(s));
+            assertEquals(eh, f.hashChars(s), "string");
 
             StringBuilder sb = new StringBuilder();
             sb.append(s);
-            assertEquals("string builder", eh, f.hashChars(sb));
+            assertEquals(eh, f.hashChars(sb), "string builder");
 
             sb.insert(0, 'a');
             sb.append('b');
-            assertEquals("string builder off len", eh, f.hashChars(sb, 1, len / 2));
+            assertEquals(eh, f.hashChars(sb, 1, len / 2), "string builder off len");
 
             // Test for OpenJDK < 7u6, where substring wasn't copied char[] array
-            assertEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
+            assertEquals(eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)), "substring");
 
             if (len >= 2) {
                 bb.order(nonNativeOrder());
@@ -183,10 +181,10 @@ class LongHashFunctionTest {
                 assert s.charAt(0) != bb.getChar(0);
 
                 long hashCharsActual = f.hashChars(s2);
-                assertNotEquals("string wrong order", eh, hashCharsActual);
+                assertNotEquals(eh, hashCharsActual, "string wrong order");
 
                 long toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
-                assertEquals("string wrong order fixed", eh, toCharSequenceActual);
+                assertEquals(eh, toCharSequenceActual, "string wrong order fixed");
 
                 ((Buffer)bb.order(nativeOrder())).clear();
             }
@@ -196,7 +194,7 @@ class LongHashFunctionTest {
     private static void testMemory(LongHashFunction f, long eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        assertEquals(eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len), "memory");
         ((Buffer)bb).clear();
     }
 

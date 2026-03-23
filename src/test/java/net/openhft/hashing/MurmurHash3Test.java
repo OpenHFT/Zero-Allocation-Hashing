@@ -5,10 +5,9 @@ package net.openhft.hashing;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 

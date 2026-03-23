@@ -3,7 +3,7 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * This tests coherence of supporting functions like hashInt(), hashLong(), hashChars etc.

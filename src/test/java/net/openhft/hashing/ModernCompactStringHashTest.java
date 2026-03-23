@@ -3,10 +3,9 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Assume;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assumptions.*;
 
 public class ModernCompactStringHashTest {
 
@@ -44,7 +43,7 @@ public class ModernCompactStringHashTest {
 
     @Test
     public void longHashReturnsVoidWhenLenIsZero() {
-        Assume.assumeTrue(isCompactLatin1("Cafe"));
+        assumeTrue(isCompactLatin1("Cafe"));
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
         long actual = ModernCompactStringHash.INSTANCE.longHash("abc", hash, 0, 0);
@@ -56,12 +55,12 @@ public class ModernCompactStringHashTest {
 
     @Test
     public void longHashUsesCompactAccessForLatin1() {
-        Assume.assumeTrue(isCompactLatin1("Cafe"));
+        assumeTrue(isCompactLatin1("Cafe"));
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
         long actual = ModernCompactStringHash.INSTANCE.longHash("Cafe", hash, 1, 2);
 
-        Assume.assumeTrue("Compact string path not active", hash.lastAccess == CompactLatin1CharSequenceAccess.INSTANCE);
+        assumeTrue(hash.lastAccess == CompactLatin1CharSequenceAccess.INSTANCE, "Compact string path not active");
         assertEquals(RecordingLongHashFunction.HASH_RESULT, actual);
         assertEquals(2L, hash.lastOffset);
         assertEquals(4L, hash.lastLength);
@@ -69,7 +68,7 @@ public class ModernCompactStringHashTest {
 
     @Test
     public void longHashFallsBackToUnsafeForNonLatin1() {
-        Assume.assumeTrue(isCompactStringsVm());
+        assumeTrue(isCompactStringsVm());
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
         ModernCompactStringHash.INSTANCE.longHash("ab\u0100c", hash, 0, 4);
@@ -79,21 +78,22 @@ public class ModernCompactStringHashTest {
         assertEquals(8L, hash.lastLength);
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void longHashValidatesOffsets() {
-        Assume.assumeTrue(isCompactStringsVm());
-        ModernCompactStringHash.INSTANCE.longHash("abc", new RecordingLongHashFunction(), 3, 1);
+        assumeTrue(isCompactStringsVm());
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> ModernCompactStringHash.INSTANCE.longHash("abc", new RecordingLongHashFunction(), 3, 1));
     }
 
     @Test
     public void tupleHashUsesCompactAccessForLatin1() {
-        Assume.assumeTrue(isCompactStringsVm());
+        assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];
 
         ModernCompactStringHash.INSTANCE.hash("Cafe", hash, 1, 2, out);
 
-        Assume.assumeTrue("Compact string path not active", hash.lastAccess == CompactLatin1CharSequenceAccess.INSTANCE);
+        assumeTrue(hash.lastAccess == CompactLatin1CharSequenceAccess.INSTANCE, "Compact string path not active");
         assertEquals(2L, hash.lastOffset);
         assertEquals(4L, hash.lastLength);
         assertEquals(RecordingLongTupleHashFunction.RESULT_VALUE, out[0]);
@@ -101,7 +101,7 @@ public class ModernCompactStringHashTest {
 
     @Test
     public void tupleHashReturnsVoidWhenLenIsZero() {
-        Assume.assumeTrue(isCompactStringsVm());
+        assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];
 
@@ -113,7 +113,7 @@ public class ModernCompactStringHashTest {
 
     @Test
     public void tupleHashFallsBackToUnsafeForNonLatin1() {
-        Assume.assumeTrue(isCompactStringsVm());
+        assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];
 

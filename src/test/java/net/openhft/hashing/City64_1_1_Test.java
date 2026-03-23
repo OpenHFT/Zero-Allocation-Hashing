@@ -3,20 +3,14 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.runners.Parameterized.Parameter;
-import static org.junit.runners.Parameterized.Parameters;
-
-@RunWith(Parameterized.class)
 public class City64_1_1_Test {
 
-    @Parameters
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < 1025; len++) {
@@ -25,20 +19,19 @@ public class City64_1_1_Test {
         return data;
     }
 
-    @Parameter
-    public int len;
-
-    @Test
-    public void testCityWithoutSeeds() {
-        test(LongHashFunction.city_1_1(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCityWithoutSeeds(int len) {
+        test(len, LongHashFunction.city_1_1(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS);
     }
 
-    @Test
-    public void testCityWithOneSeed() {
-        test(LongHashFunction.city_1_1(0L, 0L), HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCityWithOneSeed(int len) {
+        test(len, LongHashFunction.city_1_1(0L, 0L), HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0);
     }
 
-    private void test(LongHashFunction city, long[] hashesOfLoopingBytes) {
+    private void test(int len, LongHashFunction city, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;

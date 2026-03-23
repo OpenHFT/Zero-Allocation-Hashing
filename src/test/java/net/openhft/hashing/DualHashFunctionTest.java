@@ -3,17 +3,17 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DualHashFunctionTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void hashLongRejectsTooSmallResultArray() {
-        LongTupleHashFunction tuple = XXH3.asLongTupleHashFunctionWithoutSeed();
-        tuple.hashLong(17L, new long[0]);
+        assertThrows(IllegalArgumentException.class, () -> {
+            LongTupleHashFunction tuple = XXH3.asLongTupleHashFunctionWithoutSeed();
+            tuple.hashLong(17L, new long[0]);
+        });
     }
 
     @Test

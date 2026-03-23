@@ -3,14 +3,12 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assume.assumeTrue;
 import static java.nio.ByteOrder.*;
 import static net.openhft.hashing.Primitives.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 public class CharSequenceAccessTest {
     static String TEST_STRING = new String(new char[] {0xF0E1,0xD2C3,0xB4A5,0x9687,0xC8E9});

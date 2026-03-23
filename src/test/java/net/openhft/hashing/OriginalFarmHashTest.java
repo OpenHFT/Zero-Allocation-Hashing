@@ -3,13 +3,12 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
 
 import static net.openhft.hashing.CityAndFarmHash_1_1.K0;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Based on https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc
@@ -126,7 +125,7 @@ public class OriginalFarmHashTest {
             long hash = (Long) g[0];
             try {
                 byte[] s = ((String)g[1]).getBytes("US-ASCII");
-                Assert.assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
+                assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

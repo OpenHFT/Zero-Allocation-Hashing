@@ -3,19 +3,16 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(Parameterized.class)
 public class XXH3Test {
 
-    @Parameterized.Parameters
     public static Collection<Object[]> data() {
         final int maxLen = Math.min(XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED.length,
                                     XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
@@ -26,20 +23,19 @@ public class XXH3Test {
         return data;
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testXXH3WithoutSeeds() {
-        test(LongHashFunction.xx3(), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testXXH3WithoutSeeds(int len) {
+        test(len, LongHashFunction.xx3(), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
-    @Test
-    public void testXXH3WithOneSeed() {
-        test(LongHashFunction.xx3(42L), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testXXH3WithOneSeed(int len) {
+        test(len, LongHashFunction.xx3(42L), XXH3Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    private void test(LongHashFunction h, long[] hashesOfLoopingBytes) {
+    private void test(int len, LongHashFunction h, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;

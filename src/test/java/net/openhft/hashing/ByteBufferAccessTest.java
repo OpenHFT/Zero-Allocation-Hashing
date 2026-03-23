@@ -3,14 +3,14 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ByteBufferAccessTest {
 
@@ -24,7 +24,7 @@ public class ByteBufferAccessTest {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(LITTLE_ENDIAN);
         ByteBufferAccess access = ByteBufferAccess.INSTANCE;
 
-        assertEquals(ByteOrder.LITTLE_ENDIAN, access.byteOrder(buffer));
+        assertSame(ByteOrder.LITTLE_ENDIAN, access.byteOrder(buffer));
         assertEquals(0xF0DEBC9A78563412L, access.getLong(buffer, 0));
         assertEquals(0xF0DEBC9AL, access.getUnsignedInt(buffer, 4));
         assertEquals(0x78563412, access.getInt(buffer, 0));
@@ -39,7 +39,7 @@ public class ByteBufferAccessTest {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(BIG_ENDIAN);
         ByteBufferAccess access = ByteBufferAccess.INSTANCE;
 
-        assertEquals(ByteOrder.BIG_ENDIAN, access.byteOrder(buffer));
+        assertSame(ByteOrder.BIG_ENDIAN, access.byteOrder(buffer));
         assertEquals(0x123456789ABCDEF0L, access.getLong(buffer, 0));
         assertEquals(0x12345678L, access.getUnsignedInt(buffer, 0));
         assertEquals((int) 0x9ABCDEF0L, access.getInt(buffer, 4));
@@ -54,7 +54,7 @@ public class ByteBufferAccessTest {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(LITTLE_ENDIAN);
         Access<ByteBuffer> reverse = ByteBufferAccess.INSTANCE.reverseAccess();
 
-        assertEquals(ByteOrder.BIG_ENDIAN, reverse.byteOrder(buffer));
+        assertSame(ByteOrder.BIG_ENDIAN, reverse.byteOrder(buffer));
         assertEquals(0x123456789ABCDEF0L, reverse.getLong(buffer, 0));
         assertEquals(0x12345678L, reverse.getUnsignedInt(buffer, 0));
         assertEquals((int) 0x9ABCDEF0L, reverse.getInt(buffer, 4));

@@ -3,37 +3,30 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
-@RunWith(Parameterized.class)
 public class UnsafeAccessTest {
 
-    @Parameters
     public static Object[] data() {
         return new Object[] { UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE };
     }
 
-    @Parameter
-    public Access<Object> unsafe;
-
-    @Test
-    public void testInstance() {
-        assertNotSame("compiled by jdk with Unsafe.getByte() method", UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testInstance(Access<Object> unsafe) {
+        assertNotSame(UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE, "compiled by jdk with Unsafe.getByte() method");
     }
 
-    @Test
-    public void testUnsafeAccess() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testUnsafeAccess(Access<Object> unsafe) {
         {
             final long[] l = new long[]{0xFEDCBA9876543210L, 0x123456789ABCDEFL};
             assertEquals(l[0], unsafe.getLong(l, UnsafeAccess.LONG_BASE));
@@ -65,8 +58,9 @@ public class UnsafeAccessTest {
         }
     }
 
-    @Test
-    public void testUnsafeAccessUnalignLE() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testUnsafeAccessUnalignLE(Access<Object> unsafe) {
         assumeTrue(nativeOrder() == LITTLE_ENDIAN);
 
         {
@@ -93,8 +87,9 @@ public class UnsafeAccessTest {
         }
     }
 
-    @Test
-    public void testUnsafeAccessUnalignBE() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testUnsafeAccessUnalignBE(Access<Object> unsafe) {
         assumeTrue(nativeOrder() == BIG_ENDIAN);
 
         {

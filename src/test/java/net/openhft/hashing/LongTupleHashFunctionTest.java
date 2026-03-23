@@ -14,11 +14,7 @@ import static java.nio.ByteOrder.nativeOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LongTupleHashFunctionTest {
 
@@ -47,9 +43,9 @@ class LongTupleHashFunctionTest {
     }
 
     private static void testBits(LongTupleHashFunction f) {
-        assertTrue("bits should be more than 64", f.bitsLength() > 64);
-        assertEquals("tuple length", (f.bitsLength() + 63) / 64, f.newResultArray().length);
-        assertTrue("mutiple of 8", f.bitsLength() % 8 == 0);
+        assertTrue(f.bitsLength() > 64, "bits should be more than 64");
+        assertEquals((f.bitsLength() + 63) / 64, f.newResultArray().length, "tuple length");
+        assertTrue(f.bitsLength() % 8 == 0, "mutiple of 8");
     }
 
     private static void testException(LongTupleHashFunction f) {
@@ -61,7 +57,7 @@ class LongTupleHashFunctionTest {
         } catch (Throwable e) {
             fail("unexpected exception: " + e.toString());
         }
-        assertTrue("should throw NullPointerException", ok);
+        assertTrue(ok, "should throw NullPointerException");
 
         ok = false;
         try {
@@ -71,14 +67,14 @@ class LongTupleHashFunctionTest {
         } catch (Throwable e) {
             fail("unexpected exception: " + e.toString());
         }
-        assertTrue("should throw IllegalArgumentException", ok);
+        assertTrue(ok, "should throw IllegalArgumentException");
 
         // no exception with larger array
         long[] r1 = f.hashBytes(new byte[1]);
         long[] r2 = new long[r1.length + 1];
         f.hashBytes(new byte[1], r2);
         for (int i = 0; i < r1.length; ++i) {
-            assertEquals("compare element[" + i + "] for larger result array", r1[i], r2[i]);
+            assertEquals(r1[i], r2[i], "compare element[" + i + "] for larger result array");
         }
     }
 
@@ -86,9 +82,9 @@ class LongTupleHashFunctionTest {
         if (len == 0) {
             long[] r1 = f.hashVoid();
             long[] r2 = f.hashVoid();
-            assertNotSame("return different instance", r1, r2);
-            assertArrayEquals("void once", eh, r1);
-            assertArrayEquals("void twice", eh, r2);
+            assertNotSame(r1, r2, "return different instance");
+            assertArrayEquals(eh, r1, "void once");
+            assertArrayEquals(eh, r2, "void twice");
         }
     }
 
@@ -99,8 +95,8 @@ class LongTupleHashFunctionTest {
             boolean[] a = {b};
             long[] single = f.hashBoolean(b);
             long[] array = f.hashBooleans(a);
-            assertArrayEquals("testBoolean array", single, array);
-            assertArrayEquals("testBoolean unsafe", single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
+            assertArrayEquals(single, array, "testBoolean array");
+            assertArrayEquals(single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L), "testBoolean unsafe");
         }
     }
 
@@ -108,23 +104,23 @@ class LongTupleHashFunctionTest {
         long[] actual;
         if (len == 1) {
             actual = f.hashByte(bb.get(0));
-            assertArrayEquals("byte hash", eh, actual);
+            assertArrayEquals(eh, actual, "byte hash");
         }
 
         if (len == 2) {
             actual = f.hashShort(bb.getShort(0));
-            assertArrayEquals("short hash", eh, actual);
+            assertArrayEquals(eh, actual, "short hash");
             actual = f.hashChar(bb.getChar(0));
-            assertArrayEquals("char hash", eh, actual);
+            assertArrayEquals(eh, actual, "char hash");
         }
 
         if (len == 4) {
             actual = f.hashInt(bb.getInt(0));
-            assertArrayEquals("int hash", eh, actual);
+            assertArrayEquals(eh, actual, "int hash");
         }
         if (len == 8) {
             actual = f.hashLong(bb.getLong(0));
-            assertArrayEquals("long hash", eh, actual);
+            assertArrayEquals(eh, actual, "long hash");
         }
     }
 
@@ -135,61 +131,61 @@ class LongTupleHashFunctionTest {
         long[] twoByteExpected = f.hashBytes(bytes, 0, 2);
         long[] fourByteExpected = f.hashBytes(bytes, 0, 4);
         long[] eightByteExpected = f.hashBytes(bytes);
-        assertArrayEquals("byte hash neg", oneByteExpected, f.hashByte((byte) -1));
-        assertArrayEquals("short hash neg", twoByteExpected, f.hashShort((short) -1));
-        assertArrayEquals("char hash neg", twoByteExpected, f.hashChar((char) -1));
-        assertArrayEquals("int hash neg", fourByteExpected, f.hashInt(-1));
-        assertArrayEquals("long hash neg", eightByteExpected, f.hashLong(-1L));
+        assertArrayEquals(oneByteExpected, f.hashByte((byte) -1), "byte hash neg");
+        assertArrayEquals(twoByteExpected, f.hashShort((short) -1), "short hash neg");
+        assertArrayEquals(twoByteExpected, f.hashChar((char) -1), "char hash neg");
+        assertArrayEquals(fourByteExpected, f.hashInt(-1), "int hash neg");
+        assertArrayEquals(eightByteExpected, f.hashLong(-1L), "long hash neg");
     }
 
     private static void testArrays(LongTupleHashFunction f, byte[] data, long[] eh, int len,
                                    ByteBuffer bb) {
-        assertArrayEquals("byte array", eh, f.hashBytes(data));
+        assertArrayEquals(eh, f.hashBytes(data), "byte array");
 
         byte[] data2 = new byte[len + 2];
         System.arraycopy(data, 0, data2, 1, len);
-        assertArrayEquals("byte array off len", eh, f.hashBytes(data2, 1, len));
+        assertArrayEquals(eh, f.hashBytes(data2, 1, len), "byte array off len");
 
         if ((len & 1) == 0) {
             int shortLen = len / 2;
 
             short[] shorts = new short[shortLen];
             bb.asShortBuffer().get(shorts);
-            assertArrayEquals("short array", eh, f.hashShorts(shorts));
+            assertArrayEquals(eh, f.hashShorts(shorts), "short array");
 
             short[] shorts2 = new short[shortLen + 2];
             System.arraycopy(shorts, 0, shorts2, 1, shortLen);
-            assertArrayEquals("short array off len", eh, f.hashShorts(shorts2, 1, shortLen));
+            assertArrayEquals(eh, f.hashShorts(shorts2, 1, shortLen), "short array off len");
 
             char[] chars = new char[shortLen];
             bb.asCharBuffer().get(chars);
-            assertArrayEquals("char array", eh, f.hashChars(chars));
+            assertArrayEquals(eh, f.hashChars(chars), "char array");
 
             char[] chars2 = new char[shortLen + 2];
             System.arraycopy(chars, 0, chars2, 1, shortLen);
-            assertArrayEquals("char array off len", eh, f.hashChars(chars2, 1, shortLen));
+            assertArrayEquals(eh, f.hashChars(chars2, 1, shortLen), "char array off len");
         }
 
         if ((len & 3) == 0) {
             int intLen = len / 4;
             int[] ints = new int[intLen];
             bb.asIntBuffer().get(ints);
-            assertArrayEquals("int array", eh, f.hashInts(ints));
+            assertArrayEquals(eh, f.hashInts(ints), "int array");
 
             int[] ints2 = new int[intLen + 2];
             System.arraycopy(ints, 0, ints2, 1, intLen);
-            assertArrayEquals("int array off len", eh, f.hashInts(ints2, 1, intLen));
+            assertArrayEquals(eh, f.hashInts(ints2, 1, intLen), "int array off len");
         }
 
         if ((len & 7) == 0) {
             int longLen = len / 8;
             long[] longs = new long[longLen];
             bb.asLongBuffer().get(longs);
-            assertArrayEquals("long array", eh, f.hashLongs(longs));
+            assertArrayEquals(eh, f.hashLongs(longs), "long array");
 
             long[] longs2 = new long[longLen + 2];
             System.arraycopy(longs, 0, longs2, 1, longLen);
-            assertArrayEquals("long array off len", eh, f.hashLongs(longs2, 1, longLen));
+            assertArrayEquals(eh, f.hashLongs(longs2, 1, longLen), "long array off len");
         }
     }
 
@@ -198,17 +194,17 @@ class LongTupleHashFunctionTest {
         // object need to be invoked from a parent Buffer object explicitly.
 
         bb.order(LITTLE_ENDIAN);
-        assertArrayEquals("byte buffer little endian", eh, f.hashBytes(bb));
+        assertArrayEquals(eh, f.hashBytes(bb), "byte buffer little endian");
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
         ((Buffer)bb2).position(1);
         bb2.put(bb);
-        assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
+        assertArrayEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer little endian off len");
 
         ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
-        assertArrayEquals("byte buffer big endian", eh, f.hashBytes(bb));
+        assertArrayEquals(eh, f.hashBytes(bb), "byte buffer big endian");
         bb2.order(BIG_ENDIAN);
-        assertArrayEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
+        assertArrayEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer big endian off len");
 
         ((Buffer)bb.order(nativeOrder())).clear();
     }
@@ -216,18 +212,18 @@ class LongTupleHashFunctionTest {
     private static void testCharSequences(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
         if ((len & 1) == 0) {
             String s = bb.asCharBuffer().toString();
-            assertArrayEquals("string", eh, f.hashChars(s));
+            assertArrayEquals(eh, f.hashChars(s), "string");
 
             StringBuilder sb = new StringBuilder();
             sb.append(s);
-            assertArrayEquals("string builder", eh, f.hashChars(sb));
+            assertArrayEquals(eh, f.hashChars(sb), "string builder");
 
             sb.insert(0, 'a');
             sb.append('b');
-            assertArrayEquals("string builder off len", eh, f.hashChars(sb, 1, len / 2));
+            assertArrayEquals(eh, f.hashChars(sb, 1, len / 2), "string builder off len");
 
             // Test for OpenJDK < 7u6, where substring wasn't copied char[] array
-            assertArrayEquals("substring", eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)));
+            assertArrayEquals(eh, f.hashChars(sb.toString().substring(1, len / 2 + 1)), "substring");
 
             if (len >= 2) {
                 bb.order(nonNativeOrder());
@@ -238,7 +234,7 @@ class LongTupleHashFunctionTest {
                 assertThat("string wrong order", hashCharsActual, not(equalTo(eh)));
 
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
-                assertArrayEquals("string wrong order fixed", eh, toCharSequenceActual);
+                assertArrayEquals(eh, toCharSequenceActual, "string wrong order fixed");
 
                 ((Buffer)bb.order(nativeOrder())).clear();
             }
@@ -248,7 +244,7 @@ class LongTupleHashFunctionTest {
     private static void testMemory(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        assertArrayEquals(eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len), "memory");
         ((Buffer)bb).clear();
     }
 

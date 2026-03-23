@@ -3,16 +3,13 @@
  */
 package net.openhft.hashing;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@RunWith(Parameterized.class)
 public class WyHashTest {
-    @Parameterized.Parameters
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < 1025; len++) {
@@ -21,20 +18,19 @@ public class WyHashTest {
         return data;
     }
 
-    @Parameterized.Parameter
-    public int len;
-
-    @Test
-    public void testWyHashWithoutSeeds() {
-        test(LongHashFunction.wy_3(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testWyHashWithoutSeeds(int len) {
+        test(len, LongHashFunction.wy_3(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
-    @Test
-    public void testWyHasWithOneSeed() {
-        test(LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testWyHasWithOneSeed(int len) {
+        test(len, LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    private void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
+    private void test(int len, LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;
