@@ -11,9 +11,6 @@ import java.util.Arrays;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static java.nio.ByteOrder.nativeOrder;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LongTupleHashFunctionTest {
@@ -231,7 +228,7 @@ class LongTupleHashFunctionTest {
                 assert s.charAt(0) != bb.getChar(0);
 
                 long[] hashCharsActual = f.hashChars(s2);
-                assertThat("string wrong order", hashCharsActual, not(equalTo(eh)));
+                assertFalse(Arrays.equals(eh, hashCharsActual), "string wrong order");
 
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertArrayEquals(eh, toCharSequenceActual, "string wrong order fixed");
