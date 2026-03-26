@@ -4,10 +4,12 @@
 package net.openhft.hashing;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assumptions.*;
 
-public class ModernCompactStringHashTest {
+class ModernCompactStringHashTest {
 
     private static boolean isCompactStringsVm() {
         return System.getProperty("java.version").compareTo("1.9") >= 0;
@@ -42,7 +44,7 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void longHashReturnsVoidWhenLenIsZero() {
+    void longHashReturnsVoidWhenLenIsZero() {
         assumeTrue(isCompactLatin1("Cafe"));
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
@@ -54,7 +56,7 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void longHashUsesCompactAccessForLatin1() {
+    void longHashUsesCompactAccessForLatin1() {
         assumeTrue(isCompactLatin1("Cafe"));
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
@@ -67,7 +69,7 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void longHashFallsBackToUnsafeForNonLatin1() {
+    void longHashFallsBackToUnsafeForNonLatin1() {
         assumeTrue(isCompactStringsVm());
         RecordingLongHashFunction hash = new RecordingLongHashFunction();
 
@@ -79,14 +81,14 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void longHashValidatesOffsets() {
+    void longHashValidatesOffsets() {
         assumeTrue(isCompactStringsVm());
         assertThrows(IndexOutOfBoundsException.class,
                 () -> ModernCompactStringHash.INSTANCE.longHash("abc", new RecordingLongHashFunction(), 3, 1));
     }
 
     @Test
-    public void tupleHashUsesCompactAccessForLatin1() {
+    void tupleHashUsesCompactAccessForLatin1() {
         assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];
@@ -100,7 +102,7 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void tupleHashReturnsVoidWhenLenIsZero() {
+    void tupleHashReturnsVoidWhenLenIsZero() {
         assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];
@@ -112,7 +114,7 @@ public class ModernCompactStringHashTest {
     }
 
     @Test
-    public void tupleHashFallsBackToUnsafeForNonLatin1() {
+    void tupleHashFallsBackToUnsafeForNonLatin1() {
         assumeTrue(isCompactStringsVm());
         RecordingLongTupleHashFunction hash = new RecordingLongTupleHashFunction();
         long[] out = new long[hash.newResultArray().length];

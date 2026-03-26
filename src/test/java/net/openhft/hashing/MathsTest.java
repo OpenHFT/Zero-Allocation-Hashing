@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MathsTest {
+class MathsTest {
     @Test
-    public void testUnsignedLongMulXorFold() {
+    void testUnsignedLongMulXorFold() {
         {
             long x = 0x100000001L;
             long y = 0x200000002L;

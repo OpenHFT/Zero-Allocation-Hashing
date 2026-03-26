@@ -11,15 +11,15 @@ import java.util.Arrays;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class MurmurHash3Test {
+class MurmurHash3Test {
 
     @Test
-    public void testMurmurWithoutSeed() {
+    void testMurmurWithoutSeed() {
         testMurmur(LongTupleHashFunction.murmur_3(), LongHashFunction.murmur_3(), Hashing.murmur3_128());
     }
 
     @Test
-    public void testMurmurWithSeed() {
+    void testMurmurWithSeed() {
         testMurmur(LongTupleHashFunction.murmur_3(42L), LongHashFunction.murmur_3(42L), Hashing.murmur3_128(42));
     }
 

@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class MetroHashTest {
+ class MetroHashTest {
 
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
@@ -21,13 +21,13 @@ public class MetroHashTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testMetroWithoutSeeds(int len) {
+    void testMetroWithoutSeeds(int len) {
         test(len, LongHashFunction.metro(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testMetroWithSeeds(int len) {
+    void testMetroWithSeeds(int len) {
         test(len, LongHashFunction.metro(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 

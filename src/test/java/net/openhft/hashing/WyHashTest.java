@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class WyHashTest {
+ class WyHashTest {
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < 1025; len++) {
@@ -20,13 +20,13 @@ public class WyHashTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testWyHashWithoutSeeds(int len) {
+    void testWyHashWithoutSeeds(int len) {
         test(len, LongHashFunction.wy_3(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEED);
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testWyHasWithOneSeed(int len) {
+    void testWyHasWithOneSeed(int len) {
         test(len, LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 

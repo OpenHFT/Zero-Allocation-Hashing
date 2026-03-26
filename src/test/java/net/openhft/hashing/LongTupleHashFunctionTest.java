@@ -91,7 +91,7 @@ class LongTupleHashFunctionTest {
     private static void testBoolean(LongTupleHashFunction f, int len) {
         if (len != 1)
             return;
-        for (boolean b : new boolean[] {true, false}) {
+        for (boolean b : new boolean[]{true, false}) {
             boolean[] a = {b};
             long[] single = f.hashBoolean(b);
             long[] array = f.hashBooleans(a);
@@ -196,17 +196,17 @@ class LongTupleHashFunctionTest {
         bb.order(LITTLE_ENDIAN);
         assertArrayEquals(eh, f.hashBytes(bb), "byte buffer little endian");
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        ((Buffer)bb2).position(1);
+        ((Buffer) bb2).position(1);
         bb2.put(bb);
         assertArrayEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer little endian off len");
 
-        ((Buffer)bb.order(BIG_ENDIAN)).clear();
+        ((Buffer) bb.order(BIG_ENDIAN)).clear();
 
         assertArrayEquals(eh, f.hashBytes(bb), "byte buffer big endian");
         bb2.order(BIG_ENDIAN);
         assertArrayEquals(eh, f.hashBytes(bb2, 1, len), "byte buffer big endian off len");
 
-        ((Buffer)bb.order(nativeOrder())).clear();
+        ((Buffer) bb.order(nativeOrder())).clear();
     }
 
     private static void testCharSequences(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
@@ -236,7 +236,7 @@ class LongTupleHashFunctionTest {
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertArrayEquals(eh, toCharSequenceActual, "string wrong order fixed");
 
-                ((Buffer)bb.order(nativeOrder())).clear();
+                ((Buffer) bb.order(nativeOrder())).clear();
             }
         }
     }
@@ -245,7 +245,7 @@ class LongTupleHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertArrayEquals(eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len), "memory");
-        ((Buffer)bb).clear();
+        ((Buffer) bb).clear();
     }
 
     private static void testLatin1String(LongTupleHashFunction f, byte[] data) {
@@ -254,11 +254,11 @@ class LongTupleHashFunctionTest {
             String inputStr = new String(data, "ISO-8859-1");
             char[] inputCharArray = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
-                inputCharArray[i] = (char)(data[i]&0xFF);
+                inputCharArray[i] = (char) (data[i] & 0xFF);
             }
             char[] inputCharArray2 = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
-                inputCharArray2[i] = (char)(data[i]&0xFF);
+                inputCharArray2[i] = (char) (data[i] & 0xFF);
             }
             assertArrayEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
         } catch (Exception e) {

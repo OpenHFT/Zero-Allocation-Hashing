@@ -12,21 +12,21 @@ import static java.nio.ByteOrder.nativeOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
-public class UnsafeAccessTest {
+class UnsafeAccessTest {
 
     public static Object[] data() {
-        return new Object[] { UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE };
+        return new Object[]{UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE};
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testInstance(Access<Object> unsafe) {
+    void testInstance(Access<Object> unsafe) {
         assertNotSame(UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE, "compiled by jdk with Unsafe.getByte() method");
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testUnsafeAccess(Access<Object> unsafe) {
+    void testUnsafeAccess(Access<Object> unsafe) {
         {
             final long[] l = new long[]{0xFEDCBA9876543210L, 0x123456789ABCDEFL};
             assertEquals(l[0], unsafe.getLong(l, UnsafeAccess.LONG_BASE));
@@ -50,7 +50,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) b[0], unsafe.getByte(b, UnsafeAccess.BYTE_BASE));
             assertEquals((int) b[1], unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(b[0]), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE));
@@ -60,7 +60,7 @@ public class UnsafeAccessTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testUnsafeAccessUnalignLE(Access<Object> unsafe) {
+    void testUnsafeAccessUnalignLE(Access<Object> unsafe) {
         assumeTrue(nativeOrder() == LITTLE_ENDIAN);
 
         {
@@ -81,7 +81,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }
@@ -89,7 +89,7 @@ public class UnsafeAccessTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testUnsafeAccessUnalignBE(Access<Object> unsafe) {
+    void testUnsafeAccessUnalignBE(Access<Object> unsafe) {
         assumeTrue(nativeOrder() == BIG_ENDIAN);
 
         {
@@ -110,7 +110,7 @@ public class UnsafeAccessTest {
         }
 
         {
-            final byte[] b = new byte[]{(byte)0xF4, 0x5D};
+            final byte[] b = new byte[]{(byte) 0xF4, 0x5D};
             assertEquals((int) 0x5D, unsafe.getByte(b, UnsafeAccess.BYTE_BASE + 1));
             assertEquals(Primitives.unsignedByte(0x5D), unsafe.getUnsignedByte(b, UnsafeAccess.BYTE_BASE + 1));
         }

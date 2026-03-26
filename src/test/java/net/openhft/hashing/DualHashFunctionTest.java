@@ -4,12 +4,13 @@
 package net.openhft.hashing;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DualHashFunctionTest {
+class DualHashFunctionTest {
 
     @Test
-    public void hashLongRejectsTooSmallResultArray() {
+    void hashLongRejectsTooSmallResultArray() {
         assertThrows(IllegalArgumentException.class, () -> {
             LongTupleHashFunction tuple = XXH3.asLongTupleHashFunctionWithoutSeed();
             tuple.hashLong(17L, new long[0]);
@@ -17,7 +18,7 @@ public class DualHashFunctionTest {
     }
 
     @Test
-    public void longHashViewMatchesTupleFirstWord() {
+    void longHashViewMatchesTupleFirstWord() {
         LongTupleHashFunction tuple = XXH3.asLongTupleHashFunctionWithoutSeed();
         long value = 123456789L;
         long[] viaAllocation = tuple.hashLong(value);

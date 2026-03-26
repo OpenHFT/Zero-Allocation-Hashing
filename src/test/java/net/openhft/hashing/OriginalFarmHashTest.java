@@ -13,10 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Based on https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc
  */
-public class OriginalFarmHashTest {
+class OriginalFarmHashTest {
     private static final int kDataSize = 1 << 20;
     private static final int kTestSize = 300;
     private static final byte[] data = new byte[kDataSize];
+
     static {
         long a = 9;
         long b = 777;
@@ -63,12 +64,12 @@ public class OriginalFarmHashTest {
     }
 
     @Test
-    public void testNa() {
+    void testNa() {
         int expectedIndex = 0, i = 0;
-        for ( ; i < kTestSize - 1; i++) {
+        for (; i < kTestSize - 1; i++) {
             expectedIndex = testNa(i * i, i, expectedIndex);
         }
-        for ( ; i < kDataSize; i += i / 7) {
+        for (; i < kDataSize; i += i / 7) {
             expectedIndex = testNa(0, i, expectedIndex);
         }
         testNa(0, kDataSize, expectedIndex);
@@ -94,12 +95,12 @@ public class OriginalFarmHashTest {
     }
 
     @Test
-    public void testUo() {
+    void testUo() {
         int expectedIndex = 0, i = 0;
-        for ( ; i < kTestSize - 1; i++) {
+        for (; i < kTestSize - 1; i++) {
             expectedIndex = testUo(i * i, i, expectedIndex);
         }
-        for ( ; i < kDataSize; i += i / 7) {
+        for (; i < kDataSize; i += i / 7) {
             expectedIndex = testUo(0, i, expectedIndex);
         }
         testUo(0, kDataSize, expectedIndex);
@@ -120,11 +121,11 @@ public class OriginalFarmHashTest {
     }
 
     @Test
-    public void testUoGo() {
+    void testUoGo() {
         for (Object[] g : GOLDEN_64) {
             long hash = (Long) g[0];
             try {
-                byte[] s = ((String)g[1]).getBytes("US-ASCII");
+                byte[] s = ((String) g[1]).getBytes("US-ASCII");
                 assertEquals(hash, LongHashFunction.farmUo().hashBytes(s));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);

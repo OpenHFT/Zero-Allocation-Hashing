@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
  * This tests coherence of supporting functions like hashInt(), hashLong(), hashChars etc.
  * Algorithm is tested in OriginalFarmHashTest
  */
-public class FarmHashTest {
+class FarmHashTest {
 
     @Test
-    public void testUo() {
+    void testUo() {
         for (int len = 0; len < 1026; len++) {
             byte[] data = new byte[len];
             for (int i = 0; i < len; i++) {
@@ -30,7 +30,7 @@ public class FarmHashTest {
     }
 
     @Test
-    public void testNa() {
+    void testNa() {
         for (int len = 0; len < 1026; len++) {
             byte[] data = new byte[len];
             for (int i = 0; i < len; i++) {

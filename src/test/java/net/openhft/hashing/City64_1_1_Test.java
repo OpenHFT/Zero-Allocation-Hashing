@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class City64_1_1_Test {
+ class City64_1_1_Test {
 
     public static Collection<Object[]> data() {
         ArrayList<Object[]> data = new ArrayList<Object[]>();
@@ -21,13 +21,13 @@ public class City64_1_1_Test {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testCityWithoutSeeds(int len) {
+    void testCityWithoutSeeds(int len) {
         test(len, LongHashFunction.city_1_1(), HASHES_OF_LOOPING_BYTES_WITHOUT_SEEDS);
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testCityWithOneSeed(int len) {
+    void testCityWithOneSeed(int len) {
         test(len, LongHashFunction.city_1_1(0L, 0L), HASHES_OF_LOOPING_BYTES_WITH_SEEDS_0_0);
     }
 

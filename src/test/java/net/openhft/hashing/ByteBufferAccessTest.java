@@ -12,7 +12,7 @@ import static java.nio.ByteOrder.BIG_ENDIAN;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ByteBufferAccessTest {
+class ByteBufferAccessTest {
 
     private static final byte[] SAMPLE = {
             (byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78,
@@ -20,7 +20,7 @@ public class ByteBufferAccessTest {
     };
 
     @Test
-    public void littleEndianAccessReadsExpectedValues() {
+    void littleEndianAccessReadsExpectedValues() {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(LITTLE_ENDIAN);
         ByteBufferAccess access = ByteBufferAccess.INSTANCE;
 
@@ -35,7 +35,7 @@ public class ByteBufferAccessTest {
     }
 
     @Test
-    public void bigEndianAccessReadsExpectedValues() {
+    void bigEndianAccessReadsExpectedValues() {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(BIG_ENDIAN);
         ByteBufferAccess access = ByteBufferAccess.INSTANCE;
 
@@ -50,7 +50,7 @@ public class ByteBufferAccessTest {
     }
 
     @Test
-    public void reverseAccessFlipsByteOrder() {
+    void reverseAccessFlipsByteOrder() {
         ByteBuffer buffer = ByteBuffer.wrap(SAMPLE).order(LITTLE_ENDIAN);
         Access<ByteBuffer> reverse = ByteBufferAccess.INSTANCE.reverseAccess();
 

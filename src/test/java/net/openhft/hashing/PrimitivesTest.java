@@ -11,7 +11,7 @@ import static java.nio.ByteOrder.nativeOrder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
-public class PrimitivesTest {
+class PrimitivesTest {
 
     private static final long l = 0x0123456789ABCDEFL;
     private static final int i = 0x01234567;
@@ -24,7 +24,7 @@ public class PrimitivesTest {
     private static final short rc = 0x6745;
 
     @Test
-    public void testLE() {
+    void testLE() {
         assumeTrue(nativeOrder() == LITTLE_ENDIAN);
 
         assertEquals(l, Primitives.nativeToLittleEndian(l));
@@ -39,7 +39,7 @@ public class PrimitivesTest {
     }
 
     @Test
-    public void testBE() {
+    void testBE() {
         assumeTrue(nativeOrder() == BIG_ENDIAN);
 
         assertEquals(rl, Primitives.nativeToLittleEndian(l));

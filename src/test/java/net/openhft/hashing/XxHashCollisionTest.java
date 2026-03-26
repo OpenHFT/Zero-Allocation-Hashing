@@ -10,10 +10,10 @@ import java.nio.ByteOrder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class XxHashCollisionTest {
+class XxHashCollisionTest {
 
     @Test
-    public void xxHashCollisionTest() {
+    void xxHashCollisionTest() {
         ByteBuffer sequence = ByteBuffer.allocate(128);
         sequence.order(ByteOrder.LITTLE_ENDIAN);
         sequence.putLong(0, 1);
