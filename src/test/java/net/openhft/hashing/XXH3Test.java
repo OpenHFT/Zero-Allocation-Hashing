@@ -9,8 +9,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class XXH3Test {
 
     public static Collection<Object[]> data() {

@@ -5,7 +5,7 @@ package net.openhft.hashing;
 
 import java.lang.reflect.Field;
 import javax.annotation.ParametersAreNonnullByDefault;
-import static net.openhft.hashing.UnsafeAccess.*;
+
 import static net.openhft.hashing.Util.*;
 
 @ParametersAreNonnullByDefault

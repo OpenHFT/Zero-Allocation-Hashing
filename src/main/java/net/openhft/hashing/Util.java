@@ -8,8 +8,6 @@ import sun.nio.ch.DirectBuffer;
 
 import org.jetbrains.annotations.NotNull;
 
-import static java.nio.ByteOrder.*;
-
 final class Util {
 
     /* Known java.vm.name list:
