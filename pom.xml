@@ -25,6 +25,7 @@
     <packaging>bundle</packaging>
 
     <properties>
+        <license.year>2013-2026</license.year>
         <!-- specify the target Java SE release, at least 7 -->
         <project.target.release>8</project.target.release>
 
