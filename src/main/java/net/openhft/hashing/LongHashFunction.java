@@ -33,7 +33,7 @@ import static net.openhft.hashing.Util.checkArrayOffs;
  *     is defined by the given {@link Access} strategy to the given object.</li>
  * </ul>
  *
- * <p>Hash function implementation could either produce equal results for equal input on platforms
+ * <p>Hash function implementation either produces equal results for equal input on platforms
  * with different {@link ByteOrder}, favoring one byte order in terms of performance, or different
  * results, but performing equally well. This choice should be explicitly documented for all
  * {@code LongHashFunction} implementations.
@@ -59,7 +59,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a {@code LongHashFunction} that implements the
      * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
-     * CityHash64 algorithm, version 1.1</a> without seed values. This implementation produce
+     * CityHash64 algorithm, version 1.1</a> without seed values. This implementation produces
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
      *
@@ -74,7 +74,7 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Returns a hash function implementing the
      * <a href="https://github.com/google/cityhash/blob/8af9b8c2b889d80c22d6bc26ba0df1afb79a30db/src/city.cc">
-     * CityHash64 algorithm, version 1.1</a> using the given seed value. This implementation produce
+     * CityHash64 algorithm, version 1.1</a> using the given seed value. This implementation produces
      * equal results for equal input on platforms with different {@link ByteOrder}, but is slower
      * on big-endian platforms than on little-endian.
      *
@@ -419,7 +419,7 @@ public abstract class LongHashFunction implements Serializable {
      * value is interpreted in {@linkplain ByteOrder#nativeOrder() native} byte order. For example,
      * the result of {@code hashShort(v)} call is identical to the result of
      * {@code hashShorts(new short[] {v})} call for any {@code short} value.
-     * As a consequence, {@code hashShort(v)} call produce always the same result as {@code
+     * As a consequence, {@code hashShort(v)} call produces always the same result as {@code
      * hashChar((char) v)}.
  *
  * @param input the short value to be hashed
@@ -433,7 +433,7 @@ public abstract class LongHashFunction implements Serializable {
      * value is interpreted in {@linkplain ByteOrder#nativeOrder() native} byte order. For example,
      * the result of {@code hashChar(v)} call is identical to the result of
      * {@code hashChars(new char[] {v})} call for any {@code char} value.
-     * As a consequence, {@code hashChar(v)} call produce always the same result as {@code
+     * As a consequence, {@code hashChar(v)} call produces always the same result as {@code
      * hashShort((short) v)}.
  *
  * @param input the char value to be hashed
