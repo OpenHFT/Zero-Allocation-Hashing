@@ -39,7 +39,7 @@ class WyHash {
      *
      * @param seed seed for the hash
      * @param input the type wrapped by the Access, ex. byte[], ByteBuffer, etc.
-     * @param access class wrapping optimized access pattern to the input
+     * @param access class wrapping optimised access pattern to the input
      * @param off offset to the input
      * @param length length to read from input
      * @param <T> byte[], ByteBuffer, etc.

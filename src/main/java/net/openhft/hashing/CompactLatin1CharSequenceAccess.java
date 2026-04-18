@@ -60,11 +60,11 @@ import static net.openhft.hashing.UnsafeAccess.BYTE_BASE;
  * Parameters:
  *
  * Parameters must satisfy: 0 <= offset < offset + typeWidth <= input.length*2.
- * When offset + typeWidth >= (input.length + 1)*2, the behavior is undefined, throwing a exception
+ * When offset + typeWidth >= (input.length + 1)*2, the behaviour is undefined, throwing a exception
  * or returning dirty results.
  * When offset + typeWidth == input.length*2 + 1,
  * 1) on BE machine, the result is correct
- * 2) on LE machine, the behavior is undefined, throwing a exception or returning dirty results.
+ * 2) on LE machine, the behaviour is undefined, throwing a exception or returning dirty results.
  *
  * compressed idx :  0
  * expanded index :  0  1
