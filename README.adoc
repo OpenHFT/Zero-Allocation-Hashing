@@ -90,7 +90,7 @@ There is no simple way to hash these using this project, for example, classes su
 
 === Javadoc
 
-See http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
+See https://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
 
 === Internal documentation
 
@@ -132,7 +132,7 @@ In Java:
 long hash = LongHashFunction.wy_3().hashChars("hello");
 ----
 
-See *http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest[JavaDocs]* for more information.
+See *https://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest[JavaDocs]* for more information.
 
 == Contributions are most welcome!
 
