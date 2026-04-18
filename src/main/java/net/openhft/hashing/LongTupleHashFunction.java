@@ -29,7 +29,7 @@ import static net.openhft.hashing.Util.*;
  *     <p>will store the hash results in array {@code result[0 .. newResultArray().length-1]}, and
  *     throws exceptions when {@code result == null} or the length of the array is less than
  *     {@code newResultArray().length}. {@link #newResultArray} method should always be used to
- *     create resuable result arrays to avoid exceptions. See {@link #hashLong(long, long[])}.
+ *     create reusable result arrays to avoid exceptions. See {@link #hashLong(long, long[])}.
  *
  *     <p><b>Warning:</b> A single allocation occurs only at the begining of some runtime scope, so
  *     it could be called <strong>Almost-Zero-Allocation-Hashing</strong>.</li>
@@ -55,7 +55,7 @@ import static net.openhft.hashing.Util.*;
  * in the result array. The bits length must be greater than 64, otherwise just use the
  * {@link LongHashFunction} interface. And the length should also be a positive multiple of 8.
  *
- * <p>Also see {@link LongHashFunction} for additional information about subclassing andd access.
+ * <p>Also see {@link LongHashFunction} for additional information about subclassing and access.
  *
  * @see LongHashFunction LongHashFunction
  */

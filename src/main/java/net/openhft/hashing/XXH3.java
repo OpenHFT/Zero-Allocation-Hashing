@@ -11,7 +11,7 @@ import static net.openhft.hashing.UnsafeAccess.*;
 
 /**
  * Adapted version of XXH3 implementation from https://github.com/Cyan4973/xxHash.
- * This implementation provides endian-independant hash values, but it's slower on big-endian platforms.
+ * This implementation provides endian-independent hash values, but it's slower on big-endian platforms.
  */
 class XXH3 {
     private static final Access<Object> unsafeLE = UnsafeAccess.INSTANCE.byteOrder(null, LITTLE_ENDIAN);

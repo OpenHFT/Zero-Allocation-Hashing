@@ -9,7 +9,7 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
  * Adapted version of WyHash implementation from https://github.com/wangyi-fudan/wyhash
  * Original @author <a href="mailto:godspeed_china@yeah.net">Wang Yi</a>
  * Adapted @author <a href="mailto:firestrand@gmail.com">Travis Silvers</a>
- * This implementation provides endian-independant hash values, but it's slower on big-endian
+ * This implementation provides endian-independent hash values, but it's slower on big-endian
  * platforms.
  * The original C based version is also much faster.
  */
