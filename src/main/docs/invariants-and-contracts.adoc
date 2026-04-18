@@ -6,7 +6,7 @@ toc::[]
 
 === Hash Interface Guarantees
 
-* Every `LongHashFunction` and `LongTupleHashFunction` implementation treats primitives as if they were written to memory using the platform’s native byte order; the API therefore guarantees that `hashLong(v)` equals `hashLongs(new long[] {v})` and similar array forms (`LongHashFunction.java`, `LongTupleHashFunction.java`).
+* Every `LongHashFunction` and `LongTupleHashFunction` implementation treats primitives as if they were written to memory using the platform's native byte order; the API therefore guarantees that `hashLong(v)` equals `hashLongs(new long[] {v})` and similar array forms (`LongHashFunction.java`, `LongTupleHashFunction.java`).
 * All bundled algorithms normalise multi-byte reads to little-endian before mixing, so the same input bytes produce identical hashes on big- and little-endian machines.
 Performance may differ, but results must not (`CityAndFarmHash_1_1.java`, `XxHash.java`, `XXH3.java`, `WyHash.java`, `MetroHash.java`, `MurmurHash_3.java`).
 * `hash(Object, Access, long off, long len)` assumes the addressed region is contiguous and valid for the requested byte count.
@@ -27,7 +27,7 @@ Alternative `Access` implementations should document whether they permit null ba
 
 === Result Buffer Handling
 
-* `LongTupleHashFunction.hash*(…, long[] result)` requires a pre-sized buffer created via `newResultArray()`.
+* `LongTupleHashFunction.hash*(..., long[] result)` requires a pre-sized buffer created via `newResultArray()`.
 The method throws `NullPointerException` for null buffers and `IllegalArgumentException` for undersized buffers; the helper checks are centralised in `DualHashFunction` (`DualHashFunction.java:12-74`).
 * The allocation-free path is only honoured when callers reuse buffers.
 The overloads that return `long[]` will always allocate exactly one new array per call by design (`LongTupleHashFunction.java:70-118`).
@@ -41,7 +41,7 @@ Several implementations expose singleton seedless instances via `readResolve`, e
 
 === String Handling
 
-* `hashChars` and `hash(CharSequence…)` delegate to `Util.VALID_STRING_HASH`, which inspects the running JVM to choose the correct memory layout strategy.
+* `hashChars` and `hash(CharSequence...)` delegate to `Util.VALID_STRING_HASH`, which inspects the running JVM to choose the correct memory layout strategy.
 Altering char sequence hashing must preserve this runtime detection, or mixed HotSpot/OpenJ9 estates will diverge (`Util.java:29-63`, `ModernCompactStringHash.java`, `ModernHotSpotStringHash.java`, `HotSpotPrior7u6StringHash.java`).
 * Latin-1 compact strings are read through `CompactLatin1CharSequenceAccess`, which reinterprets the backing `byte[]` without allocating.
 Any change to string support must maintain zero-allocation access for both UTF-16 and compact encodings (`CompactLatin1CharSequenceAccess.java`).
@@ -50,7 +50,7 @@ Any change to string support must maintain zero-allocation access for both UTF-1
 
 * Methods that accept `byte[]` plus `off` and `len` use `Util.checkArrayOffs` for bounds validation.
 Negative lengths or offsets, or slices that extend past the array end, raise `IndexOutOfBoundsException` immediately (`Util.java:70-77`, `LongHashFunction.java:480-547`).
-* ByteBuffer hashing honours the buffer’s position, limit, and order.
+* ByteBuffer hashing honours the buffer's position, limit, and order.
 The implementation temporarily adjusts `Buffer` state to satisfy IBM JDK 7 quirks, then restores the original markers (`LongHashFunction.java:392-470`, `LongHashFunctionTest.java:120-176`).
 
 === Thread Safety
