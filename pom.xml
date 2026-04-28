@@ -38,6 +38,9 @@
         <maven.bundle.plugin.version>5.1.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
+        <jmh.version>1.37</jmh.version>
+        <sonar.organization>openhft</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
@@ -71,6 +74,20 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -273,7 +290,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
