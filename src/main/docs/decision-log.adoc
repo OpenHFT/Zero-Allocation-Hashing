@@ -10,20 +10,22 @@ Chronicle Software
 [cols="1,3"]
 |===
 | Status | Accepted
-| Context | To achieve the "Zero-Allocation" goal and maximize throughput, standard Java array access checks and byte-by-byte reading overhead are prohibitive.
+| Date | 2025-11-01
+| Context | To achieve the "Zero-Allocation" goal and maximise throughput, standard Java array access checks and byte-by-byte reading overhead are prohibitive.
 | Decision | Use `sun.misc.Unsafe` (`UnsafeAccess.java`) to perform raw memory reads (getLong, getInt) directly from heap arrays and off-heap addresses.
 | Consequences |
 * **Positive:** Maximal performance; enables "type punning" (reading bytes as longs) efficiently.
-* **Negative:** Depends on internal JDK APIs. Requires specific `--add-opens` flags on modularized JDKs (Java 9+).
+* **Negative:** Depends on internal JDK APIs. Requires specific `--add-opens` flags on modularised JDKs (Java 9+).
 |===
 
-== ADR-002: Little-Endian Canonicalization
+== ADR-002: Little-Endian Canonicalisation
 
 [cols="1,3"]
 |===
 | Status | Accepted
+| Date | 2025-11-01
 | Context | Different hardware architectures store multibyte primitives in different orders (Little-Endian vs Big-Endian). Hashing algorithms (often ported from C++) usually assume a specific order (mostly LE).
-| Decision | All implementations must normalize input to Little-Endian before processing (`Primitives.nativeToLittleEndian`, `Access.byteOrder`). The `Access` abstraction handles the detection and necessary byte swapping.
+| Decision | All implementations must normalise input to Little-Endian before processing (`Primitives.nativeToLittleEndian`, `Access.byteOrder`). The `Access` abstraction handles the detection and necessary byte swapping.
 | Consequences |
 * **Positive:** Guarantees identical hash results for the same byte sequence regardless of the hardware platform (x86 vs s390x).
 * **Negative:** Incurs a performance penalty on Big-Endian platforms due to the overhead of byte-swapping during reads.
@@ -34,7 +36,8 @@ Chronicle Software
 [cols="1,3"]
 |===
 | Status | Accepted
-| Context | The library needs to hash data residing in various formats: `byte[]`, `ByteBuffer`, `CharSequence`, and raw memory addresses, without duplicating the complex hashing logic for each source.
+| Date | 2025-11-01
+| Context | The library needs to hash data residing in various formats: `byte[]`, `ByteBuffer`, `CharSequence`, and raw memory addresses, without duplicating the hashing logic for each source.
 | Decision | Implement an `Access<T>` strategy pattern. The hashing algorithms are written against the `Access` interface, which defines how to read 1 to 8 bytes from a given object `T` at a specific offset.
 | Consequences |
 * **Positive:** Eliminates code duplication; a single algorithm implementation supports all input types. Allows users to implement custom `Access` for their own POJOs.
@@ -46,6 +49,7 @@ Chronicle Software
 [cols="1,3"]
 |===
 | Status | Accepted
+| Date | 2025-11-01
 | Context | Java 9 introduced "Compact Strings" (JEP 254), changing the internal representation of Strings from `char[]` (UTF-16) to `byte[]` (Latin-1 or UTF-16). Standard `CharSequence` methods involve copying or decoding overhead.
 | Decision | Use reflection and `Unsafe` to inspect the internal `value` field of `java.lang.String`. Detect if the JVM uses compact strings and, if the string is Latin-1, use `CompactLatin1CharSequenceAccess` to treat the backing byte array directly.
 | Consequences |
@@ -58,6 +62,7 @@ Chronicle Software
 [cols="1,3"]
 |===
 | Status | Accepted
+| Date | 2025-11-01
 | Context | Hash functions are often used in concurrent environments (e.g., web servers, high-frequency trading).
 | Decision | `LongHashFunction` instances are fully stateless and immutable. Seeds are baked in at construction time.
 | Consequences |
@@ -70,6 +75,7 @@ Chronicle Software
 [cols="1,3"]
 |===
 | Status | Accepted
+| Date | 2025-11-01
 | Context | Java primitives are limited to 64 bits (`long`). Algorithms like MurmurHash3 and XXH128 produce 128-bit output.
 | Decision | Introduce `LongTupleHashFunction` which accepts a `long[]` buffer to write the results into. Provide `DualHashFunction` to allow viewing the 128-bit function as a 64-bit function (returning the lower 64 bits).
 | Consequences |

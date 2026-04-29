@@ -77,6 +77,7 @@ int main()
     printf("}\n");
 }
  */
+
 class XXH3Test_HASHES {
     public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
         3244421341483603138L,

@@ -55,7 +55,7 @@ class CityAndFarmHash_1_1 {
         return hashLen16(c, d, mul);
     }
 
-    private static <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
+    static private <T> long hashLen0To16(Access<T> access, T in, long off, long len) {
         if (len >= 8L) {
             long a = access.i64(in, off);
             long b = access.i64(in, off + len - 8L);
@@ -73,7 +73,7 @@ class CityAndFarmHash_1_1 {
         return K2;
     }
 
-    private static <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
+    static private <T> long hashLen17To32(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = access.i64(in, off) * K1;
         long b = access.i64(in, off + 8L);
@@ -83,7 +83,7 @@ class CityAndFarmHash_1_1 {
                 a + rotateRight(b + K2, 18) + c, mul);
     }
 
-    private static <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
+    static private <T> long cityHashLen33To64(Access<T> access, T in, long off, long len) {
         long mul = mul(len);
         long a = access.i64(in, off) * K2;
         long b = access.i64(in, off + 8L);
@@ -105,8 +105,6 @@ class CityAndFarmHash_1_1 {
     }
 
     static <T> long cityHash64(Access<T> access, T in, long off, long len) {
-        // This method is a close translation of the upstream CityHash reference implementation.
-        // Variable declaration placement and naming are preserved for clarity against the original.
         if (len <= 32L) {
             if (len <= 16L) {
                 return hashLen0To16(access, in, off, len);
@@ -122,10 +120,7 @@ class CityAndFarmHash_1_1 {
         long z = hashLen16(access.i64(in, off + len - 48L) + len,
                 access.i64(in, off + len - 24L));
 
-        long vFirst;
-        long vSecond;
-        long wFirst;
-        long wSecond;
+        long vFirst, vSecond, wFirst, wSecond;
 
         // This and following 3 blocks are produced by a single-click inline-function refactoring.
         // IntelliJ IDEA ftw

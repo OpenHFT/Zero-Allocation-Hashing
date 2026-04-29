@@ -1,4 +1,4 @@
-# Guidance for AI agents, bots, and humans contributing to Chronicle Software's OpenHFT projects.
+# Guidance for AI agents, bots, and humans contributing to Chronicle Software's OpenHFT projects
 
 LLM-based agents can accelerate development only if they respect our house rules. This file tells you:
 
@@ -71,27 +71,26 @@ This tight loop informs the AI accurately and creates immediate clarity for all 
 * **Faster feedback**: AI can quickly highlight inconsistencies when everything is in sync.
 * **Better quality**: Frequent checks align the implementation with the specified behaviour.
 * **Smoother onboarding**: Up-to-date AsciiDoc clarifies the system for new developers.
-* **Incremental changes**: AIDE flags newly updated files so you can keep the documentation synchronised.
 
 ### Best Practices
 
 * **Maintain Sync**: Keep documentation (AsciiDoc), tests, and code synchronised in version control. Changes in one area should prompt reviews and potential updates in the others.
 * **Doc-First for New Work**: For *new* features or requirements, aim to update documentation first, then use AI to help produce or refine corresponding code and tests. For refactoring or initial bootstrapping, updates might flow from code/tests back to documentation, which should then be reviewed and finalised.
 * **Small Commits**: Each commit should ideally relate to a single requirement or coherent change, making reviews easier for humans and AI analysis tools.
-- **Team Buy-In**: Encourage everyone to review AI outputs critically and contribute to maintaining the synchronicity of all artefacts.
+* **Team Buy-In**: Encourage everyone to review AI outputs critically and contribute to maintaining the synchronicity of all artefacts.
 
 ## AI Agent Guidelines
 
 When using AI agents to assist with development, please adhere to the following guidelines:
 
 * **Respect the Language & Character-set Policy**: Ensure all AI-generated content follows the British English and ISO-8859-1 guidelines outlined above.
-Focus on Clarity: AI-generated documentation should be clear and concise and add value beyond what is already present in the code or existing documentation.
+* **Focus on Clarity**: AI-generated documentation should be clear and concise and add value beyond what is already present in the code or existing documentation.
 * **Avoid Redundancy**: Do not generate content that duplicates existing documentation or code comments unless it provides additional context or clarification.
 * **Review AI Outputs**: Always review AI-generated content for accuracy, relevance, and adherence to the project's documentation standards before committing it to the repository.
 
 ## Company-Wide Tagging
 
-This section records **company-wide** decisions that apply to *all* Chronicle projects. All identifiers use the <Scope>-<Tag>-xxx prefix. The `xxx` are unique across in the same Scope even if the tags are different. Component-specific decisions live in their xxx-decision-log.adoc files.
+This section records **company-wide** decisions that apply to *all* Chronicle projects. All identifiers use the `<Scope>-<Tag>-xxx` prefix. The `xxx` digits are unique within the same Scope even if the tags are different. Component-specific decisions live in their xxx-decision-log.adoc files.
 
 ### Tag Taxonomy (Nine-Box Framework)
 
@@ -164,7 +163,7 @@ In AsciiDoc, an underscore `_` is _emphasis_; `*text*` is *bold*.
 
 - Follow repository `AGENTS.md` as the base rules; this section adds module notes. Durable docs live in `src/main/docs/` with the landing page at `README.adoc`.
 - Module purpose: zero-allocation hashing primitives and utilities for bytes/arrays/buffers with stable, cross-platform output.
-- Build commands: full build `mvn -q clean verify`; module-only without tests `mvn -pl zero-allocation-hashing -am -DskipTests install`.
+- Build commands: full build `mvn -q clean verify`; quality gates `mvn -Pquality verify` (requires JDK 11+).
 - Quality gates: keep Checkstyle/SpotBugs clean; preserve deterministic hash outputs across platforms; avoid hidden allocations in hot paths.
 - Documentation: maintain Nine-Box IDs in `src/main/docs/specifications.adoc`/`project-requirements` if added, and link decisions/tests accordingly; British English, ASCII/ISO-8859-1, `:source-highlighter: rouge`.
 - Guardrails: changes to hashing outputs are breaking; document any algorithm/version bumps; call out platform-specific behaviour in `unsafe-and-platform-notes.adoc`.

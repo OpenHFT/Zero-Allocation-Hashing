@@ -1,5 +1,6 @@
 = Algorithm Profiles
 :toc:
+:pp: ++
 :lang: en-GB
 :source-highlighter: rouge
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Zero-Allocation Hashing is a Java library providing fast, non-cryptographic hash functions that allocate zero objects during hash computation. It implements multiple algorithms (CityHash, FarmHash, MurmurHash3, xxHash, XXH3, wyHash, MetroHash) for hashing byte sequences from various sources (arrays, buffers, CharSequence, raw memory).
+Zero-Allocation Hashing is a Java library providing fast, non-cryptographic hash functions that allocate zero objects during hash computation. It implements multiple algorithms (CityHash, FarmHash, MurmurHash3, xxHash, XXH3, wyHash, MetroHash) for hashing byte sequences from various sources (arrays, buffers, CharSequence, raw memory). The corresponding Java class for MurmurHash3 is `MurmurHash_3`.
 
 Target: Java 8+ (supports JDK 8, 11, 17, 21+)
 
@@ -26,11 +26,11 @@ mvn test -Dtest=LongHashFunctionTest#testHashBytes
 # Clean build
 mvn clean install
 
-# Skip tests (not recommended before commits)
-mvn install -DskipTests
-
 # Generate javadoc
 mvn javadoc:javadoc
+
+# Run quality profile (Checkstyle + SpotBugs); requires JDK 11+
+mvn -Pquality verify
 ```
 
 ## Architecture & Key Concepts
@@ -39,7 +39,7 @@ mvn javadoc:javadoc
 
 **`LongHashFunction`** (src/main/java/net/openhft/hashing/LongHashFunction.java)
 - Primary facade for 64-bit hashes
-- Factory methods: `city_1_1()`, `farmHashNa()`, `farmHashUo()`, `murmur_3()`, `xx()`, `xx3()`, `wy_3()`, `metro()`
+- Factory methods: `city_1_1()`, `farmNa()`, `farmUo()`, `murmur_3()`, `xx()`, `xx3()`, `xx128low()`, `wy_3()`, `metro()`
 - All instances are immutable and thread-safe
 - Seeds are baked into instances at construction time
 
@@ -51,11 +51,11 @@ mvn javadoc:javadoc
 **`Access<T>`** (src/main/java/net/openhft/hashing/Access.java)
 - Strategy pattern abstracting byte sequence reading from different sources
 - Implementations: `UnsafeAccess` (heap arrays), `ByteBufferAccess`, `CharSequenceAccess`, `CompactLatin1CharSequenceAccess`
-- Handles byte-order normalization via `Access.byteOrder(input, desiredOrder)`
+- Handles byte-order normalisation via `Access.byteOrder(input, desiredOrder)`
 - Algorithms are written once against `Access` interface, work with all input types
 
 **Byte Order Handling**
-- All algorithms normalize to Little-Endian internally (ADR-002)
+- All algorithms normalise to Little-Endian internally (ADR-002)
 - Ensures cross-platform deterministic results (x86 vs s390x)
 - Performance penalty on Big-Endian platforms due to byte-swapping
 
@@ -67,7 +67,7 @@ mvn javadoc:javadoc
 - Requires `--add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED` on Java 9+
 
 **String Hashing Runtime Adaptation** (src/main/java/net/openhft/hashing/Util.java)
-- `VALID_STRING_HASH` selects correct strategy at JVM initialization
+- `VALID_STRING_HASH` selects correct strategy at JVM initialisation
 - Handles: HotSpot (pre-compact, compact strings), OpenJ9, Zing, unknown VMs
 - Uses reflection to access internal `String.value` field (ADR-004)
 - Fallback: `UnknownJvmStringHash` for unrecognized JVMs
@@ -85,7 +85,7 @@ All live in package-private classes with factory methods exposed via `LongHashFu
 ## Project-Specific Guidelines
 
 ### Language & Character Set (CRITICAL)
-- Use **British English**: "organisation", "licence", "optimisation" (NOT "organization", "license", "optimization")
+- Use **British English**: "organisation", "licence", "optimisation", "normalise", "initialise" (NOT "organization", "license", "optimization")
 - Technical US spellings allowed: "synchronized", "byte"
 - **ISO-8859-1 only** (code-points 0-255) except in string literals
 - NO smart quotes, non-breaking spaces, accented characters in code/docs
@@ -106,7 +106,7 @@ All live in package-private classes with factory methods exposed via `LongHashFu
 - Zero-allocation in steady state (one-time allocation during class loading permitted)
 - Validate array offsets/lengths via `Util.checkArrayOffs` to prevent crashes
 - Assume raw memory addresses are pre-validated by caller
-- No ThreadLocal usage (containerization requirement)
+- No ThreadLocal usage (containerisation requirement)
 - Immutable, stateless hash function instances
 
 ### Documentation Workflow (IMPORTANT)
@@ -205,18 +205,13 @@ Requires JVM flags for internal API access:
 --add-opens java.base/sun.nio.ch=ALL-UNNAMED
 ```
 
-## Key Decisions (from decision-log.adoc)
+## Key Decisions
 
-- **ADR-001**: Use `sun.misc.Unsafe` for maximum performance despite JDK dependency
-- **ADR-002**: Normalize all inputs to Little-Endian for cross-platform determinism
-- **ADR-003**: `Access<T>` strategy pattern eliminates algorithm duplication across input types
-- **ADR-004**: Reflectively access `String.value` for zero-copy hashing on modern JVMs
-- **ADR-005**: Stateless immutable hash functions (thread-safe, no ThreadLocal)
-- **ADR-006**: Use `long[]` buffers for 128-bit hashes to maintain zero-allocation
+See `src/main/docs/decision-log.adoc` for the canonical ADR list (ADR-001 through ADR-006). Reference ADR IDs in commit messages where relevant.
 
 ## References
 
-- Javadoc: http://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
+- Javadoc: https://javadoc.io/doc/net.openhft/zero-allocation-hashing/latest
 - GitHub: https://github.com/OpenHFT/Zero-Allocation-Hashing
 - Issues: https://github.com/OpenHFT/Zero-Allocation-Hashing/issues
 - Release Notes: https://chronicle.software/release-notes/

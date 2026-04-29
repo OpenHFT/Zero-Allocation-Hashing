@@ -1,5 +1,6 @@
 = Zero-Allocation Hashing Architecture Overview
 :toc:
+:pp: ++
 :lang: en-GB
 :source-highlighter: rouge
 
@@ -8,9 +9,9 @@ Chronicle Software
 === Entry Points
 
 * `net.openhft.hashing.LongHashFunction` is the primary façade for 64-bit hashes.
-It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash_3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
+It exposes factory methods for CityHash 1.1, FarmHash (NA and UO variants), MurmurHash3, xxHash, XXH3 (64-bit), wyHash v3, and MetroHash (`LongHashFunction.java`).
 * `net.openhft.hashing.LongTupleHashFunction` provides multi-word hash results.
-It currently delivers 128-bit MurmurHash_3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
+It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the single-word API with reusable `long[]` buffers (`LongTupleHashFunction.java`).
 * `net.openhft.hashing.DualHashFunction` bridges tuple implementations back into the `LongHashFunction` contract, ensuring seeded XXH128 and similar algorithms can expose both 64-bit and 128-bit variants without duplicating logic (`DualHashFunction.java`).
 
 === Memory Access Abstractions
