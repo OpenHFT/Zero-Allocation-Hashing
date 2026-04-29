@@ -1,19 +1,6 @@
 /*
- * Copyright 2014 Higher Frequency Trading http://www.higherfrequencytrading.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
  */
-
 package net.openhft.hashing;
 
 import java.nio.Buffer;
@@ -24,7 +11,7 @@ import java.util.Arrays;
 import static java.nio.ByteOrder.*;
 import static org.junit.Assert.*;
 
-public class LongHashFunctionTest {
+class LongHashFunctionTest {
 
     private static ByteOrder nonNativeOrder() {
         return nativeOrder() == LITTLE_ENDIAN ? BIG_ENDIAN : LITTLE_ENDIAN;
@@ -49,7 +36,7 @@ public class LongHashFunctionTest {
             assertEquals("void", eh, f.hashVoid());
     }
 
-    public static void testBoolean(LongHashFunction f, int len) {
+    private static void testBoolean(LongHashFunction f, int len) {
         if (len != 1)
             return;
         for (boolean b : new boolean[]{true, false}) {

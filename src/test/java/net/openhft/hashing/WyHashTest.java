@@ -1,3 +1,6 @@
+/*
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
+ */
 package net.openhft.hashing;
 
 import org.junit.Test;
@@ -31,7 +34,7 @@ public class WyHashTest {
         test(LongHashFunction.wy_3(42L), HASHES_OF_LOOPING_BYTES_WITH_SEED_42);
     }
 
-    public void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
+    private void test(LongHashFunction wyHash, long[] hashesOfLoopingBytes) {
         byte[] data = new byte[len];
         for (int j = 0; j < data.length; j++) {
             data[j] = (byte) j;

@@ -1,0 +1,29 @@
+== Change Log Template
+
+Chronicle Software
+
+Use this skeleton when documenting repository changes, whether in commit messages, pull-request descriptions, or the decision log.
+Keep the tone factual, favour British English, and ensure every item links back to a requirement tag where possible.
+
+----
+Subject: <Imperative summary <= 72 chars>
+
+Root cause
+- Describe the trigger (bug, requirement, optimisation target).
+- Reference relevant Nine-Box identifiers (for example `FN-xxx`, `NF-P-xxx`).
+
+Fix
+- Enumerate the concrete code or documentation changes.
+- Highlight any new invariants or assumptions introduced.
+
+Impact
+- Capture measurable effects (latency, throughput, allocation, API surface).
+- Note any compatibility considerations or migration steps.
+
+Verification
+- List commands executed locally (e.g., `mvn -q verify`, targeted benchmarks).
+- Mention additional artefacts provided (logs, flame graphs, benchmark tables).
+
+References
+- Link to upstream issues, decision-log entries, or external design docs.
+----

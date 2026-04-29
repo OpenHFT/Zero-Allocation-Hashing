@@ -1,19 +1,6 @@
 /*
- * Copyright 2015 Higher Frequency Trading http://www.higherfrequencytrading.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
  */
-
 package net.openhft.hashing;
 
 import org.junit.Assert;
@@ -28,10 +15,9 @@ import static org.junit.Assert.assertEquals;
  * Based on https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc
  */
 public class OriginalFarmHashTest {
-    static final int kDataSize = 1 << 20;
-    static final int kTestSize = 300;
-    static final byte[] data = new byte[kDataSize];
-
+    private static final int kDataSize = 1 << 20;
+    private static final int kTestSize = 300;
+    private static final byte[] data = new byte[kDataSize];
     static {
         long a = 9;
         long b = 777;
@@ -45,9 +31,9 @@ public class OriginalFarmHashTest {
         }
     }
 
-    static final int c1 = 0xcc9e2d51;
+    private static final int c1 = 0xcc9e2d51;
 
-    static long createSeed(int offset, int salt) {
+    private static long createSeed(int offset, int salt) {
         int h = salt;
         h = h * c1;
         h ^= (h >>> 17);
@@ -65,15 +51,15 @@ public class OriginalFarmHashTest {
         return h & 0xFFFFFFFFL;
     }
 
-    static long SEED(int offset) {
+    private static long SEED(int offset) {
         return createSeed(offset, -1);
     }
 
-    static long SEED0(int offset) {
+    private static long SEED0(int offset) {
         return createSeed(offset, 0);
     }
 
-    static long SEED1(int offset) {
+    private static long SEED1(int offset) {
         return createSeed(offset, 1);
     }
 
@@ -89,7 +75,7 @@ public class OriginalFarmHashTest {
         testNa(0, kDataSize, expectedIndex);
     }
 
-    static int testNa(int offset, int len, int expectedIndex) {
+    private static int testNa(int offset, int len, int expectedIndex) {
         LongHashFunction f = LongHashFunction.farmNa(SEED0(offset), SEED1(offset));
         long h = f.hashBytes(data, offset, len);
         assertEquals(NA_EXPECTED[expectedIndex++], h >>> 32);
@@ -120,7 +106,7 @@ public class OriginalFarmHashTest {
         testUo(0, kDataSize, expectedIndex);
     }
 
-    static int testUo(int offset, int len, int expectedIndex) {
+    private static int testUo(int offset, int len, int expectedIndex) {
         LongHashFunction f = LongHashFunction.farmUo(SEED(offset));
         long h = f.hashBytes(data, offset, len);
         assertEquals(UO_EXPECTED[expectedIndex++], h >>> 32);
@@ -147,7 +133,7 @@ public class OriginalFarmHashTest {
         }
     }
 
-    static final Object[][] GOLDEN_64 = {
+    private static final Object[][] GOLDEN_64 = {
             {0xb3454265b6df75e3L, "a"},
             {0xaa8d6e5242ada51eL, "ab"},
             {0x24a5b3a074e7f369L, "abc"},
@@ -180,7 +166,7 @@ public class OriginalFarmHashTest {
             {0x5a0a6efd52e84e2aL, "How can you write a big system without C++?  -Paul Glick"},
     };
 
-    static final long[] NA_EXPECTED = {
+    private static final long[] NA_EXPECTED = {
             1140953930L, 861465670L,
             3277735313L, 2681724312L,
             2598464059L, 797982799L,
@@ -1269,7 +1255,7 @@ public class OriginalFarmHashTest {
             4166253320L, 2747410691L,
     };
 
-    static final long[] UO_EXPECTED = {
+    private static final long[] UO_EXPECTED = {
             3277735313L, 2681724312L,
             2598464059L, 797982799L,
             2603993599L, 921001710L,

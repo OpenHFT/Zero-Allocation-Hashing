@@ -1,3 +1,6 @@
+/*
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
+ */
 package net.openhft.hashing;
 
 import java.nio.Buffer;
@@ -11,7 +14,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 
-public class LongTupleHashFunctionTest {
+class LongTupleHashFunctionTest {
 
     private static ByteOrder nonNativeOrder() {
         return nativeOrder() == LITTLE_ENDIAN ? BIG_ENDIAN : LITTLE_ENDIAN;
@@ -83,7 +86,7 @@ public class LongTupleHashFunctionTest {
         }
     }
 
-    public static void testBoolean(LongTupleHashFunction f, int len) {
+    private static void testBoolean(LongTupleHashFunction f, int len) {
         if (len != 1)
             return;
         for (boolean b : new boolean[]{true, false}) {

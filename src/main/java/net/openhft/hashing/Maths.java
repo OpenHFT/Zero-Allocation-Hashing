@@ -1,25 +1,24 @@
+/*
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
+ */
 package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
-
+@SuppressWarnings("Since15")
 class Maths {
     @NotNull
     private static final Maths INSTANCE;
 
     static {
-        Maths maths = null;
+        boolean hasMultiplyHigh = true;
         try {
-            Method multiplyHigh = Math.class.getDeclaredMethod("multiplyHigh", int.class, int.class);
-            MethodHandle multiplyHighMH = MethodHandles.lookup().unreflect(multiplyHigh);
-            maths = new MathsJDK9(multiplyHighMH);
+            // stubs in src/main/java-stub are used to allow this to compile in Java 8+
+            Math.multiplyHigh(0, 0);
         } catch (final Throwable ignore) {
-            maths = new Maths();
+            hasMultiplyHigh = false;
         }
-        INSTANCE = maths;
+        INSTANCE = hasMultiplyHigh ? new MathsJDK9() : new Maths();
     }
 
     public static long unsignedLongMulXorFold(final long lhs, final long rhs) {
@@ -68,32 +67,19 @@ class Maths {
     }
 }
 
+@SuppressWarnings("Since15")
 class MathsJDK9 extends Maths {
-    private final MethodHandle multiplyHighMH;
-
-    public MathsJDK9(MethodHandle multiplyHighMH) {
-        this.multiplyHighMH = multiplyHighMH;
-    }
-
     // Math.multiplyHigh() is intrinsified from JDK 10. But JDK 9 is out of life, we always prefer
     // this version to the scalar one.
     @Override
     long unsignedLongMulXorFoldImp(final long lhs, final long rhs) {
-        final long upper = invokeExact(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);
+        final long upper = Math.multiplyHigh(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);
         final long lower = lhs * rhs;
         return lower ^ upper;
     }
 
     @Override
     long unsignedLongMulHighImp(final long lhs, final long rhs) {
-        return invokeExact(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);
-    }
-
-    private long invokeExact(long lhs, long rhs) {
-        try {
-            return (long) multiplyHighMH.invokeExact(lhs, rhs);
-        } catch (Throwable e) {
-            throw new AssertionError(e);
-        }
+        return Math.multiplyHigh(lhs, rhs) + ((lhs >> 63) & rhs) + ((rhs >> 63) & lhs);
     }
 }
