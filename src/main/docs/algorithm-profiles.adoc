@@ -1,18 +1,19 @@
-== Algorithm Profiles
+= Algorithm Profiles
+:toc:
 :pp: ++
+:lang: en-GB
+:source-highlighter: rouge
 
 Chronicle Software
-
-toc::[]
 
 === CityHash 1.1
 
 Factories ::
 `LongHashFunction.city_1_1()`, `.city_1_1(long)`, `.city_1_1(long, long)` (`LongHashFunction.java:53-115`).
 Implementation ::
-`net.openhft.hashing.CityAndFarmHash_1_1` ports Google’s CityHash64 v1.1 (`CityAndFarmHash_1_1.java`).
+`net.openhft.hashing.CityAndFarmHash_1_1` ports Google's CityHash64 v1.1 (`CityAndFarmHash_1_1.java`).
 Key traits ::
-* Normalises inputs to little-endian and forwards short-length cases to specialised mix routines (1–3, 4–7, 8–16 byte fast paths).
+* Normalises inputs to little-endian and forwards short-length cases to specialised mix routines (1-3, 4-7, 8-16 byte fast paths).
 * Produces identical output across host endianness; big-endian incurs the expected byte swapping cost.
 * Provides seedless, single-seed, and dual-seed variants mirroring the upstream API.
 
@@ -31,17 +32,17 @@ Key traits ::
 Factories ::
 `LongHashFunction.farmUo()`, `.farmUo(long)`, `.farmUo(long, long)` (`LongHashFunction.java:181-243`).
 Implementation ::
-Also hosted in `CityAndFarmHash_1_1`, which covers the 1.1 update’s longer pipelines.
+Also hosted in `CityAndFarmHash_1_1`, which covers the 1.1 update's longer pipelines.
 Key traits ::
-* Maintains parity with Google’s C{pp} release for test vectors.
-* Endianness neutral: always routes through an `Access` view that matches the algorithm’s little-endian assumptions.
+* Maintains parity with Google's C{pp} release for test vectors.
+* Endianness neutral: always routes through an `Access` view that matches the algorithm's little-endian assumptions.
 
 === MurmurHash3
 
 Factories ::
 `LongHashFunction.murmur_3()`, `.murmur_3(long)` for 64-bit (`LongHashFunction.java:245-268`); `LongTupleHashFunction.murmur_3()`, `.murmur_3(long)` for 128-bit (`LongTupleHashFunction.java:35-69`).
 Implementation ::
-`net.openhft.hashing.MurmurHash_3` adapts Austin Appleby’s x64 variants.
+`net.openhft.hashing.MurmurHash_3` adapts Austin Appleby's x64 variants.
 It extends `DualHashFunction` so the 128-bit engine also exposes the low 64 bits through `LongHashFunction`.
 Key traits ::
 * Little-endian canonicalisation via `Access.byteOrder`.
@@ -54,7 +55,7 @@ Factories ::
 Implementation ::
 `net.openhft.hashing.XxHash` ports the official XXH64 reference and keeps the unsigned prime constants as signed Java longs.
 Key traits ::
-* Uses four-lane accumulation for ≥32 byte inputs, matching upstream behaviour bit-for-bit.
+* Uses four-lane accumulation for >=32 byte inputs, matching upstream behaviour bit-for-bit.
 * Applies the canonical avalanche round in `XxHash.finalize` for all lengths.
 * Seeded and seedless instances differ only by the stored `seed()` override; serialisation preserves both forms.
 
@@ -67,7 +68,7 @@ Implementation ::
 `net.openhft.hashing.XXH3` keeps the FARSH-derived 192 byte secret and streaming logic.
 It defines distinct entry points for 64-bit, 128-bit, and low-64-bit projections.
 Key traits ::
-* Optimises for short messages with dedicated 1–3, 4–8, 9–16, 17–128, and 129–240 byte paths.
+* Optimises for short messages with dedicated 1-3, 4-8, 9-16, 17-128, and 129-240 byte paths.
 * Uses `UnsafeAccess.INSTANCE.byteOrder(null, LITTLE_ENDIAN)` once to avoid per-call adapter allocation.
 * The 128-bit variant reuses the same mixing core; exposing the low 64 bits avoids extra copies for callers that only need a single `long`.
 
@@ -76,10 +77,10 @@ Key traits ::
 Factories ::
 `LongHashFunction.wy_3()`, `.wy_3(long)` (`LongHashFunction.java:343-369`).
 Implementation ::
-`net.openhft.hashing.WyHash` mirrors Wang Yi’s version 3 reference, including the `_wymum` 128-bit multiply-fold helper built on `Maths.unsignedLongMulXorFold`.
+`net.openhft.hashing.WyHash` mirrors Wang Yi's version 3 reference, including the `_wymum` 128-bit multiply-fold helper built on `Maths.unsignedLongMulXorFold`.
 Key traits ::
 * Supports streaming chunks up to 256 bytes per loop iteration; beyond that it accumulates in 32 byte strides.
-* Handles ≤3, ≤8, ≤16, ≤24, ≤32 byte inputs with the same branching as the C code.
+* Handles <=3, <=8, <=16, <=24, <=32 byte inputs with the same branching as the C code.
 * Maintains deterministic output across architectures while acknowledging the performance hit on big-endian systems.
 
 === MetroHash (metrohash64_2)
@@ -87,8 +88,8 @@ Key traits ::
 Factories ::
 `LongHashFunction.metro()`, `.metro(long)` (`LongHashFunction.java:371-389`).
 Implementation ::
-`net.openhft.hashing.MetroHash` implements the 64-bit metrohash variant with the `_2` initialisation vector, matching the original author’s reference.
+`net.openhft.hashing.MetroHash` implements the 64-bit metrohash variant with the `_2` initialisation vector, matching the original author's reference.
 Key traits ::
-* Performs four-lane unrolled mixing for ≥32 byte inputs and cascades down to 16, 8, 4, 2, and 1 byte tails.
+* Performs four-lane unrolled mixing for >=32 byte inputs and cascades down to 16, 8, 4, 2, and 1 byte tails.
 * Uses deterministic finalisation (`MetroHash.finalize`) shared by scalar and streaming paths.
 * Seeded instances override `seed()` and cache the pre-hashed `hashVoid()` constant to avoid re-computation.
