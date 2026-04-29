@@ -10,13 +10,13 @@
    <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
-        <version>1.27ea1</version>
+        <version>2026.0</version>
         <relativePath />
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zero-allocation-hashing</artifactId>
-    <version>0.27ea2-SNAPSHOT</version>
+    <version>2026.1-SNAPSHOT</version>
     <name>Zero-allocation Hashing</name>
     <description>Zero-allocation implementations of fast non-cryptographic hash functions
         for byte sequences or blocks of memory</description>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
             <!-- JUnit 4 supports Java 7, but JUnit 5 don't. -->
         </dependency>
@@ -81,15 +81,15 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.5.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.1.4</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.0</version>
+                    <version>3.12.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -124,7 +124,6 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <compilerArgs>
                         <!-- used for disable warning for target release 9+ -->
@@ -194,20 +193,11 @@
 
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>sun/**</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>sun/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -254,7 +244,6 @@
              <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>${maven.bundle.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -335,7 +324,7 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>-XX:-CompactStrings</argLine>
+                                    <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
