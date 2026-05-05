@@ -70,7 +70,7 @@ public class XxHashTest {
      * }
      */
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {
             -1205034819632174695L,
             -1642502924627794072L,
             5216751715308240086L,
@@ -1098,7 +1098,7 @@ public class XxHashTest {
             8014460039616323415L
     };
 
-    public static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
+    private static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {
             -7444071767201028348L,
             -8959994473701255385L,
             7116559933691734543L,
@@ -2123,6 +2123,6 @@ public class XxHashTest {
             -9061091728950139525L,
             -6864767830358160810L,
             4879532090226251157L,
-            5528644708740739488L
+        5528644708740739488L
     };
 }

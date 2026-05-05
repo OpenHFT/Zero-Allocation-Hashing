@@ -49,32 +49,32 @@ public class XXH3Test {
 /**
  * Test data is output of the following program with xxh3 implementation
  * from https://github.com/Cyan4973/xxHash
- * <p>
- * #include "xxhash.c"
- * #include <stdlib.h>
- * #include <stdio.h>
- * int main()
- * {
- * const int N = 2048 + 1; // 2 full blocks
- * char* src = (char*) malloc(N);
- * for (int i = 0; i < N; i++) {
- * src[i] = (char) i;
- * }
- * <p>
- * printf("class XXH3Test_HASHES {\n");
- * printf("    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {\n");
- * for (int i = 0; i <= N; i++) {
- * printf("        %lldL,\n", (long long) XXH3_64bits(src, i));
- * }
- * printf("    };\n");
- * <p>
- * printf("    public static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {\n");
- * for (int i = 0; i <= N; i++) {
- * printf("        %lldL,\n", (long long) XXH3_64bits_withSeed(src, i, 42));
- * }
- * printf("    };\n");
- * printf("}\n");
- * }
+
+ #include "xxhash.c"
+ #include <stdlib.h>
+ #include <stdio.h>
+ int main()
+ {
+ const int N = 2048 + 1; // 2 full blocks
+ char* src = (char*) malloc(N);
+ for (int i = 0; i < N; i++) {
+ src[i] = (char) i;
+ }
+
+ printf("class XXH3Test_HASHES {\n");
+ printf("    public static final long[] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {\n");
+ for (int i = 0; i <= N; i++) {
+ printf("        %lldL,\n", (long long) XXH3_64bits(src, i));
+ }
+ printf("    };\n");
+
+ printf("    public static final long[] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {\n");
+ for (int i = 0; i <= N; i++) {
+ printf("        %lldL,\n", (long long) XXH3_64bits_withSeed(src, i, 42));
+ }
+ printf("    };\n");
+ printf("}\n");
+ }
  */
 
 class XXH3Test_HASHES {

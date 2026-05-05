@@ -50,34 +50,34 @@ public class XXH128Test {
 /**
  * Test data is output of the following program with xxh3 implementation
  * from https://github.com/Cyan4973/xxHash
- * <p>
- * #include "xxhash.c"
- * #include <stdlib.h>
- * #include <stdio.h>
- * int main()
- * {
- * const int N = 1024 + 256; // at least one full blocks
- * char* src = (char*) malloc(N);
- * for (int i = 0; i < N; i++) {
- * src[i] = (char) i;
- * }
- * <p>
- * printf("class XXH128Test_HASHES {\n");
- * printf("    public static final long[][] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {\n");
- * for (int i = 0; i <= N; i++) {
- * const XXH128_hash_t result = XXH3_128bits(src, i);
- * printf("        { %lldL, %lldL },\n", (long long)result.low64, (long long)result.high64);
- * }
- * printf("    };\n");
- * <p>
- * printf("    public static final long[][] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {\n");
- * for (int i = 0; i <= N; i++) {
- * const XXH128_hash_t result = XXH3_128bits_withSeed(src, i, 42);
- * printf("        { %lldL, %lldL },\n", (long long)result.low64, (long long)result.high64);
- * }
- * printf("    };\n");
- * printf("}\n");
- * }
+
+ #include "xxhash.c"
+ #include <stdlib.h>
+ #include <stdio.h>
+ int main()
+ {
+ const int N = 1024 + 256; // at least one full blocks
+ char* src = (char*) malloc(N);
+ for (int i = 0; i < N; i++) {
+ src[i] = (char) i;
+ }
+
+ printf("class XXH128Test_HASHES {\n");
+ printf("    public static final long[][] HASHES_OF_LOOPING_BYTES_WITHOUT_SEED = {\n");
+ for (int i = 0; i <= N; i++) {
+ const XXH128_hash_t result = XXH3_128bits(src, i);
+ printf("        { %lldL, %lldL },\n", (long long)result.low64, (long long)result.high64);
+ }
+ printf("    };\n");
+
+ printf("    public static final long[][] HASHES_OF_LOOPING_BYTES_WITH_SEED_42 = {\n");
+ for (int i = 0; i <= N; i++) {
+ const XXH128_hash_t result = XXH3_128bits_withSeed(src, i, 42);
+ printf("        { %lldL, %lldL },\n", (long long)result.low64, (long long)result.high64);
+ }
+ printf("    };\n");
+ printf("}\n");
+ }
  */
 
 class XXH128Test_HASHES {

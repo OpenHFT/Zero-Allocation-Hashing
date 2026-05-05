@@ -234,7 +234,6 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>3.0.0-M4</version>

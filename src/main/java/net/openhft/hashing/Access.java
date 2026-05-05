@@ -214,7 +214,7 @@ public abstract class Access<T> {
      * order}, widened to {@code int}
      */
     public int getShort(T input, long offset) {
-        return (int) (short) getUnsignedShort(input, offset);
+        return (short) getUnsignedShort(input, offset);
     }
 
     /**

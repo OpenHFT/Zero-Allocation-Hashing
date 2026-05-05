@@ -76,8 +76,7 @@ final class Primitives {
         char adjustByteOrder(final char v) {
             return v;
         }
-    }
-
+        }
     private static class ByteOrderHelperReverse extends ByteOrderHelper {
         long adjustByteOrder(final long v) {
             return Long.reverseBytes(v);

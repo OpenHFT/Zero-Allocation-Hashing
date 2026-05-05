@@ -69,8 +69,7 @@ class WyHash {
                     u64Rorate32(access, input, off + 8) ^ seed ^ _wyp1)
                     ^ _wymum(u64Rorate32(access, input, off + 16) ^ seed ^ _wyp2,
                     u64Rorate32(access, input, off + length - 8) ^ seed ^ _wyp3), length ^ _wyp4);
-        long see1 = seed;
-        long i = length, p = off;
+        long see1 = seed, i = length, p = off;
         for (; i > 256; i -= 256, p += 256) {
             seed = _wymum(access.i64(input, p) ^ seed ^ _wyp0,
                     access.i64(input, p + 8) ^ seed ^ _wyp1) ^
