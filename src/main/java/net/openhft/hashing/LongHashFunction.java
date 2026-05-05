@@ -67,6 +67,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long)
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1() {
         return CityAndFarmHash_1_1.asLongHashFunctionWithoutSeed();
     }
@@ -83,6 +84,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithSeed(seed);
     }
@@ -100,6 +102,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed0, long seed1) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
     }
@@ -225,6 +228,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm without seed values
      * @see #murmur_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3() {
         return MurmurHash_3.asLongHashFunctionWithoutSeed();
     }
@@ -240,6 +244,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm with the given seed value
      * @see #murmur_3()
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3(long seed) {
         return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
@@ -335,6 +340,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, without a seed value
      * @see #wy_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3() {
         return WyHash.asLongHashFunctionWithoutSeed();
     }
@@ -350,6 +356,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, with the given seed value
      * @see #wy_3()
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3(long seed) {
         return WyHash.asLongHashFunctionWithSeed(seed);
     }
