@@ -6,6 +6,9 @@ on:
       - develop
   pull_request:
     types: [ opened, synchronize, reopened ]
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     name: Build
