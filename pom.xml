@@ -5,8 +5,7 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>net.openhft</groupId>
@@ -20,8 +19,7 @@
     <version>2026.1-SNAPSHOT</version>
     <name>Zero-allocation Hashing</name>
     <description>Zero-allocation implementations of fast non-cryptographic hash functions
-        for byte sequences or blocks of memory
-    </description>
+        for byte sequences or blocks of memory</description>
     <inceptionYear>2014</inceptionYear>
     <url>https://github.com/OpenHFT/Zero-Allocation-Hashing</url>
     <packaging>bundle</packaging>
@@ -241,8 +239,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.11.2
-                        </version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
+                        <version>1.11.2</version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
                     </dependency>
                 </dependencies>
             </plugin>
