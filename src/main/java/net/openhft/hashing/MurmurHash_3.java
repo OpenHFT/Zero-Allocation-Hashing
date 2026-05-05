@@ -5,6 +5,7 @@ package net.openhft.hashing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
@@ -217,6 +218,7 @@ class MurmurHash_3 {
         public int bitsLength() {
             return 128;
         }
+
         @Override
         @NotNull
         public long[] newResultArray() {
@@ -278,6 +280,7 @@ class MurmurHash_3 {
     static LongTupleHashFunction asLongTupleHashFunctionWithoutSeed() {
         return AsLongTupleHashFunction.SEEDLESS_INSTANCE;
     }
+
     @NotNull
     static LongHashFunction asLongHashFunctionWithoutSeed() {
         return AsLongTupleHashFunction.SEEDLESS_INSTANCE_LONG;
@@ -322,6 +325,7 @@ class MurmurHash_3 {
     static LongTupleHashFunction asLongTupleHashFunctionWithSeed(long seed) {
         return new AsLongTupleHashFunctionSeeded(seed);
     }
+
     @NotNull
     static LongHashFunction asLongHashFunctionWithSeed(long seed) {
         return new AsLongTupleHashFunctionSeeded(seed).asLongHashFunction();

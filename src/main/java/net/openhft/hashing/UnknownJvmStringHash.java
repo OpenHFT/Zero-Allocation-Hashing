@@ -16,7 +16,7 @@ enum UnknownJvmStringHash implements StringHash {
 
     @Override
     public void hash(final String s, final LongTupleHashFunction hashFunction,
-                    final int off, final int len, final long[] result) {
+                     final int off, final int len, final long[] result) {
         LongTupleHashFunction.hashNativeChars(hashFunction, s, off, len, result);
     }
 }

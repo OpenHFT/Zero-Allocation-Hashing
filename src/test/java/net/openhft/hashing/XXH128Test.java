@@ -10,15 +10,13 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-
 @RunWith(Parameterized.class)
 public class XXH128Test {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         final int maxLen = Math.min(XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITHOUT_SEED.length,
-                                    XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
+                XXH128Test_HASHES.HASHES_OF_LOOPING_BYTES_WITH_SEED_42.length);
         ArrayList<Object[]> data = new ArrayList<Object[]>();
         for (int len = 0; len < maxLen; len++) {
             data.add(new Object[]{len});
@@ -48,6 +46,7 @@ public class XXH128Test {
         LongHashFunctionTest.test(hl, data, hashesOfLoopingBytes[len][0]);
     }
 }
+
 /**
  * Test data is output of the following program with xxh3 implementation
  * from https://github.com/Cyan4973/xxHash

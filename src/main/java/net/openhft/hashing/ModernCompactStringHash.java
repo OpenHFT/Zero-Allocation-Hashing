@@ -3,10 +3,10 @@
  */
 package net.openhft.hashing;
 
-import java.lang.reflect.Field;
 import javax.annotation.ParametersAreNonnullByDefault;
-import static net.openhft.hashing.UnsafeAccess.*;
-import static net.openhft.hashing.Util.*;
+import java.lang.reflect.Field;
+
+import static net.openhft.hashing.Util.checkArrayOffs;
 
 @ParametersAreNonnullByDefault
 enum ModernCompactStringHash implements StringHash {
@@ -15,7 +15,7 @@ enum ModernCompactStringHash implements StringHash {
     private static final long valueOffset;
     private static final boolean enableCompactStrings;
     private static final Access<byte[]> compactLatin1Access
-        = CompactLatin1CharSequenceAccess.INSTANCE;
+            = CompactLatin1CharSequenceAccess.INSTANCE;
 
     static {
         try {
@@ -31,7 +31,7 @@ enum ModernCompactStringHash implements StringHash {
 
     @Override
     public long longHash(final String s, final LongHashFunction hashFunction,
-                    final int off, final int len) {
+                         final int off, final int len) {
         final int sl = s.length();
         if (len <= 0 || sl <= 0) {
             checkArrayOffs(sl, off, len); // check as chars
@@ -41,16 +41,16 @@ enum ModernCompactStringHash implements StringHash {
             if (enableCompactStrings && sl == value.length) {
                 checkArrayOffs(sl, off, len); // check as chars
                 // 'off' and 'len' are passed as bytes
-                return hashFunction.hash(value, compactLatin1Access, (long)off*2L, (long)len*2L);
+                return hashFunction.hash(value, compactLatin1Access, (long) off * 2L, (long) len * 2L);
             } else {
-                return hashFunction.hashBytes(value, off*2, len*2); // hash as bytes
+                return hashFunction.hashBytes(value, off * 2, len * 2); // hash as bytes
             }
         }
     }
 
     @Override
     public void hash(final String s, final LongTupleHashFunction hashFunction,
-                    final int off, final int len, final long[] result) {
+                     final int off, final int len, final long[] result) {
         final int sl = s.length();
         if (len <= 0 || sl <= 0) {
             checkArrayOffs(sl, off, len); // check as chars
@@ -60,9 +60,9 @@ enum ModernCompactStringHash implements StringHash {
             if (enableCompactStrings && sl == value.length) {
                 checkArrayOffs(sl, off, len); // check as chars
                 // 'off' and 'len' are passed as bytes
-                hashFunction.hash(value, compactLatin1Access, (long)off*2L, (long)len*2L, result);
+                hashFunction.hash(value, compactLatin1Access, (long) off * 2L, (long) len * 2L, result);
             } else {
-                hashFunction.hashBytes(value, off*2, len*2, result); // hash as bytes
+                hashFunction.hashBytes(value, off * 2, len * 2, result); // hash as bytes
             }
         }
     }

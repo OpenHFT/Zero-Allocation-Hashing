@@ -118,10 +118,10 @@ public abstract class Access<T> {
      * }}</pre>
      *
      * @param backingOrder the byte order of {@code char} reads backing
-     * {@code CharSequences} to access
+     *                     {@code CharSequences} to access
+     * @param <T>          the {@code CharSequence} subtype to access
      * @return the {@code Access} to {@link CharSequence}s backed by {@code char} reads made in
      * the specified byte order
-     * @param <T> the {@code CharSequence} subtype to access
      * @see #toNativeCharSequence()
      */
     @SuppressWarnings("unchecked")
@@ -132,15 +132,16 @@ public abstract class Access<T> {
     /**
      * Constructor for use in subclasses.
      */
-    protected Access() {}
+    protected Access() {
+    }
 
     /**
      * Reads {@code [offset, offset + 7]} bytes of the byte sequence represented by the given
      * {@code input} as a single {@code long} value.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the first byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return eight bytes as a {@code long} value, in {@linkplain #byteOrder(Object) the expected
      * order}
      */
@@ -156,9 +157,9 @@ public abstract class Access<T> {
      * Shortcut for {@code getInt(input, offset) & 0xFFFFFFFFL}. Could be implemented more
      * efficiently.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the first byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return four bytes as an unsigned int value, in {@linkplain #byteOrder(Object) the expected
      * order}
      */
@@ -170,9 +171,9 @@ public abstract class Access<T> {
      * Reads {@code [offset, offset + 3]} bytes of the byte sequence represented by the given
      * {@code input} as a single {@code int} value.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the first byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return four bytes as an {@code int} value, in {@linkplain #byteOrder(Object) the expected
      * order}
      */
@@ -188,9 +189,9 @@ public abstract class Access<T> {
      * Shortcut for {@code getShort(input, offset) & 0xFFFF}. Could be implemented more
      * efficiently.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the first byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return two bytes as an unsigned short value, in {@linkplain #byteOrder(Object) the expected
      * order}
      */
@@ -206,22 +207,22 @@ public abstract class Access<T> {
      * Reads {@code [offset, offset + 1]} bytes of the byte sequence represented by the given
      * {@code input} as a single {@code short} value, returned widened to {@code int}.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the first byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return two bytes as a {@code short} value, in {@linkplain #byteOrder(Object) the expected
      * order}, widened to {@code int}
      */
     public int getShort(T input, long offset) {
-        return (int) (short) getUnsignedShort(input, offset);
+        return (short) getUnsignedShort(input, offset);
     }
 
     /**
      * Shortcut for {@code getByte(input, offset) & 0xFF}. Could be implemented more efficiently.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return a byte by the given {@code offset}, interpreted as unsigned
      */
     public int getUnsignedByte(T input, long offset) {
@@ -232,21 +233,41 @@ public abstract class Access<T> {
      * Reads a single byte at the given {@code offset} in the byte sequence represented by the given
      * {@code input}, returned widened to {@code int}.
      *
-     * @param input the object to access
+     * @param input  the object to access
      * @param offset offset to the byte to read within the byte sequence represented
-     * by the given object
+     *               by the given object
      * @return a byte by the given {@code offset}, widened to {@code int}
      */
     public abstract int getByte(T input, long offset);
 
     // short names
-    public long i64(final T input, final long offset) { return getLong(input, offset); }
-    public long u32(final T input, final long offset) { return getUnsignedInt(input, offset); }
-    public  int i32(final T input, final long offset) { return getInt(input, offset); }
-    public  int u16(final T input, final long offset) { return getUnsignedShort(input, offset); }
-    public  int i16(final T input, final long offset) { return getShort(input, offset); }
-    public  int  u8(final T input, final long offset) { return getUnsignedByte(input, offset); }
-    public  int  i8(final T input, final long offset) { return getByte(input, offset); }
+    public long i64(final T input, final long offset) {
+        return getLong(input, offset);
+    }
+
+    public long u32(final T input, final long offset) {
+        return getUnsignedInt(input, offset);
+    }
+
+    public int i32(final T input, final long offset) {
+        return getInt(input, offset);
+    }
+
+    public int u16(final T input, final long offset) {
+        return getUnsignedShort(input, offset);
+    }
+
+    public int i16(final T input, final long offset) {
+        return getShort(input, offset);
+    }
+
+    public int u8(final T input, final long offset) {
+        return getUnsignedByte(input, offset);
+    }
+
+    public int i8(final T input, final long offset) {
+        return getByte(input, offset);
+    }
 
     /**
      * The byte order in which all multi-byte {@code getXXX()} reads from the given {@code input}
@@ -261,7 +282,7 @@ public abstract class Access<T> {
      * Get {@code this} or the reversed access object for reading the input as fixed
      * byte order of {@code byteOrder}.
      *
-     * @param input the accessed object
+     * @param input     the accessed object
      * @param byteOrder the byte order to be used for reading the {@code input}
      * @return a {@code Access} object which will read the {@code input} with the
      * byte order of {@code byteOrder}.
@@ -281,8 +302,8 @@ public abstract class Access<T> {
      */
     static <T> Access<T> newDefaultReverseAccess(final Access<T> access) {
         return access instanceof ReverseAccess
-               ? access.reverseAccess()
-               : new ReverseAccess<T>(access);
+                ? access.reverseAccess()
+                : new ReverseAccess<T>(access);
     }
 
     /**
@@ -290,41 +311,51 @@ public abstract class Access<T> {
      */
     private static class ReverseAccess<T> extends Access<T> {
         final Access<T> access;
+
         private ReverseAccess(final Access<T> access) {
             this.access = access;
         }
+
         @Override
         public long getLong(final T input, final long offset) {
             return Long.reverseBytes(access.getLong(input, offset));
         }
+
         @Override
         public long getUnsignedInt(final T input, final long offset) {
             return Long.reverseBytes(access.getUnsignedInt(input, offset)) >>> 32;
         }
+
         @Override
         public int getInt(final T input, final long offset) {
             return Integer.reverseBytes(access.getInt(input, offset));
         }
+
         @Override
         public int getUnsignedShort(final T input, final long offset) {
             return Integer.reverseBytes(access.getUnsignedShort(input, offset)) >>> 16;
         }
+
         @Override
         public int getShort(final T input, final long offset) {
             return Integer.reverseBytes(access.getShort(input, offset)) >> 16;
         }
+
         @Override
         public int getUnsignedByte(final T input, final long offset) {
             return access.getUnsignedByte(input, offset);
         }
+
         @Override
         public int getByte(final T input, final long offset) {
             return access.getByte(input, offset);
         }
+
         @Override
         public ByteOrder byteOrder(final T input) {
             return LITTLE_ENDIAN == access.byteOrder(input) ? BIG_ENDIAN : LITTLE_ENDIAN;
         }
+
         @Override
         protected Access<T> reverseAccess() {
             return access;
