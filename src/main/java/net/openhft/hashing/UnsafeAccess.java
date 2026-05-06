@@ -3,10 +3,9 @@
  */
 package net.openhft.hashing;
 
-import sun.misc.Unsafe;
-
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
+import sun.misc.Unsafe;
 
 import static net.openhft.hashing.Primitives.*;
 
@@ -16,8 +15,8 @@ public class UnsafeAccess extends Access<Object> {
 
     // for test only
     static final UnsafeAccess OLD_INSTANCE = NATIVE_LITTLE_ENDIAN
-            ? new OldUnsafeAccessLittleEndian()
-            : new OldUnsafeAccessBigEndian();
+                                             ? new OldUnsafeAccessLittleEndian()
+                                             : new OldUnsafeAccessBigEndian();
 
     static final Unsafe UNSAFE;
 
@@ -44,10 +43,10 @@ public class UnsafeAccess extends Access<Object> {
             INT_BASE = UNSAFE.arrayBaseOffset(int[].class);
             LONG_BASE = UNSAFE.arrayBaseOffset(long[].class);
 
-            TRUE_BYTE_VALUE = (byte) UNSAFE.getInt(new boolean[]{true, true, true, true},
-                    BOOLEAN_BASE);
-            FALSE_BYTE_VALUE = (byte) UNSAFE.getInt(new boolean[]{false, false, false, false},
-                    BOOLEAN_BASE);
+            TRUE_BYTE_VALUE = (byte)UNSAFE.getInt(new boolean[] {true, true, true, true},
+                                                  BOOLEAN_BASE);
+            FALSE_BYTE_VALUE = (byte)UNSAFE.getInt(new boolean[] {false, false, false, false},
+                                                  BOOLEAN_BASE);
         } catch (final Exception e) {
             throw new AssertionError(e);
         }
@@ -64,8 +63,7 @@ public class UnsafeAccess extends Access<Object> {
         INSTANCE_NON_NATIVE = Access.newDefaultReverseAccess(INSTANCE);
     }
 
-    private UnsafeAccess() {
-    }
+    private UnsafeAccess() {}
 
     @Override
     public long getLong(Object input, long offset) {
@@ -127,12 +125,12 @@ public class UnsafeAccess extends Access<Object> {
     private static class OldUnsafeAccessBigEndian extends UnsafeAccess {
         @Override
         public int getShort(final Object input, final long offset) {
-            return (int) (short) UNSAFE.getInt(input, offset - 2);
+            return (int)(short)UNSAFE.getInt(input, offset - 2);
         }
 
         @Override
         public int getByte(final Object input, final long offset) {
-            return (int) (byte) UNSAFE.getInt(input, offset - 3);
+            return (int)(byte)UNSAFE.getInt(input, offset - 3);
         }
     }
 }

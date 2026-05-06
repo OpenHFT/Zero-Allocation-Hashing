@@ -402,9 +402,9 @@ public abstract class LongHashFunction implements Serializable {
      * value is interpreted in {@linkplain ByteOrder#nativeOrder() native} byte order. For example,
      * the result of {@code hashLong(v)} call is identical to the result of
      * {@code hashLongs(new long[] {v})} call for any {@code long} value.
-     *
-     * @param input the long value to be hashed
-     * @return the hash code for the given long value
+ *
+ * @param input the long value to be hashed
+ * @return the hash code for the given long value
      */
     public abstract long hashLong(long input);
 
@@ -414,9 +414,9 @@ public abstract class LongHashFunction implements Serializable {
      * value is interpreted in {@linkplain ByteOrder#nativeOrder() native} byte order. For example,
      * the result of {@code hashInt(v)} call is identical to the result of
      * {@code hashInts(new int[] {v})} call for any {@code int} value.
-     *
-     * @param input the int value to be hashed
-     * @return the hash code for the given int value
+ *
+ * @param input the int value to be hashed
+ * @return the hash code for the given int value
      */
     public abstract long hashInt(int input);
 
@@ -428,9 +428,9 @@ public abstract class LongHashFunction implements Serializable {
      * {@code hashShorts(new short[] {v})} call for any {@code short} value.
      * As a consequence, {@code hashShort(v)} call produce always the same result as {@code
      * hashChar((char) v)}.
-     *
-     * @param input the short value to be hashed
-     * @return the hash code for the given short value
+ *
+ * @param input the short value to be hashed
+ * @return the hash code for the given short value
      */
     public abstract long hashShort(short input);
 
@@ -442,9 +442,9 @@ public abstract class LongHashFunction implements Serializable {
      * {@code hashChars(new char[] {v})} call for any {@code char} value.
      * As a consequence, {@code hashChar(v)} call produce always the same result as {@code
      * hashShort((short) v)}.
-     *
-     * @param input the char value to be hashed
-     * @return the hash code for the given char value
+ *
+ * @param input the char value to be hashed
+ * @return the hash code for the given char value
      */
     public abstract long hashChar(char input);
 
@@ -453,17 +453,17 @@ public abstract class LongHashFunction implements Serializable {
      * {@code LongHashFunction} methods that accept sequences of bytes. For example, the result of
      * {@code hashByte(v)} call is identical to the result of
      * {@code hashBytes(new byte[] {v})} call for any {@code byte} value.
-     *
-     * @param input the byte value to be hashed
-     * @return the hash code for the given byte value
+ *
+ * @param input the byte value to be hashed
+ * @return the hash code for the given byte value
      */
     public abstract long hashByte(byte input);
 
     /**
      * Returns the hash code for the empty (zero-length) bytes sequence,
      * for example {@code hashBytes(new byte[0])}.
-     *
-     * @return the hash code for the empty bytes sequence
+ *
+ * @return the hash code for the empty bytes sequence
      */
     public abstract long hashVoid();
 
@@ -494,9 +494,9 @@ public abstract class LongHashFunction implements Serializable {
      * Shortcut for {@link #hashBooleans(boolean[]) hashBooleans(new boolean[] &#123;input&#125;)}.
      * Note that this is not necessarily equal to {@code hashByte(input ? (byte) 1 : (byte) 0)},
      * because booleans could be stored differently in this JVM.
-     *
-     * @param input the boolean value to be hashed
-     * @return the hash code for the given boolean value
+ *
+ * @param input the boolean value to be hashed
+ * @return the hash code for the given boolean value
      */
     public long hashBoolean(boolean input) {
         return hashByte(input ? TRUE_BYTE_VALUE : FALSE_BYTE_VALUE);
@@ -504,9 +504,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashBooleans(boolean[], int, int) hashBooleans(input, 0, input.length)}.
-     *
-     * @param input the boolean array to be hashed
-     * @return the hash code for the given boolean array
+ *
+ * @param input the boolean array to be hashed
+ * @return the hash code for the given boolean array
      */
     public long hashBooleans(@NotNull boolean[] input) {
         return unsafeHash(input, BOOLEAN_BASE, input.length);
@@ -532,9 +532,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashBytes(byte[], int, int) hashBytes(input, 0, input.length)}.
-     *
-     * @param input the byte array to be hashed
-     * @return the hash code for the given byte array
+ *
+ * @param input the byte array to be hashed
+ * @return the hash code for the given byte array
      */
     public long hashBytes(@NotNull byte[] input) {
         return unsafeHash(input, BYTE_BASE, input.length);
@@ -561,9 +561,9 @@ public abstract class LongHashFunction implements Serializable {
     /**
      * Shortcut for {@link #hashBytes(ByteBuffer, int, int)
      * hashBytes(input, input.position(), input.remaining())}.
-     *
-     * @param input the ByteBuffer to be hashed
-     * @return the hash code for the given ByteBuffer
+ *
+ * @param input the ByteBuffer to be hashed
+ * @return the hash code for the given ByteBuffer
      */
     public long hashBytes(ByteBuffer input) {
         return hashByteBuffer(input, input.position(), input.remaining());
@@ -616,9 +616,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashChars(char[], int, int) hashChars(input, 0, input.length)}.
-     *
-     * @param input the char array to be hashed
-     * @return the hash code for the given char array
+ *
+ * @param input the char array to be hashed
+ * @return the hash code for the given char array
      */
     public long hashChars(@NotNull char[] input) {
         return unsafeHash(input, CHAR_BASE, input.length * 2L);
@@ -646,9 +646,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashChars(String, int, int) hashChars(input, 0, input.length())}.
-     *
-     * @param input the String to be hashed
-     * @return the hash code for the given String
+ *
+ * @param input the String to be hashed
+ * @return the hash code for the given String
      */
     public long hashChars(@NotNull String input) {
         return VALID_STRING_HASH.longHash(input, this, 0, input.length());
@@ -758,9 +758,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashInts(int[], int, int) hashInts(input, 0, input.length)}.
-     *
-     * @param input the integer array to be hashed
-     * @return the hash code for the given integer array
+ *
+ * @param input the integer array to be hashed
+ * @return the hash code for the given integer array
      */
     public long hashInts(@NotNull int[] input) {
         return unsafeHash(input, INT_BASE, input.length * 4L);
@@ -788,9 +788,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashLongs(long[], int, int) hashLongs(input, 0, input.length)}.
-     *
-     * @param input the long array to be hashed
-     * @return the hash code for the given long array
+ *
+ * @param input the long array to be hashed
+ * @return the hash code for the given long array
      */
     public long hashLongs(@NotNull long[] input) {
         return unsafeHash(input, LONG_BASE, input.length * 8L);

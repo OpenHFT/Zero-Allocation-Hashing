@@ -7,7 +7,7 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
+   <parent>
         <groupId>net.openhft</groupId>
         <artifactId>java-parent-pom</artifactId>
         <version>2026.0</version>
@@ -239,7 +239,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.11.2</version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
+			<version>1.11.2</version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
                     </dependency>
                 </dependencies>
             </plugin>
@@ -258,7 +258,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
@@ -309,7 +309,7 @@
             <properties>
                 <project.jdk.min-version>1.${project.target.release}</project.jdk.min-version>
                 <maven.bundle.plugin.version>3.5.1</maven.bundle.plugin.version>
-                <doclint/>
+                <doclint />
             </properties>
         </profile>
         <profile>
@@ -375,6 +375,78 @@
                                 <configuration>
                                     <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>quality</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>validate</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <configLocation>${checkstyle.config.location}</configLocation>
+                            <failOnViolation>true</failOnViolation>
+                            <logViolationsToConsole>true</logViolationsToConsole>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <violationSeverity>${checkstyle.violationSeverity}</violationSeverity>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>10.26.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>net.openhft</groupId>
+                                <artifactId>chronicle-quality-rules</artifactId>
+                                <version>1.27.0-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <!-- SpotBugs 4.x line that requires Java 11+ -->
+                        <version>4.9.8.1</version>
+                        <configuration>
+                            <effort>Max</effort>
+                            <threshold>Low</threshold>
+                            <includeTests>true</includeTests>
+                            <failOnError>true</failOnError>
+                            <!-- Shared SpotBugs filters from chronicle-quality-rules -->
+                            <includeFilterFile>net/openhft/quality/spotbugs27/chronicle-spotbugs-include.xml</includeFilterFile>
+                            <excludeFilterFile>net/openhft/quality/spotbugs27/chronicle-spotbugs-exclude.xml</excludeFilterFile>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.openhft</groupId>
+                                <artifactId>chronicle-quality-rules</artifactId>
+                                <version>1.27.0-SNAPSHOT</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>spotbugs-main</id>
+                                <!-- Run after compilation of main classes, before tests execute, and gate on findings -->
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
