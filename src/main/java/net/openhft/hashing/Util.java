@@ -3,10 +3,12 @@
  */
 package net.openhft.hashing;
 
-import org.jetbrains.annotations.NotNull;
+import java.nio.ByteBuffer;
 import sun.nio.ch.DirectBuffer;
 
-import java.nio.ByteBuffer;
+import org.jetbrains.annotations.NotNull;
+
+import static java.nio.ByteOrder.*;
 
 final class Util {
 
@@ -23,7 +25,6 @@ final class Util {
     static private boolean isHotSpotVM(@NotNull final String name) {
         return name.contains("HotSpot") || name.contains("OpenJDK");
     }
-
     static private boolean isJ9VM(@NotNull final String name) {
         return name.contains("Eclipse OpenJ9") || name.contains("IBM J9");
     }
@@ -34,8 +35,7 @@ final class Util {
 
     @NotNull
     static final StringHash VALID_STRING_HASH;
-
-    static {
+    static  {
         StringHash stringHash = null;
         try {
             final String vmName = System.getProperty("java.vm.name");
@@ -73,6 +73,6 @@ final class Util {
     }
 
     static long getDirectBufferAddress(@NotNull final ByteBuffer buff) {
-        return ((DirectBuffer) buff).address();
+        return ((DirectBuffer)buff).address();
     }
 }

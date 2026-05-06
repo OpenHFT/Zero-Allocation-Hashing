@@ -8,11 +8,17 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import static java.nio.ByteOrder.*;
+import static java.nio.ByteOrder.BIG_ENDIAN;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
+import static java.nio.ByteOrder.nativeOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 class LongTupleHashFunctionTest {
 
@@ -89,7 +95,7 @@ class LongTupleHashFunctionTest {
     private static void testBoolean(LongTupleHashFunction f, int len) {
         if (len != 1)
             return;
-        for (boolean b : new boolean[]{true, false}) {
+        for (boolean b : new boolean[] {true, false}) {
             boolean[] a = {b};
             long[] single = f.hashBoolean(b);
             long[] array = f.hashBooleans(a);
@@ -194,17 +200,17 @@ class LongTupleHashFunctionTest {
         bb.order(LITTLE_ENDIAN);
         assertArrayEquals("byte buffer little endian", eh, f.hashBytes(bb));
         ByteBuffer bb2 = ByteBuffer.allocate(len + 2).order(LITTLE_ENDIAN);
-        ((Buffer) bb2).position(1);
+        ((Buffer)bb2).position(1);
         bb2.put(bb);
         assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer) bb.order(BIG_ENDIAN)).clear();
+        ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
         assertArrayEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertArrayEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
 
-        ((Buffer) bb.order(nativeOrder())).clear();
+        ((Buffer)bb.order(nativeOrder())).clear();
     }
 
     private static void testCharSequences(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
@@ -234,7 +240,7 @@ class LongTupleHashFunctionTest {
                 long[] toCharSequenceActual = f.hash(s2, Access.toCharSequence(nonNativeOrder()), 0, len);
                 assertArrayEquals("string wrong order fixed", eh, toCharSequenceActual);
 
-                ((Buffer) bb.order(nativeOrder())).clear();
+                ((Buffer)bb.order(nativeOrder())).clear();
             }
         }
     }
@@ -243,7 +249,7 @@ class LongTupleHashFunctionTest {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
         assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
-        ((Buffer) bb).clear();
+        ((Buffer)bb).clear();
     }
 
     private static void testLatin1String(LongTupleHashFunction f, byte[] data) {
@@ -252,11 +258,11 @@ class LongTupleHashFunctionTest {
             String inputStr = new String(data, "ISO-8859-1");
             char[] inputCharArray = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
-                inputCharArray[i] = (char) (data[i] & 0xFF);
+                inputCharArray[i] = (char)(data[i]&0xFF);
             }
             char[] inputCharArray2 = new char[data.length];
             for (int i = 0; i < data.length; ++i) {
-                inputCharArray2[i] = (char) (data[i] & 0xFF);
+                inputCharArray2[i] = (char)(data[i]&0xFF);
             }
             assertArrayEquals(f.hashChars(inputStr), f.hashChars(inputCharArray));
         } catch (Exception e) {

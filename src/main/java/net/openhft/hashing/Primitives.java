@@ -8,8 +8,7 @@ import static java.nio.ByteOrder.nativeOrder;
 
 final class Primitives {
 
-    private Primitives() {
-    }
+    private Primitives() {}
 
     static final boolean NATIVE_LITTLE_ENDIAN = nativeOrder() == LITTLE_ENDIAN;
 
@@ -43,11 +42,11 @@ final class Primitives {
         int adjustByteOrder(final int v) { return v; }
         short adjustByteOrder(final short v) { return v; }
         char adjustByteOrder(final char v) { return v; }
-        }
+    }
     private static class ByteOrderHelperReverse extends ByteOrderHelper {
-        long adjustByteOrder(final long v) { return Long.reverseBytes(v); }
-        int adjustByteOrder(final int v) { return Integer.reverseBytes(v); }
-        short adjustByteOrder(final short v) { return Short.reverseBytes(v); }
-        char adjustByteOrder(final char v) { return Character.reverseBytes(v); }
+        @Override long adjustByteOrder(final long v) { return Long.reverseBytes(v); }
+        @Override int adjustByteOrder(final int v) { return Integer.reverseBytes(v); }
+        @Override short adjustByteOrder(final short v) { return Short.reverseBytes(v); }
+        @Override char adjustByteOrder(final char v) { return Character.reverseBytes(v); }
     }
 }
