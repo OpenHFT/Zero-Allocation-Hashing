@@ -1,0 +1,66 @@
+= Integration Tests
+
+This directory contains integration tests for the Zero-Allocation-Hashing library using the Maven Invoker Plugin and JUnit 4.
+
+== Test Cases
+
+=== 1. simple-usage
+
+Tests basic usage of the hashing library without modules.
+
+- Tests various hash functions (XxHash, CityHash, MurmurHash3, FarmHash)
+- Verifies hash consistency across byte arrays, ByteBuffers, and CharSequences
+- Ensures public API is accessible
+- Uses JUnit 4 assertions
+
+=== 2. module-test
+
+Tests proper module encapsulation on Java 9+.
+
+- Uses `module-info.java` to require the `net.openhft.hashing` module
+- Verifies that only exported packages are accessible
+- Tests are compiled and run with module path
+- Demonstrates module system working correctly
+- Uses JUnit 4 assertions
+
+== Running Integration Tests
+
+Integration tests run automatically during the build with:
+
+[source,bash]
+----
+./mvnw clean verify
+----
+
+Or run them separately with:
+
+[source,bash]
+----
+./mvnw invoker:run
+----
+
+== Module Encapsulation
+
+The library exports only the `net.openhft.hashing` package via module-info.java:
+
+[source,java]
+----
+module net.openhft.hashing {
+    requires jdk.unsupported;
+    exports net.openhft.hashing;
+}
+----
+
+Internal packages (like sun.nio.ch) are not exported and cannot be accessed by consuming modules.
+
+== Multi-Release JAR
+
+The library is built as a multi-release JAR with module-info.class in META-INF/versions/9/:
+
+- Java 8: Works as a regular JAR without module system
+- Java 9+: Works as a named module with proper encapsulation
+
+== Test Framework
+
+All integration tests use JUnit 4 (same as the main project tests) and do not print to System.out.
+Test results are reported through Maven Surefire plugin output only.
