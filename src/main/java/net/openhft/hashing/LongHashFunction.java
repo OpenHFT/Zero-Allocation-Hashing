@@ -67,6 +67,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long)
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1() {
         return CityAndFarmHash_1_1.asLongHashFunctionWithoutSeed();
     }
@@ -83,6 +84,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithSeed(seed);
     }
@@ -100,6 +102,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed0, long seed1) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
     }
@@ -225,6 +228,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm without seed values
      * @see #murmur_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3() {
         return MurmurHash_3.asLongHashFunctionWithoutSeed();
     }
@@ -240,6 +244,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm with the given seed value
      * @see #murmur_3()
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3(long seed) {
         return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
@@ -335,6 +340,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, without a seed value
      * @see #wy_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3() {
         return WyHash.asLongHashFunctionWithoutSeed();
     }
@@ -350,6 +356,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, with the given seed value
      * @see #wy_3()
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3(long seed) {
         return WyHash.asLongHashFunctionWithSeed(seed);
     }
@@ -669,9 +676,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashChars(StringBuilder, int, int) hashChars(input, 0, input.length())}.
- *
- * @param input the StringBuilder to be hashed
- * @return the hash code for the given StringBuilder
+     *
+     * @param input the StringBuilder to be hashed
+     * @return the hash code for the given StringBuilder
      */
     public long hashChars(@NotNull StringBuilder input) {
         return hashNativeChars(input);
@@ -697,33 +704,33 @@ public abstract class LongHashFunction implements Serializable {
         return hashNativeChars(input, off, len);
     }
 
-/**
- * Returns the hash code for the entire CharSequence.
- *
- * @param input the CharSequence to be hashed
- * @return the hash code for the given CharSequence
- */
+    /**
+     * Returns the hash code for the entire CharSequence.
+     *
+     * @param input the CharSequence to be hashed
+     * @return the hash code for the given CharSequence
+     */
     long hashNativeChars(CharSequence input) {
         return hashNativeChars(input, 0, input.length());
     }
 
-/**
- * Returns the hash code for a subsequence of the given CharSequence.
- *
- * @param input the CharSequence to be hashed
- * @param off   the index of the first char in the subsequence
- * @param len   the length of the subsequence
- * @return the hash code for the specified subsequence of the given CharSequence
- */
+    /**
+     * Returns the hash code for a subsequence of the given CharSequence.
+     *
+     * @param input the CharSequence to be hashed
+     * @param off   the index of the first char in the subsequence
+     * @param len   the length of the subsequence
+     * @return the hash code for the specified subsequence of the given CharSequence
+     */
     long hashNativeChars(CharSequence input, int off, int len) {
         return hash(input, nativeCharSequenceAccess(), off * 2L, len * 2L);
     }
 
     /**
      * Shortcut for {@link #hashShorts(short[], int, int) hashShorts(input, 0, input.length)}.
- *
- * @param input the short array to be hashed
- * @return the hash code for the given short array
+     *
+     * @param input the short array to be hashed
+     * @return the hash code for the given short array
      */
     public long hashShorts(@NotNull short[] input) {
         return unsafeHash(input, SHORT_BASE, input.length * 2L);
