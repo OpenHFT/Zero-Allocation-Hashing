@@ -6,7 +6,9 @@ package net.openhft.it.module;
 import net.openhft.hashing.LongHashFunction;
 import org.junit.Test;
 
+import java.lang.module.ModuleDescriptor;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -37,5 +39,29 @@ public class ModuleTest {
         } catch (ClassNotFoundException e) {
             fail("Public API net.openhft.hashing.LongHashFunction should be accessible");
         }
+    }
+
+    @Test
+    public void testExplicitDescriptorContract() {
+        Module module = LongHashFunction.class.getModule();
+        assertTrue("Library should be a named module", module.isNamed());
+        assertEquals("net.openhft.hashing", module.getName());
+
+        ModuleDescriptor descriptor = module.getDescriptor();
+        assertNotNull("Named module should have a descriptor", descriptor);
+        assertFalse("Library should not resolve as an automatic module", descriptor.isAutomatic());
+
+        Set<ModuleDescriptor.Exports> exports = descriptor.exports();
+        assertEquals("Only the public API package should be exported", 1, exports.size());
+        ModuleDescriptor.Exports publicApi = exports.iterator().next();
+        assertEquals("net.openhft.hashing", publicApi.source());
+        assertFalse("Public API export should be unqualified", publicApi.isQualified());
+
+        ModuleDescriptor.Requires unsupported = descriptor.requires().stream()
+                .filter(requirement -> requirement.name().equals("jdk.unsupported"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Descriptor must require jdk.unsupported"));
+        assertFalse("jdk.unsupported must be available at runtime",
+                unsupported.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
     }
 }

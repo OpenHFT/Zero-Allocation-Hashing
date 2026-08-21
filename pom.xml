@@ -31,13 +31,15 @@
         <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
         <project.maven.min-version>3.5.0</project.maven.min-version>
 
-        <maven.compiler.release>${project.target.release}</maven.compiler.release>
+        <maven.compiler.source>${project.target.release}</maven.compiler.source>
+        <maven.compiler.target>${project.target.release}</maven.compiler.target>
 
         <!-- bundle plugin requires JDK8 from 4.0.0, JDK15 requires 5.1.1 for issue FELIX-6259 -->
         <maven.bundle.plugin.version>5.1.1</maven.bundle.plugin.version>
 
         <doclint>all,-missing</doclint>
         <jmh.version>1.37</jmh.version>
+        <moditect.version>1.3.0.Final</moditect.version>
         <sonar.organization>openhft</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
@@ -287,10 +289,6 @@
                         <Private-Package>!java.*,!sun.*</Private-Package>
                         <Import-Package>*</Import-Package>
                         <Multi-Release>true</Multi-Release>
-                        <Include-Resource>
-                            {maven-resources},
-                            META-INF/versions/=${project.build.outputDirectory}/META-INF/versions/
-                        </Include-Resource>
                     </instructions>
                 </configuration>
                 <executions>
@@ -302,6 +300,27 @@
                         <goals>
                             <goal>manifest</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.moditect</groupId>
+                <artifactId>moditect-maven-plugin</artifactId>
+                <version>${moditect.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-module-info</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>add-module-info</goal>
+                        </goals>
+                        <configuration>
+                            <jvmVersion>9</jvmVersion>
+                            <module>
+                                <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
+                            </module>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -386,29 +405,13 @@
         <profile>
             <id>jdk9+-profile</id>
             <activation>
-                <jdk>[9,)</jdk>
+                <jdk>[9,17)</jdk>
             </activation>
+            <properties>
+                <maven.compiler.release>${project.target.release}</maven.compiler.release>
+            </properties>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>compile-java9</id>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                                <configuration>
-                                    <release>9</release>
-                                    <compileSourceRoots>
-                                        <compileSourceRoot>${project.basedir}/src/main/java9</compileSourceRoot>
-                                    </compileSourceRoots>
-                                    <multiReleaseOutput>true</multiReleaseOutput>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <executions>
