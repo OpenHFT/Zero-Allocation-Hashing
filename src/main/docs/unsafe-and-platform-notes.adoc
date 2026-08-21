@@ -24,7 +24,14 @@ Older HotSpot builds and other JVMs fall back to UTF-16 behaviour through `Moder
 The target differs because class-path code belongs to the unnamed module.
 The module descriptor cannot request that another module export one of its packages, so the application launcher must supply this option.
 * Java 24 and 25 emit terminal-deprecation warnings for some `sun.misc.Unsafe` memory-access methods.
-These warnings do not prevent execution through Java 25, but removal of those methods is a separate compatibility horizon.
+The Java 25 default is `--sun-misc-unsafe-memory-access=warn`, which permits execution and emits at most one warning per JVM.
+The first warning from this library normally identifies `UnsafeAccess.arrayBaseOffset`, but suppressing or replacing that one call would not resolve the underlying dependency: hashing also uses `getByte`, `getShort`, `getInt`, and `getLong` throughout its hot paths.
+* Applications that have explicitly accepted this temporary compatibility risk can suppress the warning on Java 24 and 25 with `--sun-misc-unsafe-memory-access=allow`.
+This is an application-wide launcher policy, not a library setting, and does not mitigate the future-removal risk.
+Use `debug` instead when locating every call; `deny` makes the current implementation fail during `UnsafeAccess` initialisation.
+* Removing the warning properly requires replacing all affected on-heap and off-heap memory operations with supported APIs, principally `VarHandle` and the Foreign Function and Memory API.
+That work requires version-specific implementations and performance validation, and is separate from JPMS packaging.
+See https://openjdk.org/jeps/498[JEP 498] and https://openjdk.org/jeps/471[JEP 471].
 
 === Platform Behaviour
 
