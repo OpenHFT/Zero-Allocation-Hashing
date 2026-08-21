@@ -1,0 +1,326 @@
+diff --git a/pom.xml b/pom.xml
+index 078bece..cc9c84d 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -381,6 +381,46 @@
+                 </plugins>
+             </build>
+         </profile>
++        <profile>
++            <!-- Research-only profile for the rejected issue #67 adapter experiment. -->
++            <id>varhandle-prototype</id>
++            <activation>
++                <property>
++                    <name>varhandlePrototype</name>
++                </property>
++            </activation>
++            <properties>
++                <maven.compiler.testRelease>11</maven.compiler.testRelease>
++            </properties>
++            <build>
++                <plugins>
++                    <plugin>
++                        <artifactId>maven-compiler-plugin</artifactId>
++                        <configuration>
++                            <proc>full</proc>
++                        </configuration>
++                    </plugin>
++                    <plugin>
++                        <groupId>org.codehaus.mojo</groupId>
++                        <artifactId>build-helper-maven-plugin</artifactId>
++                        <executions>
++                            <execution>
++                                <id>add-varhandle-prototype-test-source</id>
++                                <phase>generate-test-sources</phase>
++                                <goals>
++                                    <goal>add-test-source</goal>
++                                </goals>
++                                <configuration>
++                                    <sources>
++                                        <source>src/test/java9-prototype</source>
++                                    </sources>
++                                </configuration>
++                            </execution>
++                        </executions>
++                    </plugin>
++                </plugins>
++            </build>
++        </profile>
+         <profile>
+             <id>quality</id>
+             <build>
+diff --git a/src/test/java9-prototype/net/openhft/hashing/VarHandleAccess.java b/src/test/java9-prototype/net/openhft/hashing/VarHandleAccess.java
+new file mode 100644
+index 0000000..3022d43
+--- /dev/null
++++ b/src/test/java9-prototype/net/openhft/hashing/VarHandleAccess.java
+@@ -0,0 +1,101 @@
++/*
++ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
++ */
++package net.openhft.hashing;
++
++import java.lang.invoke.MethodHandles;
++import java.lang.invoke.VarHandle;
++import java.nio.ByteOrder;
++
++import static net.openhft.hashing.Primitives.unsignedByte;
++import static net.openhft.hashing.Primitives.unsignedInt;
++import static net.openhft.hashing.Primitives.unsignedShort;
++
++/**
++ * Prototype {@link Access} to {@code byte[]} backed by {@link VarHandle} rather than
++ * {@code sun.misc.Unsafe} (issue #67). This lives in the test tree because it needs
++ * Java&nbsp;9+ APIs while the shipped library still compiles for Java&nbsp;8. It exists only
++ * to record the bounded experiment performed for issue #67.
++ * <p>
++ * Offsets follow the same convention as {@link UnsafeAccess} for {@code byte[]} inputs:
++ * they are absolute {@code UnsafeAccess.BYTE_BASE + arrayIndex} values, so this access
++ * can be dropped into {@link LongHashFunction#hash} in place of {@link Access#unsafe()}.
++ *
++ * <h2>Scoped conclusion</h2>
++ * {@link VarHandleVsUnsafeBenchmark} measured whole XXH3 hashes over small, repeatedly accessed
++ * {@code byte[]} inputs on JDK&nbsp;11/17/21/25. Adapting the current absolute-{@code long}-offset
++ * {@link Access} contract to byte-array view VarHandles was slower than {@link UnsafeAccess} in
++ * every measured case. This prototype is therefore unsuitable as a drop-in replacement.
++ * The experiment does not evaluate a specialised relative-{@code int}-offset implementation,
++ * XxHash, streaming input, {@code ByteBuffer}, or raw-memory access.
++ * <p>
++ * This class is not an Unsafe-denial fallback: its {@link #BYTE_BASE} initialisation and the XXH3
++ * implementation still depend on Unsafe memory-access methods.
++ */
++final class VarHandleAccess extends Access<byte[]> {
++
++    static final VarHandleAccess INSTANCE = new VarHandleAccess();
++
++    private static final long BYTE_BASE = UnsafeAccess.BYTE_BASE;
++
++    private static final VarHandle LONG_VH =
++            MethodHandles.byteArrayViewVarHandle(long[].class, ByteOrder.nativeOrder());
++    private static final VarHandle INT_VH =
++            MethodHandles.byteArrayViewVarHandle(int[].class, ByteOrder.nativeOrder());
++    private static final VarHandle SHORT_VH =
++            MethodHandles.byteArrayViewVarHandle(short[].class, ByteOrder.nativeOrder());
++
++    private final Access<byte[]> reverse = Access.newDefaultReverseAccess(this);
++
++    private VarHandleAccess() {
++    }
++
++    private static int index(final long offset) {
++        return (int) (offset - BYTE_BASE);
++    }
++
++    @Override
++    public long getLong(final byte[] input, final long offset) {
++        return (long) LONG_VH.get(input, index(offset));
++    }
++
++    @Override
++    public long getUnsignedInt(final byte[] input, final long offset) {
++        return unsignedInt(getInt(input, offset));
++    }
++
++    @Override
++    public int getInt(final byte[] input, final long offset) {
++        return (int) INT_VH.get(input, index(offset));
++    }
++
++    @Override
++    public int getUnsignedShort(final byte[] input, final long offset) {
++        return unsignedShort(getShort(input, offset));
++    }
++
++    @Override
++    public int getShort(final byte[] input, final long offset) {
++        return (short) SHORT_VH.get(input, index(offset));
++    }
++
++    @Override
++    public int getUnsignedByte(final byte[] input, final long offset) {
++        return unsignedByte(getByte(input, offset));
++    }
++
++    @Override
++    public int getByte(final byte[] input, final long offset) {
++        return input[index(offset)];
++    }
++
++    @Override
++    public ByteOrder byteOrder(final byte[] input) {
++        return ByteOrder.nativeOrder();
++    }
++
++    @Override
++    protected Access<byte[]> reverseAccess() {
++        return reverse;
++    }
++}
+diff --git a/src/test/java9-prototype/net/openhft/hashing/VarHandleAccessTest.java b/src/test/java9-prototype/net/openhft/hashing/VarHandleAccessTest.java
+new file mode 100644
+index 0000000..ebfa3f7
+--- /dev/null
++++ b/src/test/java9-prototype/net/openhft/hashing/VarHandleAccessTest.java
+@@ -0,0 +1,66 @@
++/*
++ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
++ */
++package net.openhft.hashing;
++
++import org.junit.Test;
++
++import java.util.Random;
++
++import static org.junit.Assert.assertEquals;
++
++/**
++ * Validates the {@link VarHandleAccess} prototype for issue #67: a VarHandle-based
++ * byte[] read path must produce results bit-for-bit identical to the shipped
++ * {@code sun.misc.Unsafe} path across the hash functions and a range of lengths,
++ * including sub-word tails and unaligned offsets. This is a differential test against
++ * the current implementation, not an external specification or an Unsafe-denial test.
++ */
++public class VarHandleAccessTest {
++
++    private static final LongHashFunction[] FUNCTIONS = {
++            LongHashFunction.xx(),
++            LongHashFunction.xx(42L),
++            LongHashFunction.xx3(),
++            LongHashFunction.xx3(42L),
++            LongHashFunction.city_1_1(),
++            LongHashFunction.farmNa(),
++            LongHashFunction.farmUo(),
++            LongHashFunction.murmur_3(),
++            LongHashFunction.wy_3(),
++            LongHashFunction.metro(),
++    };
++
++    @Test
++    public void varHandleAccessMatchesUnsafeForByteArrays() {
++        final Random random = new Random(12345L);
++        for (int len = 0; len <= 264; len++) {
++            final byte[] bytes = new byte[len];
++            random.nextBytes(bytes);
++            for (LongHashFunction fn : FUNCTIONS) {
++                final long viaUnsafe = fn.hashBytes(bytes);
++                final long viaVarHandle =
++                        fn.hash(bytes, VarHandleAccess.INSTANCE, UnsafeAccess.BYTE_BASE, len);
++                assertEquals("mismatch for " + fn + " at length " + len,
++                        viaUnsafe, viaVarHandle);
++            }
++        }
++    }
++
++    @Test
++    public void varHandleAccessMatchesUnsafeAtUnalignedOffsets() {
++        final Random random = new Random(67890L);
++        final int len = 96;
++        for (int prefix = 0; prefix < 8; prefix++) {
++            final byte[] bytes = new byte[prefix + len];
++            random.nextBytes(bytes);
++            for (LongHashFunction fn : FUNCTIONS) {
++                final long viaUnsafe = fn.hashBytes(bytes, prefix, len);
++                final long viaVarHandle = fn.hash(
++                        bytes, VarHandleAccess.INSTANCE, UnsafeAccess.BYTE_BASE + prefix, len);
++                assertEquals("mismatch for " + fn + " at prefix " + prefix,
++                        viaUnsafe, viaVarHandle);
++            }
++        }
++    }
++}
+diff --git a/src/test/java9-prototype/net/openhft/hashing/VarHandleVsUnsafeBenchmark.java b/src/test/java9-prototype/net/openhft/hashing/VarHandleVsUnsafeBenchmark.java
+new file mode 100644
+index 0000000..c8d53b1
+--- /dev/null
++++ b/src/test/java9-prototype/net/openhft/hashing/VarHandleVsUnsafeBenchmark.java
+@@ -0,0 +1,90 @@
++/*
++ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
++ */
++package net.openhft.hashing;
++
++import org.openjdk.jmh.annotations.Benchmark;
++import org.openjdk.jmh.annotations.BenchmarkMode;
++import org.openjdk.jmh.annotations.Fork;
++import org.openjdk.jmh.annotations.Measurement;
++import org.openjdk.jmh.annotations.Mode;
++import org.openjdk.jmh.annotations.OutputTimeUnit;
++import org.openjdk.jmh.annotations.Param;
++import org.openjdk.jmh.annotations.Scope;
++import org.openjdk.jmh.annotations.Setup;
++import org.openjdk.jmh.annotations.State;
++import org.openjdk.jmh.annotations.Warmup;
++
++import java.io.IOException;
++import java.util.Random;
++import java.util.concurrent.TimeUnit;
++
++/**
++ * Go/no-go benchmark for issue #67: is a {@link java.lang.invoke.VarHandle}-based
++ * {@link Access} to {@code byte[]} at least as fast as the shipped {@code sun.misc.Unsafe}
++ * path for <em>whole hash operations</em> (not isolated primitive loads)?
++ * <p>
++ * The two benchmark methods run the identical hash algorithm over the identical input;
++ * they differ only in the {@link Access} implementation handed to
++ * {@link LongHashFunction#hash(Object, Access, long, long)}:
++ * <ul>
++ *   <li>{@code unsafe} uses the production {@link UnsafeAccess#INSTANCE};</li>
++ *   <li>{@code varHandle} uses the prototype {@link VarHandleAccess#INSTANCE}.</li>
++ * </ul>
++ * Both accesses receive the same absolute offset. The VarHandle adapter converts that
++ * {@code long} value to a relative {@code int} index for every read; this conversion is part of
++ * the adapter cost measured here. Parameters sweep input length and start alignment because the
++ * JIT can treat aligned and unaligned access differently on some JDKs.
++ * <p>
++ * Fork count, iteration counts and modes are intentionally left at conservative defaults and
++ * are meant to be overridden on the JMH command line per JDK under test so the same source
++ * produces comparable raw output on JDK&nbsp;11, 17, 21 and 25.
++ * <p>
++ * Run explicitly with {@code -DvarhandlePrototype} on JDK&nbsp;11+; it lives in the test tree
++ * because {@link VarHandleAccess} needs newer APIs while the library still targets Java&nbsp;8.
++ */
++@State(Scope.Thread)
++@BenchmarkMode({Mode.AverageTime, Mode.Throughput})
++@OutputTimeUnit(TimeUnit.NANOSECONDS)
++@Warmup(iterations = 5, time = 1)
++@Measurement(iterations = 5, time = 1)
++@Fork(3)
++public class VarHandleVsUnsafeBenchmark {
++
++    private static final long BYTE_BASE = UnsafeAccess.BYTE_BASE;
++
++    @Param({"8", "16", "64", "128", "1024", "4096"})
++    private int length;
++
++    /** 0 = aligned start, 1 = start one byte in so 8-byte reads straddle word boundaries. */
++    @Param({"0", "1"})
++    private int startAlign;
++
++    private LongHashFunction xx3;
++    private byte[] input;
++    private long offset;
++    private long len;
++
++    @Setup
++    public void setup() {
++        xx3 = LongHashFunction.xx3();
++        input = new byte[length + 8];
++        new Random(42).nextBytes(input);
++        offset = BYTE_BASE + startAlign;
++        len = length;
++    }
++
++    @Benchmark
++    public long unsafe() {
++        return xx3.hash(input, UnsafeAccess.INSTANCE, offset, len);
++    }
++
++    @Benchmark
++    public long varHandle() {
++        return xx3.hash(input, VarHandleAccess.INSTANCE, offset, len);
++    }
++
++    public static void main(String[] args) throws IOException {
++        org.openjdk.jmh.Main.main(args);
++    }
++}

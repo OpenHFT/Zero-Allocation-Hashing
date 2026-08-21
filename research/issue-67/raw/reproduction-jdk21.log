@@ -1,0 +1,1049 @@
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 8, startAlign = 0)
+
+# Run progress: 0.00% complete, ETA 00:03:12
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.586 ns/op
+# Warmup Iteration   2: 2.640 ns/op
+# Warmup Iteration   3: 2.353 ns/op
+Iteration   1: 2.339 ns/op
+Iteration   2: 2.320 ns/op
+Iteration   3: 2.323 ns/op
+Iteration   4: 2.345 ns/op
+Iteration   5: 2.351 ns/op
+
+# Run progress: 2.08% complete, ETA 00:03:17
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.640 ns/op
+# Warmup Iteration   2: 2.555 ns/op
+# Warmup Iteration   3: 2.339 ns/op
+Iteration   1: 2.333 ns/op
+Iteration   2: 2.309 ns/op
+Iteration   3: 2.318 ns/op
+Iteration   4: 2.333 ns/op
+Iteration   5: 2.420 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.339 ±(99.9%) 0.047 ns/op [Average]
+  (min, avg, max) = (2.309, 2.339, 2.420), stdev = 0.031
+  CI (99.9%): [2.292, 2.386] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 8, startAlign = 1)
+
+# Run progress: 4.17% complete, ETA 00:03:11
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.581 ns/op
+# Warmup Iteration   2: 2.555 ns/op
+# Warmup Iteration   3: 2.341 ns/op
+Iteration   1: 2.343 ns/op
+Iteration   2: 2.322 ns/op
+Iteration   3: 2.321 ns/op
+Iteration   4: 2.325 ns/op
+Iteration   5: 2.324 ns/op
+
+# Run progress: 6.25% complete, ETA 00:03:07
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.572 ns/op
+# Warmup Iteration   2: 2.539 ns/op
+# Warmup Iteration   3: 2.329 ns/op
+Iteration   1: 2.308 ns/op
+Iteration   2: 2.320 ns/op
+Iteration   3: 2.333 ns/op
+Iteration   4: 2.353 ns/op
+Iteration   5: 2.344 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.329 ±(99.9%) 0.021 ns/op [Average]
+  (min, avg, max) = (2.308, 2.329, 2.353), stdev = 0.014
+  CI (99.9%): [2.308, 2.350] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 16, startAlign = 0)
+
+# Run progress: 8.33% complete, ETA 00:03:03
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.776 ns/op
+# Warmup Iteration   2: 2.727 ns/op
+# Warmup Iteration   3: 2.513 ns/op
+Iteration   1: 2.518 ns/op
+Iteration   2: 2.535 ns/op
+Iteration   3: 2.546 ns/op
+Iteration   4: 2.519 ns/op
+Iteration   5: 2.511 ns/op
+
+# Run progress: 10.42% complete, ETA 00:02:58
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.780 ns/op
+# Warmup Iteration   2: 2.755 ns/op
+# Warmup Iteration   3: 2.534 ns/op
+Iteration   1: 2.522 ns/op
+Iteration   2: 3.163 ns/op
+Iteration   3: 2.508 ns/op
+Iteration   4: 2.508 ns/op
+Iteration   5: 2.523 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.585 ±(99.9%) 0.308 ns/op [Average]
+  (min, avg, max) = (2.508, 2.585, 3.163), stdev = 0.203
+  CI (99.9%): [2.278, 2.893] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 16, startAlign = 1)
+
+# Run progress: 12.50% complete, ETA 00:02:54
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.815 ns/op
+# Warmup Iteration   2: 2.758 ns/op
+# Warmup Iteration   3: 2.558 ns/op
+Iteration   1: 2.548 ns/op
+Iteration   2: 2.514 ns/op
+Iteration   3: 2.517 ns/op
+Iteration   4: 2.512 ns/op
+Iteration   5: 2.528 ns/op
+
+# Run progress: 14.58% complete, ETA 00:02:50
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.750 ns/op
+# Warmup Iteration   2: 2.733 ns/op
+# Warmup Iteration   3: 2.530 ns/op
+Iteration   1: 2.516 ns/op
+Iteration   2: 2.519 ns/op
+Iteration   3: 2.502 ns/op
+Iteration   4: 2.499 ns/op
+Iteration   5: 2.499 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.516 ±(99.9%) 0.023 ns/op [Average]
+  (min, avg, max) = (2.499, 2.516, 2.548), stdev = 0.015
+  CI (99.9%): [2.493, 2.538] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 64, startAlign = 0)
+
+# Run progress: 16.67% complete, ETA 00:02:46
+# Fork: 1 of 2
+# Warmup Iteration   1: 5.703 ns/op
+# Warmup Iteration   2: 5.671 ns/op
+# Warmup Iteration   3: 5.416 ns/op
+Iteration   1: 5.399 ns/op
+Iteration   2: 5.426 ns/op
+Iteration   3: 5.401 ns/op
+Iteration   4: 5.404 ns/op
+Iteration   5: 5.386 ns/op
+
+# Run progress: 18.75% complete, ETA 00:02:42
+# Fork: 2 of 2
+# Warmup Iteration   1: 5.658 ns/op
+# Warmup Iteration   2: 5.615 ns/op
+# Warmup Iteration   3: 5.451 ns/op
+Iteration   1: 5.391 ns/op
+Iteration   2: 5.441 ns/op
+Iteration   3: 5.414 ns/op
+Iteration   4: 5.370 ns/op
+Iteration   5: 5.438 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  5.407 ±(99.9%) 0.035 ns/op [Average]
+  (min, avg, max) = (5.370, 5.407, 5.441), stdev = 0.023
+  CI (99.9%): [5.372, 5.442] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 64, startAlign = 1)
+
+# Run progress: 20.83% complete, ETA 00:02:37
+# Fork: 1 of 2
+# Warmup Iteration   1: 5.629 ns/op
+# Warmup Iteration   2: 5.570 ns/op
+# Warmup Iteration   3: 5.424 ns/op
+Iteration   1: 5.425 ns/op
+Iteration   2: 5.499 ns/op
+Iteration   3: 5.541 ns/op
+Iteration   4: 5.329 ns/op
+Iteration   5: 5.327 ns/op
+
+# Run progress: 22.92% complete, ETA 00:02:33
+# Fork: 2 of 2
+# Warmup Iteration   1: 5.693 ns/op
+# Warmup Iteration   2: 5.558 ns/op
+# Warmup Iteration   3: 5.397 ns/op
+Iteration   1: 5.336 ns/op
+Iteration   2: 5.387 ns/op
+Iteration   3: 5.373 ns/op
+Iteration   4: 5.355 ns/op
+Iteration   5: 5.378 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  5.395 ±(99.9%) 0.110 ns/op [Average]
+  (min, avg, max) = (5.327, 5.395, 5.541), stdev = 0.073
+  CI (99.9%): [5.285, 5.505] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 128, startAlign = 0)
+
+# Run progress: 25.00% complete, ETA 00:02:29
+# Fork: 1 of 2
+# Warmup Iteration   1: 11.408 ns/op
+# Warmup Iteration   2: 11.189 ns/op
+# Warmup Iteration   3: 10.760 ns/op
+Iteration   1: 10.950 ns/op
+Iteration   2: 10.936 ns/op
+Iteration   3: 10.936 ns/op
+Iteration   4: 10.934 ns/op
+Iteration   5: 10.908 ns/op
+
+# Run progress: 27.08% complete, ETA 00:02:25
+# Fork: 2 of 2
+# Warmup Iteration   1: 11.467 ns/op
+# Warmup Iteration   2: 11.249 ns/op
+# Warmup Iteration   3: 11.013 ns/op
+Iteration   1: 10.829 ns/op
+Iteration   2: 10.920 ns/op
+Iteration   3: 10.824 ns/op
+Iteration   4: 10.829 ns/op
+Iteration   5: 10.848 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  10.892 ±(99.9%) 0.079 ns/op [Average]
+  (min, avg, max) = (10.824, 10.892, 10.950), stdev = 0.052
+  CI (99.9%): [10.813, 10.970] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 128, startAlign = 1)
+
+# Run progress: 29.17% complete, ETA 00:02:21
+# Fork: 1 of 2
+# Warmup Iteration   1: 11.562 ns/op
+# Warmup Iteration   2: 11.471 ns/op
+# Warmup Iteration   3: 11.045 ns/op
+Iteration   1: 11.046 ns/op
+Iteration   2: 11.002 ns/op
+Iteration   3: 11.023 ns/op
+Iteration   4: 11.223 ns/op
+Iteration   5: 10.989 ns/op
+
+# Run progress: 31.25% complete, ETA 00:02:17
+# Fork: 2 of 2
+# Warmup Iteration   1: 11.430 ns/op
+# Warmup Iteration   2: 11.311 ns/op
+# Warmup Iteration   3: 10.999 ns/op
+Iteration   1: 11.005 ns/op
+Iteration   2: 11.074 ns/op
+Iteration   3: 10.936 ns/op
+Iteration   4: 10.952 ns/op
+Iteration   5: 11.039 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  11.029 ±(99.9%) 0.121 ns/op [Average]
+  (min, avg, max) = (10.936, 11.029, 11.223), stdev = 0.080
+  CI (99.9%): [10.908, 11.150] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 1024, startAlign = 0)
+
+# Run progress: 33.33% complete, ETA 00:02:12
+# Fork: 1 of 2
+# Warmup Iteration   1: 68.141 ns/op
+# Warmup Iteration   2: 66.093 ns/op
+# Warmup Iteration   3: 65.259 ns/op
+Iteration   1: 67.147 ns/op
+Iteration   2: 64.591 ns/op
+Iteration   3: 65.377 ns/op
+Iteration   4: 64.437 ns/op
+Iteration   5: 66.147 ns/op
+
+# Run progress: 35.42% complete, ETA 00:02:08
+# Fork: 2 of 2
+# Warmup Iteration   1: 67.562 ns/op
+# Warmup Iteration   2: 65.993 ns/op
+# Warmup Iteration   3: 65.066 ns/op
+Iteration   1: 64.615 ns/op
+Iteration   2: 65.212 ns/op
+Iteration   3: 65.071 ns/op
+Iteration   4: 65.021 ns/op
+Iteration   5: 65.360 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  65.298 ±(99.9%) 1.234 ns/op [Average]
+  (min, avg, max) = (64.437, 65.298, 67.147), stdev = 0.816
+  CI (99.9%): [64.064, 66.531] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 1024, startAlign = 1)
+
+# Run progress: 37.50% complete, ETA 00:02:04
+# Fork: 1 of 2
+# Warmup Iteration   1: 68.602 ns/op
+# Warmup Iteration   2: 68.397 ns/op
+# Warmup Iteration   3: 68.636 ns/op
+Iteration   1: 67.828 ns/op
+Iteration   2: 68.087 ns/op
+Iteration   3: 66.718 ns/op
+Iteration   4: 66.329 ns/op
+Iteration   5: 66.959 ns/op
+
+# Run progress: 39.58% complete, ETA 00:02:00
+# Fork: 2 of 2
+# Warmup Iteration   1: 68.812 ns/op
+# Warmup Iteration   2: 66.953 ns/op
+# Warmup Iteration   3: 65.571 ns/op
+Iteration   1: 66.536 ns/op
+Iteration   2: 68.009 ns/op
+Iteration   3: 65.846 ns/op
+Iteration   4: 67.082 ns/op
+Iteration   5: 67.741 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  67.113 ±(99.9%) 1.170 ns/op [Average]
+  (min, avg, max) = (65.846, 67.113, 68.087), stdev = 0.774
+  CI (99.9%): [65.943, 68.283] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 4096, startAlign = 0)
+
+# Run progress: 41.67% complete, ETA 00:01:56
+# Fork: 1 of 2
+# Warmup Iteration   1: 263.146 ns/op
+# Warmup Iteration   2: 249.364 ns/op
+# Warmup Iteration   3: 247.592 ns/op
+Iteration   1: 248.896 ns/op
+Iteration   2: 247.238 ns/op
+Iteration   3: 247.516 ns/op
+Iteration   4: 247.553 ns/op
+Iteration   5: 247.693 ns/op
+
+# Run progress: 43.75% complete, ETA 00:01:52
+# Fork: 2 of 2
+# Warmup Iteration   1: 263.720 ns/op
+# Warmup Iteration   2: 249.284 ns/op
+# Warmup Iteration   3: 249.386 ns/op
+Iteration   1: 252.735 ns/op
+Iteration   2: 250.040 ns/op
+Iteration   3: 249.423 ns/op
+Iteration   4: 249.149 ns/op
+Iteration   5: 249.234 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  248.948 ±(99.9%) 2.488 ns/op [Average]
+  (min, avg, max) = (247.238, 248.948, 252.735), stdev = 1.646
+  CI (99.9%): [246.460, 251.436] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 4096, startAlign = 1)
+
+# Run progress: 45.83% complete, ETA 00:01:47
+# Fork: 1 of 2
+# Warmup Iteration   1: 271.762 ns/op
+# Warmup Iteration   2: 258.562 ns/op
+# Warmup Iteration   3: 254.510 ns/op
+Iteration   1: 255.405 ns/op
+Iteration   2: 256.179 ns/op
+Iteration   3: 255.662 ns/op
+Iteration   4: 252.116 ns/op
+Iteration   5: 251.142 ns/op
+
+# Run progress: 47.92% complete, ETA 00:01:43
+# Fork: 2 of 2
+# Warmup Iteration   1: 272.676 ns/op
+# Warmup Iteration   2: 255.480 ns/op
+# Warmup Iteration   3: 254.883 ns/op
+Iteration   1: 255.989 ns/op
+Iteration   2: 256.259 ns/op
+Iteration   3: 256.346 ns/op
+Iteration   4: 256.568 ns/op
+Iteration   5: 258.203 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  255.387 ±(99.9%) 3.219 ns/op [Average]
+  (min, avg, max) = (251.142, 255.387, 258.203), stdev = 2.129
+  CI (99.9%): [252.168, 258.606] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 8, startAlign = 0)
+
+# Run progress: 50.00% complete, ETA 00:01:39
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.990 ns/op
+# Warmup Iteration   2: 2.940 ns/op
+# Warmup Iteration   3: 2.678 ns/op
+Iteration   1: 2.695 ns/op
+Iteration   2: 2.684 ns/op
+Iteration   3: 2.716 ns/op
+Iteration   4: 2.695 ns/op
+Iteration   5: 2.706 ns/op
+
+# Run progress: 52.08% complete, ETA 00:01:35
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.976 ns/op
+# Warmup Iteration   2: 3.004 ns/op
+# Warmup Iteration   3: 2.689 ns/op
+Iteration   1: 2.716 ns/op
+Iteration   2: 2.758 ns/op
+Iteration   3: 2.692 ns/op
+Iteration   4: 2.701 ns/op
+Iteration   5: 2.699 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.706 ±(99.9%) 0.031 ns/op [Average]
+  (min, avg, max) = (2.684, 2.706, 2.758), stdev = 0.021
+  CI (99.9%): [2.675, 2.738] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 8, startAlign = 1)
+
+# Run progress: 54.17% complete, ETA 00:01:31
+# Fork: 1 of 2
+# Warmup Iteration   1: 2.954 ns/op
+# Warmup Iteration   2: 2.935 ns/op
+# Warmup Iteration   3: 2.690 ns/op
+Iteration   1: 2.702 ns/op
+Iteration   2: 2.694 ns/op
+Iteration   3: 2.699 ns/op
+Iteration   4: 2.710 ns/op
+Iteration   5: 2.697 ns/op
+
+# Run progress: 56.25% complete, ETA 00:01:27
+# Fork: 2 of 2
+# Warmup Iteration   1: 2.967 ns/op
+# Warmup Iteration   2: 2.906 ns/op
+# Warmup Iteration   3: 2.669 ns/op
+Iteration   1: 2.711 ns/op
+Iteration   2: 2.710 ns/op
+Iteration   3: 2.691 ns/op
+Iteration   4: 2.711 ns/op
+Iteration   5: 2.681 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.701 ±(99.9%) 0.016 ns/op [Average]
+  (min, avg, max) = (2.681, 2.701, 2.711), stdev = 0.010
+  CI (99.9%): [2.685, 2.716] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 16, startAlign = 0)
+
+# Run progress: 58.33% complete, ETA 00:01:23
+# Fork: 1 of 2
+# Warmup Iteration   1: 3.230 ns/op
+# Warmup Iteration   2: 3.190 ns/op
+# Warmup Iteration   3: 2.946 ns/op
+Iteration   1: 2.972 ns/op
+Iteration   2: 2.977 ns/op
+Iteration   3: 2.977 ns/op
+Iteration   4: 2.975 ns/op
+Iteration   5: 2.952 ns/op
+
+# Run progress: 60.42% complete, ETA 00:01:18
+# Fork: 2 of 2
+# Warmup Iteration   1: 3.201 ns/op
+# Warmup Iteration   2: 3.214 ns/op
+# Warmup Iteration   3: 2.961 ns/op
+Iteration   1: 2.988 ns/op
+Iteration   2: 2.963 ns/op
+Iteration   3: 2.948 ns/op
+Iteration   4: 3.022 ns/op
+Iteration   5: 3.012 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.979 ±(99.9%) 0.036 ns/op [Average]
+  (min, avg, max) = (2.948, 2.979, 3.022), stdev = 0.024
+  CI (99.9%): [2.943, 3.015] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 16, startAlign = 1)
+
+# Run progress: 62.50% complete, ETA 00:01:14
+# Fork: 1 of 2
+# Warmup Iteration   1: 3.243 ns/op
+# Warmup Iteration   2: 3.222 ns/op
+# Warmup Iteration   3: 3.008 ns/op
+Iteration   1: 2.966 ns/op
+Iteration   2: 2.964 ns/op
+Iteration   3: 2.979 ns/op
+Iteration   4: 2.982 ns/op
+Iteration   5: 3.015 ns/op
+
+# Run progress: 64.58% complete, ETA 00:01:10
+# Fork: 2 of 2
+# Warmup Iteration   1: 3.195 ns/op
+# Warmup Iteration   2: 3.149 ns/op
+# Warmup Iteration   3: 2.954 ns/op
+Iteration   1: 2.977 ns/op
+Iteration   2: 2.918 ns/op
+Iteration   3: 2.977 ns/op
+Iteration   4: 2.946 ns/op
+Iteration   5: 2.956 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.968 ±(99.9%) 0.038 ns/op [Average]
+  (min, avg, max) = (2.918, 2.968, 3.015), stdev = 0.025
+  CI (99.9%): [2.930, 3.006] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 64, startAlign = 0)
+
+# Run progress: 66.67% complete, ETA 00:01:06
+# Fork: 1 of 2
+# Warmup Iteration   1: 6.709 ns/op
+# Warmup Iteration   2: 6.795 ns/op
+# Warmup Iteration   3: 6.531 ns/op
+Iteration   1: 6.611 ns/op
+Iteration   2: 6.591 ns/op
+Iteration   3: 6.550 ns/op
+Iteration   4: 6.585 ns/op
+Iteration   5: 6.536 ns/op
+
+# Run progress: 68.75% complete, ETA 00:01:02
+# Fork: 2 of 2
+# Warmup Iteration   1: 6.779 ns/op
+# Warmup Iteration   2: 6.610 ns/op
+# Warmup Iteration   3: 6.556 ns/op
+Iteration   1: 6.555 ns/op
+Iteration   2: 6.586 ns/op
+Iteration   3: 6.570 ns/op
+Iteration   4: 6.607 ns/op
+Iteration   5: 6.719 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  6.591 ±(99.9%) 0.077 ns/op [Average]
+  (min, avg, max) = (6.536, 6.591, 6.719), stdev = 0.051
+  CI (99.9%): [6.514, 6.668] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 64, startAlign = 1)
+
+# Run progress: 70.83% complete, ETA 00:00:58
+# Fork: 1 of 2
+# Warmup Iteration   1: 6.701 ns/op
+# Warmup Iteration   2: 6.636 ns/op
+# Warmup Iteration   3: 6.635 ns/op
+Iteration   1: 6.629 ns/op
+Iteration   2: 6.631 ns/op
+Iteration   3: 6.631 ns/op
+Iteration   4: 6.648 ns/op
+Iteration   5: 6.620 ns/op
+
+# Run progress: 72.92% complete, ETA 00:00:53
+# Fork: 2 of 2
+# Warmup Iteration   1: 6.743 ns/op
+# Warmup Iteration   2: 6.676 ns/op
+# Warmup Iteration   3: 6.602 ns/op
+Iteration   1: 6.635 ns/op
+Iteration   2: 6.785 ns/op
+Iteration   3: 6.661 ns/op
+Iteration   4: 6.637 ns/op
+Iteration   5: 6.570 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  6.645 ±(99.9%) 0.083 ns/op [Average]
+  (min, avg, max) = (6.570, 6.645, 6.785), stdev = 0.055
+  CI (99.9%): [6.562, 6.727] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 128, startAlign = 0)
+
+# Run progress: 75.00% complete, ETA 00:00:49
+# Fork: 1 of 2
+# Warmup Iteration   1: 12.276 ns/op
+# Warmup Iteration   2: 12.311 ns/op
+# Warmup Iteration   3: 12.112 ns/op
+Iteration   1: 12.123 ns/op
+Iteration   2: 12.084 ns/op
+Iteration   3: 12.185 ns/op
+Iteration   4: 12.236 ns/op
+Iteration   5: 12.130 ns/op
+
+# Run progress: 77.08% complete, ETA 00:00:45
+# Fork: 2 of 2
+# Warmup Iteration   1: 12.261 ns/op
+# Warmup Iteration   2: 12.018 ns/op
+# Warmup Iteration   3: 12.159 ns/op
+Iteration   1: 12.037 ns/op
+Iteration   2: 12.068 ns/op
+Iteration   3: 12.154 ns/op
+Iteration   4: 12.223 ns/op
+Iteration   5: 12.235 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  12.148 ±(99.9%) 0.108 ns/op [Average]
+  (min, avg, max) = (12.037, 12.148, 12.236), stdev = 0.072
+  CI (99.9%): [12.039, 12.256] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 128, startAlign = 1)
+
+# Run progress: 79.17% complete, ETA 00:00:41
+# Fork: 1 of 2
+# Warmup Iteration   1: 12.438 ns/op
+# Warmup Iteration   2: 13.299 ns/op
+# Warmup Iteration   3: 12.354 ns/op
+Iteration   1: 12.352 ns/op
+Iteration   2: 12.406 ns/op
+Iteration   3: 12.330 ns/op
+Iteration   4: 12.303 ns/op
+Iteration   5: 12.462 ns/op
+
+# Run progress: 81.25% complete, ETA 00:00:37
+# Fork: 2 of 2
+# Warmup Iteration   1: 12.757 ns/op
+# Warmup Iteration   2: 13.010 ns/op
+# Warmup Iteration   3: 12.279 ns/op
+Iteration   1: 12.303 ns/op
+Iteration   2: 12.390 ns/op
+Iteration   3: 12.467 ns/op
+Iteration   4: 12.405 ns/op
+Iteration   5: 12.294 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  12.371 ±(99.9%) 0.097 ns/op [Average]
+  (min, avg, max) = (12.294, 12.371, 12.467), stdev = 0.064
+  CI (99.9%): [12.274, 12.469] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 1024, startAlign = 0)
+
+# Run progress: 83.33% complete, ETA 00:00:33
+# Fork: 1 of 2
+# Warmup Iteration   1: 108.881 ns/op
+# Warmup Iteration   2: 106.116 ns/op
+# Warmup Iteration   3: 105.946 ns/op
+Iteration   1: 104.811 ns/op
+Iteration   2: 103.226 ns/op
+Iteration   3: 103.616 ns/op
+Iteration   4: 104.352 ns/op
+Iteration   5: 104.627 ns/op
+
+# Run progress: 85.42% complete, ETA 00:00:29
+# Fork: 2 of 2
+# Warmup Iteration   1: 108.973 ns/op
+# Warmup Iteration   2: 105.756 ns/op
+# Warmup Iteration   3: 104.164 ns/op
+Iteration   1: 103.529 ns/op
+Iteration   2: 105.735 ns/op
+Iteration   3: 103.301 ns/op
+Iteration   4: 102.800 ns/op
+Iteration   5: 102.168 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  103.816 ±(99.9%) 1.602 ns/op [Average]
+  (min, avg, max) = (102.168, 103.816, 105.735), stdev = 1.059
+  CI (99.9%): [102.215, 105.418] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 1024, startAlign = 1)
+
+# Run progress: 87.50% complete, ETA 00:00:24
+# Fork: 1 of 2
+# Warmup Iteration   1: 108.534 ns/op
+# Warmup Iteration   2: 106.998 ns/op
+# Warmup Iteration   3: 104.694 ns/op
+Iteration   1: 105.785 ns/op
+Iteration   2: 106.530 ns/op
+Iteration   3: 105.657 ns/op
+Iteration   4: 110.046 ns/op
+Iteration   5: 105.108 ns/op
+
+# Run progress: 89.58% complete, ETA 00:00:20
+# Fork: 2 of 2
+# Warmup Iteration   1: 110.887 ns/op
+# Warmup Iteration   2: 105.727 ns/op
+# Warmup Iteration   3: 102.513 ns/op
+Iteration   1: 103.218 ns/op
+Iteration   2: 103.613 ns/op
+Iteration   3: 103.942 ns/op
+Iteration   4: 105.317 ns/op
+Iteration   5: 105.683 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  105.490 ±(99.9%) 2.906 ns/op [Average]
+  (min, avg, max) = (103.218, 105.490, 110.046), stdev = 1.922
+  CI (99.9%): [102.584, 108.396] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 4096, startAlign = 0)
+
+# Run progress: 91.67% complete, ETA 00:00:16
+# Fork: 1 of 2
+# Warmup Iteration   1: 392.461 ns/op
+# Warmup Iteration   2: 364.828 ns/op
+# Warmup Iteration   3: 362.226 ns/op
+Iteration   1: 358.981 ns/op
+Iteration   2: 358.390 ns/op
+Iteration   3: 358.415 ns/op
+Iteration   4: 357.474 ns/op
+Iteration   5: 359.596 ns/op
+
+# Run progress: 93.75% complete, ETA 00:00:12
+# Fork: 2 of 2
+# Warmup Iteration   1: 389.924 ns/op
+# Warmup Iteration   2: 359.087 ns/op
+# Warmup Iteration   3: 356.741 ns/op
+Iteration   1: 357.557 ns/op
+Iteration   2: 356.132 ns/op
+Iteration   3: 358.416 ns/op
+Iteration   4: 357.854 ns/op
+Iteration   5: 357.887 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  358.070 ±(99.9%) 1.421 ns/op [Average]
+  (min, avg, max) = (356.132, 358.070, 359.596), stdev = 0.940
+  CI (99.9%): [356.649, 359.492] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.11, OpenJDK 64-Bit Server VM, 21.0.11+10-1-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 4096, startAlign = 1)
+
+# Run progress: 95.83% complete, ETA 00:00:08
+# Fork: 1 of 2
+# Warmup Iteration   1: 400.382 ns/op
+# Warmup Iteration   2: 367.994 ns/op
+# Warmup Iteration   3: 365.613 ns/op
+Iteration   1: 371.059 ns/op
+Iteration   2: 378.948 ns/op
+Iteration   3: 402.950 ns/op
+Iteration   4: 380.115 ns/op
+Iteration   5: 372.379 ns/op
+
+# Run progress: 97.92% complete, ETA 00:00:04
+# Fork: 2 of 2
+# Warmup Iteration   1: 400.930 ns/op
+# Warmup Iteration   2: 361.919 ns/op
+# Warmup Iteration   3: 364.509 ns/op
+Iteration   1: 356.528 ns/op
+Iteration   2: 361.737 ns/op
+Iteration   3: 355.990 ns/op
+Iteration   4: 353.517 ns/op
+Iteration   5: 353.170 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  368.639 ±(99.9%) 23.944 ns/op [Average]
+  (min, avg, max) = (353.170, 368.639, 402.950), stdev = 15.837
+  CI (99.9%): [344.696, 392.583] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:03:19
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                             (length)  (startAlign)  Mode  Cnt    Score    Error  Units
+VarHandleVsUnsafeBenchmark.unsafe            8             0  avgt   10    2.339 ±  0.047  ns/op
+VarHandleVsUnsafeBenchmark.unsafe            8             1  avgt   10    2.329 ±  0.021  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           16             0  avgt   10    2.585 ±  0.308  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           16             1  avgt   10    2.516 ±  0.023  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           64             0  avgt   10    5.407 ±  0.035  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           64             1  avgt   10    5.395 ±  0.110  ns/op
+VarHandleVsUnsafeBenchmark.unsafe          128             0  avgt   10   10.892 ±  0.079  ns/op
+VarHandleVsUnsafeBenchmark.unsafe          128             1  avgt   10   11.029 ±  0.121  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         1024             0  avgt   10   65.298 ±  1.234  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         1024             1  avgt   10   67.113 ±  1.170  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         4096             0  avgt   10  248.948 ±  2.488  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         4096             1  avgt   10  255.387 ±  3.219  ns/op
+VarHandleVsUnsafeBenchmark.varHandle         8             0  avgt   10    2.706 ±  0.031  ns/op
+VarHandleVsUnsafeBenchmark.varHandle         8             1  avgt   10    2.701 ±  0.016  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        16             0  avgt   10    2.979 ±  0.036  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        16             1  avgt   10    2.968 ±  0.038  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        64             0  avgt   10    6.591 ±  0.077  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        64             1  avgt   10    6.645 ±  0.083  ns/op
+VarHandleVsUnsafeBenchmark.varHandle       128             0  avgt   10   12.148 ±  0.108  ns/op
+VarHandleVsUnsafeBenchmark.varHandle       128             1  avgt   10   12.371 ±  0.097  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      1024             0  avgt   10  103.816 ±  1.602  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      1024             1  avgt   10  105.490 ±  2.906  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      4096             0  avgt   10  358.070 ±  1.421  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      4096             1  avgt   10  368.639 ± 23.944  ns/op
+
+Benchmark result is saved to /tmp/zah121-reproduction-jdk21.json

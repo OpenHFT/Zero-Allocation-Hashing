@@ -1,0 +1,173 @@
+item=ZAH #67
+repo=Zero-Allocation-Hashing
+branch=feat/Zero-Allocation-Hashing-67-prototype-java-9-mr-jar-varhandle
+sha=15971be0c616447c0595a664ef76ffc38b8f2f9b
+command=mvn -o -B clean test
+started=2026-08-20T20:00:08+01:00
+
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------< net.openhft:zero-allocation-hashing >-----------------
+[INFO] Building Zero-allocation Hashing 2026.1-SNAPSHOT
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:3.5.0:clean (default-clean) @ zero-allocation-hashing ---
+[INFO] Deleting /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/target
+[INFO]
+[INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-maven) @ zero-allocation-hashing ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO]
+[INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-no-snapshots) @ zero-allocation-hashing ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.dependency.RequireReleaseDeps passed
+[INFO]
+[INFO] --- maven-enforcer-plugin:3.3.0:enforce (enforce-versions) @ zero-allocation-hashing ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 2: org.apache.maven.enforcer.rules.property.RequireProperty passed
+[INFO]
+[INFO] --- build-helper-maven-plugin:3.1.0:regex-properties (match-target-release) @ zero-allocation-hashing ---
+[INFO]
+[INFO] --- maven-checkstyle-plugin:3.3.0:check (validate) @ zero-allocation-hashing ---
+[INFO] You have 0 Checkstyle violations.
+[INFO]
+[INFO] --- build-helper-maven-plugin:3.1.0:add-source (add-stub-source) @ zero-allocation-hashing ---
+[INFO] Source directory: /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/src/main/java-stub added.
+[INFO]
+[INFO] --- maven-resources-plugin:3.3.1:resources (default-resources) @ zero-allocation-hashing ---
+[INFO] skip non existing resourceDirectory /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.14.0:compile (default-compile) @ zero-allocation-hashing ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 26 source files with javac [debug deprecation release 8] to target/classes
+[WARNING] source value 8 is obsolete and will be removed in a future release
+[WARNING] target value 8 is obsolete and will be removed in a future release
+[WARNING] To suppress warnings about obsolete options, use -Xlint:-options.
+[INFO]
+[INFO] --- maven-bundle-plugin:5.1.9:manifest (default) @ zero-allocation-hashing ---
+[INFO] No MANIFEST.MF file found, generating manifest.
+[INFO] Writing manifest: /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/target/classes/META-INF/MANIFEST.MF
+[INFO]
+[INFO] --- build-helper-maven-plugin:3.1.0:add-test-source (add-varhandle-prototype-test-source) @ zero-allocation-hashing ---
+[INFO] Test Source directory: /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/src/test/java9-prototype added.
+[INFO]
+[INFO] --- maven-resources-plugin:3.3.1:testResources (default-testResources) @ zero-allocation-hashing ---
+[INFO] skip non existing resourceDirectory /tmp/draft-pr-local-validation.ds07V8/Zero-Allocation-Hashing/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.14.0:testCompile (default-testCompile) @ zero-allocation-hashing ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 25 source files with javac [debug deprecation release 11] to target/test-classes
+[INFO]
+[INFO] --- maven-surefire-plugin:3.1.2:test (default-test) @ zero-allocation-hashing ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running net.openhft.hashing.VarHandleAccessTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 s -- in net.openhft.hashing.VarHandleAccessTest
+[INFO] Running net.openhft.hashing.XxHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.258 s -- in net.openhft.hashing.XxHashTest
+[INFO] Running net.openhft.hashing.XxHashCollisionTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s -- in net.openhft.hashing.XxHashCollisionTest
+[INFO] Running net.openhft.hashing.XXH3Test
+[INFO] Tests run: 4100, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.412 s -- in net.openhft.hashing.XXH3Test
+[INFO] Running net.openhft.hashing.XXH128Test
+[INFO] Tests run: 2562, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.364 s -- in net.openhft.hashing.XXH128Test
+[INFO] Running net.openhft.hashing.WyHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.257 s -- in net.openhft.hashing.WyHashTest
+[INFO] Running net.openhft.hashing.UtilTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in net.openhft.hashing.UtilTest
+[INFO] Running net.openhft.hashing.UnsafeAccessTest
+[WARNING] Tests run: 8, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.066 s -- in net.openhft.hashing.UnsafeAccessTest
+[INFO] Running net.openhft.hashing.PrimitivesTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.046 s -- in net.openhft.hashing.PrimitivesTest
+[INFO] Running net.openhft.hashing.OriginalFarmHashTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.220 s -- in net.openhft.hashing.OriginalFarmHashTest
+[INFO] Running net.openhft.hashing.MurmurHash3Test
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.151 s -- in net.openhft.hashing.MurmurHash3Test
+[INFO] Running net.openhft.hashing.ModernCompactStringHashTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.051 s -- in net.openhft.hashing.ModernCompactStringHashTest
+[INFO] Running net.openhft.hashing.MetroHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.261 s -- in net.openhft.hashing.MetroHashTest
+[INFO] Running net.openhft.hashing.MathsTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.036 s -- in net.openhft.hashing.MathsTest
+[INFO] Running net.openhft.hashing.FarmHashTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.152 s -- in net.openhft.hashing.FarmHashTest
+[INFO] Running net.openhft.hashing.DualHashFunctionTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s -- in net.openhft.hashing.DualHashFunctionTest
+[INFO] Running net.openhft.hashing.CompactLatin1CharSequenceAccessTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.035 s -- in net.openhft.hashing.CompactLatin1CharSequenceAccessTest
+[INFO] Running net.openhft.hashing.City64_1_1_Test
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.229 s -- in net.openhft.hashing.City64_1_1_Test
+[INFO] Running net.openhft.hashing.CharSequenceAccessTest
+[WARNING] Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.032 s -- in net.openhft.hashing.CharSequenceAccessTest
+[INFO] Running net.openhft.hashing.ByteBufferAccessTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.030 s -- in net.openhft.hashing.ByteBufferAccessTest
+[INFO]
+[INFO] Results:
+[INFO]
+[WARNING] Tests run: 14903, Failures: 0, Errors: 0, Skipped: 5
+[INFO]
+[INFO]
+[INFO] --- maven-surefire-plugin:3.1.2:test (test-without-compact-string) @ zero-allocation-hashing ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junit4.JUnit4Provider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running net.openhft.hashing.VarHandleAccessTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.059 s -- in net.openhft.hashing.VarHandleAccessTest
+[INFO] Running net.openhft.hashing.XxHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.208 s -- in net.openhft.hashing.XxHashTest
+[INFO] Running net.openhft.hashing.XxHashCollisionTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in net.openhft.hashing.XxHashCollisionTest
+[INFO] Running net.openhft.hashing.XXH3Test
+[INFO] Tests run: 4100, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.390 s -- in net.openhft.hashing.XXH3Test
+[INFO] Running net.openhft.hashing.XXH128Test
+[INFO] Tests run: 2562, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.405 s -- in net.openhft.hashing.XXH128Test
+[INFO] Running net.openhft.hashing.WyHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.235 s -- in net.openhft.hashing.WyHashTest
+[INFO] Running net.openhft.hashing.UtilTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in net.openhft.hashing.UtilTest
+[INFO] Running net.openhft.hashing.UnsafeAccessTest
+[WARNING] Tests run: 8, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0.043 s -- in net.openhft.hashing.UnsafeAccessTest
+[INFO] Running net.openhft.hashing.PrimitivesTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.032 s -- in net.openhft.hashing.PrimitivesTest
+[INFO] Running net.openhft.hashing.OriginalFarmHashTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.214 s -- in net.openhft.hashing.OriginalFarmHashTest
+[INFO] Running net.openhft.hashing.MurmurHash3Test
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.127 s -- in net.openhft.hashing.MurmurHash3Test
+[INFO] Running net.openhft.hashing.ModernCompactStringHashTest
+[WARNING] Tests run: 7, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.037 s -- in net.openhft.hashing.ModernCompactStringHashTest
+[INFO] Running net.openhft.hashing.MetroHashTest
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.210 s -- in net.openhft.hashing.MetroHashTest
+[INFO] Running net.openhft.hashing.MathsTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.034 s -- in net.openhft.hashing.MathsTest
+[INFO] Running net.openhft.hashing.FarmHashTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.114 s -- in net.openhft.hashing.FarmHashTest
+[INFO] Running net.openhft.hashing.DualHashFunctionTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 s -- in net.openhft.hashing.DualHashFunctionTest
+[INFO] Running net.openhft.hashing.CompactLatin1CharSequenceAccessTest
+[WARNING] Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.045 s -- in net.openhft.hashing.CompactLatin1CharSequenceAccessTest
+[INFO] Running net.openhft.hashing.City64_1_1_Test
+[INFO] Tests run: 2050, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.191 s -- in net.openhft.hashing.City64_1_1_Test
+[INFO] Running net.openhft.hashing.CharSequenceAccessTest
+[WARNING] Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.035 s -- in net.openhft.hashing.CharSequenceAccessTest
+[INFO] Running net.openhft.hashing.ByteBufferAccessTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in net.openhft.hashing.ByteBufferAccessTest
+[INFO]
+[INFO] Results:
+[INFO]
+[WARNING] Tests run: 14903, Failures: 0, Errors: 0, Skipped: 8
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.960 s
+[INFO] Finished at: 2026-08-20T20:00:28+01:00
+[INFO] ------------------------------------------------------------------------
+
+finished=2026-08-20T20:00:28+01:00
+duration_seconds=20
+exit_code=0
+post_test_changes=0

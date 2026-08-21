@@ -1,0 +1,1245 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 8, startAlign = 0)
+
+# Run progress: 0.00% complete, ETA 00:03:12
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.518 ns/op
+# Warmup Iteration   2: 2.512 ns/op
+# Warmup Iteration   3: 2.270 ns/op
+Iteration   1: 2.233 ns/op
+Iteration   2: 2.298 ns/op
+Iteration   3: 2.262 ns/op
+Iteration   4: 2.230 ns/op
+Iteration   5: 2.267 ns/op
+
+# Run progress: 2.08% complete, ETA 00:03:15
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.505 ns/op
+# Warmup Iteration   2: 2.545 ns/op
+# Warmup Iteration   3: 2.266 ns/op
+Iteration   1: 2.286 ns/op
+Iteration   2: 2.238 ns/op
+Iteration   3: 2.245 ns/op
+Iteration   4: 2.216 ns/op
+Iteration   5: 2.258 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.253 ±(99.9%) 0.039 ns/op [Average]
+  (min, avg, max) = (2.216, 2.253, 2.298), stdev = 0.026
+  CI (99.9%): [2.214, 2.292] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 8, startAlign = 1)
+
+# Run progress: 4.17% complete, ETA 00:03:10
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.513 ns/op
+# Warmup Iteration   2: 2.492 ns/op
+# Warmup Iteration   3: 2.267 ns/op
+Iteration   1: 2.258 ns/op
+Iteration   2: 2.240 ns/op
+Iteration   3: 2.255 ns/op
+Iteration   4: 2.272 ns/op
+Iteration   5: 2.256 ns/op
+
+# Run progress: 6.25% complete, ETA 00:03:06
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.692 ns/op
+# Warmup Iteration   2: 2.484 ns/op
+# Warmup Iteration   3: 2.292 ns/op
+Iteration   1: 2.227 ns/op
+Iteration   2: 2.259 ns/op
+Iteration   3: 2.234 ns/op
+Iteration   4: 2.263 ns/op
+Iteration   5: 2.289 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.255 ±(99.9%) 0.027 ns/op [Average]
+  (min, avg, max) = (2.227, 2.255, 2.289), stdev = 0.018
+  CI (99.9%): [2.228, 2.283] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 16, startAlign = 0)
+
+# Run progress: 8.33% complete, ETA 00:03:02
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.737 ns/op
+# Warmup Iteration   2: 2.648 ns/op
+# Warmup Iteration   3: 2.534 ns/op
+Iteration   1: 2.528 ns/op
+Iteration   2: 2.580 ns/op
+Iteration   3: 2.525 ns/op
+Iteration   4: 2.531 ns/op
+Iteration   5: 2.531 ns/op
+
+# Run progress: 10.42% complete, ETA 00:02:58
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.705 ns/op
+# Warmup Iteration   2: 2.663 ns/op
+# Warmup Iteration   3: 2.582 ns/op
+Iteration   1: 2.555 ns/op
+Iteration   2: 2.592 ns/op
+Iteration   3: 2.557 ns/op
+Iteration   4: 2.566 ns/op
+Iteration   5: 2.543 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.551 ±(99.9%) 0.035 ns/op [Average]
+  (min, avg, max) = (2.525, 2.551, 2.592), stdev = 0.023
+  CI (99.9%): [2.515, 2.586] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 16, startAlign = 1)
+
+# Run progress: 12.50% complete, ETA 00:02:54
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.743 ns/op
+# Warmup Iteration   2: 2.680 ns/op
+# Warmup Iteration   3: 2.629 ns/op
+Iteration   1: 2.595 ns/op
+Iteration   2: 2.546 ns/op
+Iteration   3: 2.623 ns/op
+Iteration   4: 2.558 ns/op
+Iteration   5: 2.559 ns/op
+
+# Run progress: 14.58% complete, ETA 00:02:50
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.664 ns/op
+# Warmup Iteration   2: 2.621 ns/op
+# Warmup Iteration   3: 2.511 ns/op
+Iteration   1: 2.560 ns/op
+Iteration   2: 2.589 ns/op
+Iteration   3: 2.578 ns/op
+Iteration   4: 2.555 ns/op
+Iteration   5: 2.560 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  2.572 ±(99.9%) 0.036 ns/op [Average]
+  (min, avg, max) = (2.546, 2.572, 2.623), stdev = 0.024
+  CI (99.9%): [2.536, 2.608] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 64, startAlign = 0)
+
+# Run progress: 16.67% complete, ETA 00:02:45
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 5.508 ns/op
+# Warmup Iteration   2: 5.401 ns/op
+# Warmup Iteration   3: 5.212 ns/op
+Iteration   1: 5.233 ns/op
+Iteration   2: 5.222 ns/op
+Iteration   3: 5.343 ns/op
+Iteration   4: 5.237 ns/op
+Iteration   5: 5.252 ns/op
+
+# Run progress: 18.75% complete, ETA 00:02:41
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 5.419 ns/op
+# Warmup Iteration   2: 5.334 ns/op
+# Warmup Iteration   3: 5.206 ns/op
+Iteration   1: 5.195 ns/op
+Iteration   2: 5.259 ns/op
+Iteration   3: 5.176 ns/op
+Iteration   4: 5.259 ns/op
+Iteration   5: 5.254 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  5.243 ±(99.9%) 0.068 ns/op [Average]
+  (min, avg, max) = (5.176, 5.243, 5.343), stdev = 0.045
+  CI (99.9%): [5.175, 5.311] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 64, startAlign = 1)
+
+# Run progress: 20.83% complete, ETA 00:02:37
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 5.556 ns/op
+# Warmup Iteration   2: 5.362 ns/op
+# Warmup Iteration   3: 5.379 ns/op
+Iteration   1: 5.226 ns/op
+Iteration   2: 5.248 ns/op
+Iteration   3: 5.228 ns/op
+Iteration   4: 5.525 ns/op
+Iteration   5: 5.280 ns/op
+
+# Run progress: 22.92% complete, ETA 00:02:33
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 5.484 ns/op
+# Warmup Iteration   2: 5.380 ns/op
+# Warmup Iteration   3: 5.187 ns/op
+Iteration   1: 5.156 ns/op
+Iteration   2: 5.337 ns/op
+Iteration   3: 5.234 ns/op
+Iteration   4: 5.312 ns/op
+Iteration   5: 5.241 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  5.279 ±(99.9%) 0.151 ns/op [Average]
+  (min, avg, max) = (5.156, 5.279, 5.525), stdev = 0.100
+  CI (99.9%): [5.127, 5.430] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 128, startAlign = 0)
+
+# Run progress: 25.00% complete, ETA 00:02:29
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 9.742 ns/op
+# Warmup Iteration   2: 9.601 ns/op
+# Warmup Iteration   3: 9.310 ns/op
+Iteration   1: 9.274 ns/op
+Iteration   2: 9.250 ns/op
+Iteration   3: 9.366 ns/op
+Iteration   4: 9.137 ns/op
+Iteration   5: 9.102 ns/op
+
+# Run progress: 27.08% complete, ETA 00:02:25
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 10.293 ns/op
+# Warmup Iteration   2: 9.677 ns/op
+# Warmup Iteration   3: 9.439 ns/op
+Iteration   1: 9.420 ns/op
+Iteration   2: 9.361 ns/op
+Iteration   3: 9.323 ns/op
+Iteration   4: 9.356 ns/op
+Iteration   5: 9.253 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  9.284 ±(99.9%) 0.155 ns/op [Average]
+  (min, avg, max) = (9.102, 9.284, 9.420), stdev = 0.103
+  CI (99.9%): [9.129, 9.439] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 128, startAlign = 1)
+
+# Run progress: 29.17% complete, ETA 00:02:20
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 9.938 ns/op
+# Warmup Iteration   2: 9.654 ns/op
+# Warmup Iteration   3: 9.172 ns/op
+Iteration   1: 9.254 ns/op
+Iteration   2: 9.315 ns/op
+Iteration   3: 9.370 ns/op
+Iteration   4: 9.410 ns/op
+Iteration   5: 9.486 ns/op
+
+# Run progress: 31.25% complete, ETA 00:02:16
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 9.765 ns/op
+# Warmup Iteration   2: 9.641 ns/op
+# Warmup Iteration   3: 9.349 ns/op
+Iteration   1: 9.249 ns/op
+Iteration   2: 9.241 ns/op
+Iteration   3: 9.412 ns/op
+Iteration   4: 9.289 ns/op
+Iteration   5: 9.252 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  9.328 ±(99.9%) 0.131 ns/op [Average]
+  (min, avg, max) = (9.241, 9.328, 9.486), stdev = 0.087
+  CI (99.9%): [9.197, 9.459] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 1024, startAlign = 0)
+
+# Run progress: 33.33% complete, ETA 00:02:12
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 60.821 ns/op
+# Warmup Iteration   2: 58.046 ns/op
+# Warmup Iteration   3: 57.366 ns/op
+Iteration   1: 58.029 ns/op
+Iteration   2: 58.073 ns/op
+Iteration   3: 57.606 ns/op
+Iteration   4: 57.563 ns/op
+Iteration   5: 57.533 ns/op
+
+# Run progress: 35.42% complete, ETA 00:02:08
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 59.896 ns/op
+# Warmup Iteration   2: 57.364 ns/op
+# Warmup Iteration   3: 58.453 ns/op
+Iteration   1: 57.507 ns/op
+Iteration   2: 60.661 ns/op
+Iteration   3: 58.872 ns/op
+Iteration   4: 58.153 ns/op
+Iteration   5: 57.755 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  58.175 ±(99.9%) 1.463 ns/op [Average]
+  (min, avg, max) = (57.507, 58.175, 60.661), stdev = 0.968
+  CI (99.9%): [56.712, 59.639] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 1024, startAlign = 1)
+
+# Run progress: 37.50% complete, ETA 00:02:04
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 63.483 ns/op
+# Warmup Iteration   2: 60.142 ns/op
+# Warmup Iteration   3: 58.626 ns/op
+Iteration   1: 58.914 ns/op
+Iteration   2: 59.227 ns/op
+Iteration   3: 58.209 ns/op
+Iteration   4: 59.195 ns/op
+Iteration   5: 58.021 ns/op
+
+# Run progress: 39.58% complete, ETA 00:02:00
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 63.435 ns/op
+# Warmup Iteration   2: 61.252 ns/op
+# Warmup Iteration   3: 59.456 ns/op
+Iteration   1: 59.052 ns/op
+Iteration   2: 59.319 ns/op
+Iteration   3: 58.902 ns/op
+Iteration   4: 59.400 ns/op
+Iteration   5: 58.490 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  58.873 ±(99.9%) 0.722 ns/op [Average]
+  (min, avg, max) = (58.021, 58.873, 59.400), stdev = 0.478
+  CI (99.9%): [58.151, 59.595] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 4096, startAlign = 0)
+
+# Run progress: 41.67% complete, ETA 00:01:56
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 230.239 ns/op
+# Warmup Iteration   2: 255.822 ns/op
+# Warmup Iteration   3: 215.497 ns/op
+Iteration   1: 219.044 ns/op
+Iteration   2: 215.286 ns/op
+Iteration   3: 218.926 ns/op
+Iteration   4: 216.413 ns/op
+Iteration   5: 217.753 ns/op
+
+# Run progress: 43.75% complete, ETA 00:01:51
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 232.489 ns/op
+# Warmup Iteration   2: 222.069 ns/op
+# Warmup Iteration   3: 216.030 ns/op
+Iteration   1: 217.776 ns/op
+Iteration   2: 215.514 ns/op
+Iteration   3: 218.733 ns/op
+Iteration   4: 216.895 ns/op
+Iteration   5: 217.901 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  217.424 ±(99.9%) 2.052 ns/op [Average]
+  (min, avg, max) = (215.286, 217.424, 219.044), stdev = 1.357
+  CI (99.9%): [215.372, 219.476] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe
+# Parameters: (length = 4096, startAlign = 1)
+
+# Run progress: 45.83% complete, ETA 00:01:47
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 241.420 ns/op
+# Warmup Iteration   2: 225.901 ns/op
+# Warmup Iteration   3: 223.947 ns/op
+Iteration   1: 227.038 ns/op
+Iteration   2: 224.527 ns/op
+Iteration   3: 224.280 ns/op
+Iteration   4: 224.897 ns/op
+Iteration   5: 226.544 ns/op
+
+# Run progress: 47.92% complete, ETA 00:01:43
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 244.209 ns/op
+# Warmup Iteration   2: 223.486 ns/op
+# Warmup Iteration   3: 222.225 ns/op
+Iteration   1: 230.068 ns/op
+Iteration   2: 223.532 ns/op
+Iteration   3: 230.400 ns/op
+Iteration   4: 222.522 ns/op
+Iteration   5: 228.108 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.unsafe":
+  226.192 ±(99.9%) 4.091 ns/op [Average]
+  (min, avg, max) = (222.522, 226.192, 230.400), stdev = 2.706
+  CI (99.9%): [222.101, 230.282] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 8, startAlign = 0)
+
+# Run progress: 50.00% complete, ETA 00:01:39
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.924 ns/op
+# Warmup Iteration   2: 2.832 ns/op
+# Warmup Iteration   3: 2.609 ns/op
+Iteration   1: 2.617 ns/op
+Iteration   2: 2.634 ns/op
+Iteration   3: 2.585 ns/op
+Iteration   4: 2.692 ns/op
+Iteration   5: 2.639 ns/op
+
+# Run progress: 52.08% complete, ETA 00:01:35
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.906 ns/op
+# Warmup Iteration   2: 2.844 ns/op
+# Warmup Iteration   3: 2.651 ns/op
+Iteration   1: 2.610 ns/op
+Iteration   2: 2.639 ns/op
+Iteration   3: 2.665 ns/op
+Iteration   4: 2.656 ns/op
+Iteration   5: 2.653 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.639 ±(99.9%) 0.046 ns/op [Average]
+  (min, avg, max) = (2.585, 2.639, 2.692), stdev = 0.030
+  CI (99.9%): [2.593, 2.685] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 8, startAlign = 1)
+
+# Run progress: 54.17% complete, ETA 00:01:31
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.911 ns/op
+# Warmup Iteration   2: 2.869 ns/op
+# Warmup Iteration   3: 2.702 ns/op
+Iteration   1: 2.678 ns/op
+Iteration   2: 2.683 ns/op
+Iteration   3: 2.696 ns/op
+Iteration   4: 2.733 ns/op
+Iteration   5: 2.672 ns/op
+
+# Run progress: 56.25% complete, ETA 00:01:26
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 2.964 ns/op
+# Warmup Iteration   2: 2.850 ns/op
+# Warmup Iteration   3: 2.642 ns/op
+Iteration   1: 2.588 ns/op
+Iteration   2: 2.621 ns/op
+Iteration   3: 2.638 ns/op
+Iteration   4: 2.606 ns/op
+Iteration   5: 2.596 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.651 ±(99.9%) 0.073 ns/op [Average]
+  (min, avg, max) = (2.588, 2.651, 2.733), stdev = 0.048
+  CI (99.9%): [2.578, 2.724] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 16, startAlign = 0)
+
+# Run progress: 58.33% complete, ETA 00:01:22
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 3.176 ns/op
+# Warmup Iteration   2: 3.085 ns/op
+# Warmup Iteration   3: 2.953 ns/op
+Iteration   1: 2.969 ns/op
+Iteration   2: 2.891 ns/op
+Iteration   3: 2.915 ns/op
+Iteration   4: 2.820 ns/op
+Iteration   5: 2.868 ns/op
+
+# Run progress: 60.42% complete, ETA 00:01:18
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 3.200 ns/op
+# Warmup Iteration   2: 3.159 ns/op
+# Warmup Iteration   3: 2.991 ns/op
+Iteration   1: 3.006 ns/op
+Iteration   2: 2.947 ns/op
+Iteration   3: 2.942 ns/op
+Iteration   4: 2.923 ns/op
+Iteration   5: 3.005 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.929 ±(99.9%) 0.089 ns/op [Average]
+  (min, avg, max) = (2.820, 2.929, 3.006), stdev = 0.059
+  CI (99.9%): [2.840, 3.018] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 16, startAlign = 1)
+
+# Run progress: 62.50% complete, ETA 00:01:14
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 3.128 ns/op
+# Warmup Iteration   2: 3.146 ns/op
+# Warmup Iteration   3: 3.017 ns/op
+Iteration   1: 2.947 ns/op
+Iteration   2: 2.912 ns/op
+Iteration   3: 2.942 ns/op
+Iteration   4: 3.014 ns/op
+Iteration   5: 2.953 ns/op
+
+# Run progress: 64.58% complete, ETA 00:01:10
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 3.127 ns/op
+# Warmup Iteration   2: 3.123 ns/op
+# Warmup Iteration   3: 2.935 ns/op
+Iteration   1: 2.875 ns/op
+Iteration   2: 2.846 ns/op
+Iteration   3: 2.868 ns/op
+Iteration   4: 2.878 ns/op
+Iteration   5: 2.873 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  2.911 ±(99.9%) 0.079 ns/op [Average]
+  (min, avg, max) = (2.846, 2.911, 3.014), stdev = 0.052
+  CI (99.9%): [2.832, 2.990] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 64, startAlign = 0)
+
+# Run progress: 66.67% complete, ETA 00:01:06
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 6.732 ns/op
+# Warmup Iteration   2: 6.314 ns/op
+# Warmup Iteration   3: 6.343 ns/op
+Iteration   1: 6.303 ns/op
+Iteration   2: 6.324 ns/op
+Iteration   3: 6.316 ns/op
+Iteration   4: 6.367 ns/op
+Iteration   5: 6.312 ns/op
+
+# Run progress: 68.75% complete, ETA 00:01:02
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 6.440 ns/op
+# Warmup Iteration   2: 6.253 ns/op
+# Warmup Iteration   3: 6.271 ns/op
+Iteration   1: 6.868 ns/op
+Iteration   2: 6.558 ns/op
+Iteration   3: 6.384 ns/op
+Iteration   4: 6.401 ns/op
+Iteration   5: 6.381 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  6.421 ±(99.9%) 0.263 ns/op [Average]
+  (min, avg, max) = (6.303, 6.421, 6.868), stdev = 0.174
+  CI (99.9%): [6.159, 6.684] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 64, startAlign = 1)
+
+# Run progress: 70.83% complete, ETA 00:00:57
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 6.705 ns/op
+# Warmup Iteration   2: 6.551 ns/op
+# Warmup Iteration   3: 6.482 ns/op
+Iteration   1: 6.502 ns/op
+Iteration   2: 6.509 ns/op
+Iteration   3: 6.473 ns/op
+Iteration   4: 6.428 ns/op
+Iteration   5: 6.443 ns/op
+
+# Run progress: 72.92% complete, ETA 00:00:53
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 6.609 ns/op
+# Warmup Iteration   2: 6.546 ns/op
+# Warmup Iteration   3: 6.639 ns/op
+Iteration   1: 6.618 ns/op
+Iteration   2: 6.532 ns/op
+Iteration   3: 6.696 ns/op
+Iteration   4: 6.738 ns/op
+Iteration   5: 6.558 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  6.550 ±(99.9%) 0.158 ns/op [Average]
+  (min, avg, max) = (6.428, 6.550, 6.738), stdev = 0.104
+  CI (99.9%): [6.392, 6.707] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 128, startAlign = 0)
+
+# Run progress: 75.00% complete, ETA 00:00:49
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 11.736 ns/op
+# Warmup Iteration   2: 11.604 ns/op
+# Warmup Iteration   3: 11.486 ns/op
+Iteration   1: 11.532 ns/op
+Iteration   2: 11.730 ns/op
+Iteration   3: 11.484 ns/op
+Iteration   4: 11.507 ns/op
+Iteration   5: 11.601 ns/op
+
+# Run progress: 77.08% complete, ETA 00:00:45
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 11.649 ns/op
+# Warmup Iteration   2: 11.553 ns/op
+# Warmup Iteration   3: 11.503 ns/op
+Iteration   1: 11.545 ns/op
+Iteration   2: 11.487 ns/op
+Iteration   3: 11.699 ns/op
+Iteration   4: 11.435 ns/op
+Iteration   5: 11.544 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  11.556 ±(99.9%) 0.143 ns/op [Average]
+  (min, avg, max) = (11.435, 11.556, 11.730), stdev = 0.095
+  CI (99.9%): [11.413, 11.700] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 128, startAlign = 1)
+
+# Run progress: 79.17% complete, ETA 00:00:41
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 12.200 ns/op
+# Warmup Iteration   2: 11.965 ns/op
+# Warmup Iteration   3: 11.813 ns/op
+Iteration   1: 11.965 ns/op
+Iteration   2: 11.964 ns/op
+Iteration   3: 11.865 ns/op
+Iteration   4: 11.949 ns/op
+Iteration   5: 11.924 ns/op
+
+# Run progress: 81.25% complete, ETA 00:00:37
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 12.156 ns/op
+# Warmup Iteration   2: 11.969 ns/op
+# Warmup Iteration   3: 12.170 ns/op
+Iteration   1: 12.154 ns/op
+Iteration   2: 12.064 ns/op
+Iteration   3: 11.923 ns/op
+Iteration   4: 11.994 ns/op
+Iteration   5: 11.736 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  11.954 ±(99.9%) 0.168 ns/op [Average]
+  (min, avg, max) = (11.736, 11.954, 12.154), stdev = 0.111
+  CI (99.9%): [11.786, 12.122] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 1024, startAlign = 0)
+
+# Run progress: 83.33% complete, ETA 00:00:33
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 96.058 ns/op
+# Warmup Iteration   2: 90.494 ns/op
+# Warmup Iteration   3: 90.501 ns/op
+Iteration   1: 91.051 ns/op
+Iteration   2: 91.659 ns/op
+Iteration   3: 91.230 ns/op
+Iteration   4: 90.851 ns/op
+Iteration   5: 90.693 ns/op
+
+# Run progress: 85.42% complete, ETA 00:00:28
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 95.969 ns/op
+# Warmup Iteration   2: 91.687 ns/op
+# Warmup Iteration   3: 91.455 ns/op
+Iteration   1: 92.433 ns/op
+Iteration   2: 92.496 ns/op
+Iteration   3: 91.352 ns/op
+Iteration   4: 91.603 ns/op
+Iteration   5: 91.571 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  91.494 ±(99.9%) 0.911 ns/op [Average]
+  (min, avg, max) = (90.693, 91.494, 92.496), stdev = 0.603
+  CI (99.9%): [90.582, 92.405] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 1024, startAlign = 1)
+
+# Run progress: 87.50% complete, ETA 00:00:24
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 96.065 ns/op
+# Warmup Iteration   2: 91.749 ns/op
+# Warmup Iteration   3: 90.813 ns/op
+Iteration   1: 92.365 ns/op
+Iteration   2: 92.343 ns/op
+Iteration   3: 93.042 ns/op
+Iteration   4: 92.486 ns/op
+Iteration   5: 95.110 ns/op
+
+# Run progress: 89.58% complete, ETA 00:00:20
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 95.315 ns/op
+# Warmup Iteration   2: 92.435 ns/op
+# Warmup Iteration   3: 91.577 ns/op
+Iteration   1: 91.539 ns/op
+Iteration   2: 91.517 ns/op
+Iteration   3: 93.526 ns/op
+Iteration   4: 92.593 ns/op
+Iteration   5: 92.772 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  92.729 ±(99.9%) 1.565 ns/op [Average]
+  (min, avg, max) = (91.517, 92.729, 95.110), stdev = 1.035
+  CI (99.9%): [91.164, 94.295] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 4096, startAlign = 0)
+
+# Run progress: 91.67% complete, ETA 00:00:16
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 333.566 ns/op
+# Warmup Iteration   2: 299.873 ns/op
+# Warmup Iteration   3: 296.653 ns/op
+Iteration   1: 304.178 ns/op
+Iteration   2: 300.980 ns/op
+Iteration   3: 308.706 ns/op
+Iteration   4: 295.870 ns/op
+Iteration   5: 297.597 ns/op
+
+# Run progress: 93.75% complete, ETA 00:00:12
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 327.283 ns/op
+# Warmup Iteration   2: 299.528 ns/op
+# Warmup Iteration   3: 299.310 ns/op
+Iteration   1: 295.963 ns/op
+Iteration   2: 301.302 ns/op
+Iteration   3: 297.456 ns/op
+Iteration   4: 299.036 ns/op
+Iteration   5: 295.769 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  299.686 ±(99.9%) 6.362 ns/op [Average]
+  (min, avg, max) = (295.769, 299.686, 308.706), stdev = 4.208
+  CI (99.9%): [293.324, 306.047] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 25.0.3, OpenJDK 64-Bit Server VM, 25.0.3+9-2-24.04.2-Ubuntu
+# VM invoker: /usr/lib/jvm/java-25-openjdk-amd64/bin/java
+# VM options: <none>
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 500 ms each
+# Measurement: 5 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle
+# Parameters: (length = 4096, startAlign = 1)
+
+# Run progress: 95.83% complete, ETA 00:00:08
+# Fork: 1 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 333.803 ns/op
+# Warmup Iteration   2: 301.611 ns/op
+# Warmup Iteration   3: 300.879 ns/op
+Iteration   1: 305.852 ns/op
+Iteration   2: 308.011 ns/op
+Iteration   3: 304.138 ns/op
+Iteration   4: 301.845 ns/op
+Iteration   5: 298.258 ns/op
+
+# Run progress: 97.92% complete, ETA 00:00:04
+# Fork: 2 of 2
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by org.openjdk.jmh.util.Utils (file:/home/peter/.m2/repository/org/openjdk/jmh/jmh-core/1.37/jmh-core-1.37.jar)
+WARNING: Please consider reporting this to the maintainers of class org.openjdk.jmh.util.Utils
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+# Warmup Iteration   1: 336.336 ns/op
+# Warmup Iteration   2: 299.272 ns/op
+# Warmup Iteration   3: 304.570 ns/op
+Iteration   1: 302.835 ns/op
+Iteration   2: 299.305 ns/op
+Iteration   3: 299.316 ns/op
+Iteration   4: 299.874 ns/op
+Iteration   5: 297.508 ns/op
+
+
+Result "net.openhft.hashing.VarHandleVsUnsafeBenchmark.varHandle":
+  301.694 ±(99.9%) 5.249 ns/op [Average]
+  (min, avg, max) = (297.508, 301.694, 308.011), stdev = 3.472
+  CI (99.9%): [296.445, 306.943] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:03:18
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                             (length)  (startAlign)  Mode  Cnt    Score   Error  Units
+VarHandleVsUnsafeBenchmark.unsafe            8             0  avgt   10    2.253 ± 0.039  ns/op
+VarHandleVsUnsafeBenchmark.unsafe            8             1  avgt   10    2.255 ± 0.027  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           16             0  avgt   10    2.551 ± 0.035  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           16             1  avgt   10    2.572 ± 0.036  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           64             0  avgt   10    5.243 ± 0.068  ns/op
+VarHandleVsUnsafeBenchmark.unsafe           64             1  avgt   10    5.279 ± 0.151  ns/op
+VarHandleVsUnsafeBenchmark.unsafe          128             0  avgt   10    9.284 ± 0.155  ns/op
+VarHandleVsUnsafeBenchmark.unsafe          128             1  avgt   10    9.328 ± 0.131  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         1024             0  avgt   10   58.175 ± 1.463  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         1024             1  avgt   10   58.873 ± 0.722  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         4096             0  avgt   10  217.424 ± 2.052  ns/op
+VarHandleVsUnsafeBenchmark.unsafe         4096             1  avgt   10  226.192 ± 4.091  ns/op
+VarHandleVsUnsafeBenchmark.varHandle         8             0  avgt   10    2.639 ± 0.046  ns/op
+VarHandleVsUnsafeBenchmark.varHandle         8             1  avgt   10    2.651 ± 0.073  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        16             0  avgt   10    2.929 ± 0.089  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        16             1  avgt   10    2.911 ± 0.079  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        64             0  avgt   10    6.421 ± 0.263  ns/op
+VarHandleVsUnsafeBenchmark.varHandle        64             1  avgt   10    6.550 ± 0.158  ns/op
+VarHandleVsUnsafeBenchmark.varHandle       128             0  avgt   10   11.556 ± 0.143  ns/op
+VarHandleVsUnsafeBenchmark.varHandle       128             1  avgt   10   11.954 ± 0.168  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      1024             0  avgt   10   91.494 ± 0.911  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      1024             1  avgt   10   92.729 ± 1.565  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      4096             0  avgt   10  299.686 ± 6.362  ns/op
+VarHandleVsUnsafeBenchmark.varHandle      4096             1  avgt   10  301.694 ± 5.249  ns/op
+
+Benchmark result is saved to /home/peter/Build-All/needs-info-research/Zero-Allocation-Hashing-67/results-jdk25.json
