@@ -204,11 +204,25 @@ class LongTupleHashFunctionTest {
         bb2.put(bb);
         assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
+        ByteBuffer direct = ByteBuffer.allocateDirect(len + 2).order(LITTLE_ENDIAN);
+        ((Buffer)direct).position(1);
+        ByteBuffer directSource = bb.duplicate();
+        ((Buffer)directSource).clear();
+        direct.put(directSource);
+        ((Buffer)direct).position(1);
+        ((Buffer)direct).limit(len + 1);
+        assertArrayEquals("direct byte buffer", eh, f.hashBytes(direct));
+        assertArrayEquals("direct byte buffer off len", eh, f.hashBytes(direct, 1, len));
+        assertEquals("direct byte buffer position unchanged", 1, direct.position());
+        assertEquals("direct byte buffer limit unchanged", len + 1, direct.limit());
+
         ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
         assertArrayEquals("byte buffer big endian", eh, f.hashBytes(bb));
         bb2.order(BIG_ENDIAN);
         assertArrayEquals("byte buffer big endian off len", eh, f.hashBytes(bb2, 1, len));
+        direct.order(BIG_ENDIAN);
+        assertArrayEquals("direct byte buffer big endian", eh, f.hashBytes(direct));
 
         ((Buffer)bb.order(nativeOrder())).clear();
     }

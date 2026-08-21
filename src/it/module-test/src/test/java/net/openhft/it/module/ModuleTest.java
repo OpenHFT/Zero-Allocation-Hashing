@@ -4,9 +4,11 @@
 package net.openhft.it.module;
 
 import net.openhft.hashing.LongHashFunction;
+import net.openhft.hashing.LongTupleHashFunction;
 import org.junit.Test;
 
 import java.lang.module.ModuleDescriptor;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
@@ -63,5 +65,40 @@ public class ModuleTest {
                 .orElseThrow(() -> new AssertionError("Descriptor must require jdk.unsupported"));
         assertFalse("jdk.unsupported must be available at runtime",
                 unsupported.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+    }
+
+    @Test
+    public void testPublicRuntimePathsWithRequiredDirectBufferExport() {
+        LongHashFunction[] functions = {
+                LongHashFunction.city_1_1(),
+                LongHashFunction.farmNa(),
+                LongHashFunction.farmUo(),
+                LongHashFunction.murmur_3(),
+                LongHashFunction.xx(),
+                LongHashFunction.xx3(),
+                LongHashFunction.xx128low(),
+                LongHashFunction.wy_3(),
+                LongHashFunction.metro()
+        };
+
+        for (LongHashFunction function : functions) {
+            long expected = function.hashBytes(TEST_BYTES);
+            assertEquals(expected, function.hashBytes(ByteBuffer.wrap(TEST_BYTES)));
+
+            ByteBuffer direct = ByteBuffer.allocateDirect(TEST_BYTES.length);
+            direct.put(TEST_BYTES).flip();
+            assertEquals(expected, function.hashBytes(direct));
+            assertEquals("Direct buffer position should be unchanged", 0, direct.position());
+            assertEquals("Direct buffer limit should be unchanged", TEST_BYTES.length, direct.limit());
+
+            assertEquals(function.hashChars(TEST_DATA),
+                    function.hashChars(new StringBuilder(TEST_DATA)));
+            assertTrue(function.hashInts(new int[] {1, 2, 3, 4}) != 0);
+        }
+
+        LongTupleHashFunction tuple = LongTupleHashFunction.xx128();
+        ByteBuffer direct = ByteBuffer.allocateDirect(TEST_BYTES.length);
+        direct.put(TEST_BYTES).flip();
+        assertArrayEquals(tuple.hashBytes(TEST_BYTES), tuple.hashBytes(direct));
     }
 }

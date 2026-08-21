@@ -51,7 +51,9 @@ module net.openhft.hashing {
 }
 ----
 
-Internal packages (like sun.nio.ch) are not exported and cannot be accessed by consuming modules.
+No implementation packages from this library are exported.
+The direct-buffer runtime test supplies `--add-exports java.base/sun.nio.ch=net.openhft.hashing` because the performance-sensitive implementation calls `DirectBuffer.address()` directly.
+For class-path use, the corresponding target is `ALL-UNNAMED`.
 
 == Multi-Release JAR
 

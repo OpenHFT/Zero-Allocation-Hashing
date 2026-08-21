@@ -9,20 +9,22 @@ Chronicle Software
 
 * `UnsafeAccess` reflects on `sun.misc.Unsafe.theUnsafe` to obtain the singleton and uses it for raw array access, field offsets, and direct memory loads (`UnsafeAccess.java:40-118`).
 This keeps hashing allocation-free but depends on the `jdk.unsupported` module.
-* Direct buffer handling casts to `sun.nio.ch.DirectBuffer` to retrieve native addresses for `hashBytes(ByteBuffer)` and `hashMemory` (`Util.java:65-68`, `LongHashFunction.java:430-470`).
-The code path assumes the buffer is direct; heap buffers are copied through array access instead.
+* Direct buffer handling casts to `sun.nio.ch.DirectBuffer` and calls `address()` directly before hashing the native memory.
+This preserves the established zero-allocation fast path and avoids reflective invocation in a performance-sensitive operation.
+There is deliberately no reflective fallback when access to `DirectBuffer` is unavailable.
 * String hashing inspects `java.lang.String.value` and, on compact-string VMs, treats the backing `byte[]` as Latin-1 using `CompactLatin1CharSequenceAccess` (`ModernCompactStringHash.java:10-62`).
 Older HotSpot builds and other JVMs fall back to UTF-16 behaviour through `ModernHotSpotStringHash` or `HotSpotPrior7u6StringHash`.
 
 === JVM Configuration
 
-* On Java 9 and newer, strong encapsulation may block reflective access to the JDK internals above.
-Add the following opens/exports when running with a strict module layer:
-** `--add-opens java.base/sun.misc=ALL-UNNAMED` (access to `Unsafe.theUnsafe`).
-** `--add-exports java.base/sun.nio.ch=ALL-UNNAMED` (casts to `DirectBuffer`).
-** `--add-opens java.base/java.lang=ALL-UNNAMED` (reading `String.value` for compact strings).
-* The library does not automatically request these permissions.
-Applications embedding Zero-Allocation Hashing must configure the JVM command line or module descriptors accordingly.
+* The explicit module descriptor declares `requires jdk.unsupported` for `sun.misc.Unsafe`.
+* On Java 9 and newer, direct-buffer hashing also requires one of the following runtime options:
+** Named-module use: `--add-exports java.base/sun.nio.ch=net.openhft.hashing`
+** Class-path use: `--add-exports java.base/sun.nio.ch=ALL-UNNAMED`
+The target differs because class-path code belongs to the unnamed module.
+The module descriptor cannot request that another module export one of its packages, so the application launcher must supply this option.
+* Java 24 and 25 emit terminal-deprecation warnings for some `sun.misc.Unsafe` memory-access methods.
+These warnings do not prevent execution through Java 25, but removal of those methods is a separate compatibility horizon.
 
 === Platform Behaviour
 
