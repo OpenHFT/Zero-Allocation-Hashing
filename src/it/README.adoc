@@ -15,7 +15,8 @@ Tests basic usage of the hashing library without modules.
 
 === 2. module-test
 
-Tests proper module encapsulation on Java 9+.
+Tests proper module encapsulation on Java 11+ because this consumer compiles with `--release 11`.
+This fixture selection does not change the library's Java 8 target or its Java 9 module descriptor.
 
 - Uses `module-info.java` to require the `net.openhft.hashing` module
 - Verifies that only exported packages are accessible
