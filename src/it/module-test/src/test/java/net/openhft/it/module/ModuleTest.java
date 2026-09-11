@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.lang.module.ModuleDescriptor;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
@@ -93,7 +94,13 @@ public class ModuleTest {
 
             assertEquals(function.hashChars(TEST_DATA),
                     function.hashChars(new StringBuilder(TEST_DATA)));
-            assertTrue(function.hashInts(new int[] {1, 2, 3, 4}) != 0);
+            int[] integers = {1, 2, 3, 4};
+            ByteBuffer integerBytes = ByteBuffer.allocate(integers.length * Integer.BYTES)
+                    .order(ByteOrder.nativeOrder());
+            for (int value : integers)
+                integerBytes.putInt(value);
+            // Primitive-array hashing uses the bytes as laid out in native memory.
+            assertEquals(function.hashBytes(integerBytes.array()), function.hashInts(integers));
         }
 
         LongTupleHashFunction tuple = LongTupleHashFunction.xx128();
