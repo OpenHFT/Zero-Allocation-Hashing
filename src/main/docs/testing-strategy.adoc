@@ -35,4 +35,5 @@ The source programs used to generate those vectors are embedded in each test for
 === Build and Verification
 
 * Run `mvn -q verify` from the repository root before publishing changes; the goal invokes unit tests under the appropriate JVM profiles and ensures multi-version compatibility.
+* GitHub Actions runs the build and SonarCloud analysis on JDK 21 to meet the scanner engine's runtime requirement. The Maven compiler still targets Java 8.
 * Include new regression cases alongside the code change so future automated runs catch behavioural drift without manual intervention.
