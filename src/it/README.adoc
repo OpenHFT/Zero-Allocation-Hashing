@@ -67,3 +67,9 @@ The library is built as a multi-release JAR with module-info.class in META-INF/v
 
 All integration tests use JUnit 4 (same as the main project tests) and do not print to System.out.
 Test results are reported through Maven Surefire plugin output only.
+
+The library unit tests also check direct-buffer ranges independently of the active cursor window.
+`LongHashFunctionTest` and `LongTupleHashFunctionTest` put distinct guard bytes around the payload,
+then request only the payload while position and limit cover the complete buffer. They verify the
+hash and unchanged cursor, then restore the payload window before the whole-buffer byte-order check.
+Replacing the direct-buffer range with `position()` and `remaining()` must fail these assertions.

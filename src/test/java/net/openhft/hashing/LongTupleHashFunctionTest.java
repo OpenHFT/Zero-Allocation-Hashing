@@ -205,6 +205,8 @@ class LongTupleHashFunctionTest {
         assertArrayEquals("byte buffer little endian off len", eh, f.hashBytes(bb2, 1, len));
 
         ByteBuffer direct = ByteBuffer.allocateDirect(len + 2).order(LITTLE_ENDIAN);
+        direct.put(0, (byte) 0x6D);
+        direct.put(len + 1, (byte) 0xB7);
         ((Buffer)direct).position(1);
         ByteBuffer directSource = bb.duplicate();
         ((Buffer)directSource).clear();
@@ -212,9 +214,16 @@ class LongTupleHashFunctionTest {
         ((Buffer)direct).position(1);
         ((Buffer)direct).limit(len + 1);
         assertArrayEquals("direct byte buffer", eh, f.hashBytes(direct));
-        assertArrayEquals("direct byte buffer off len", eh, f.hashBytes(direct, 1, len));
         assertEquals("direct byte buffer position unchanged", 1, direct.position());
         assertEquals("direct byte buffer limit unchanged", len + 1, direct.limit());
+
+        // The explicit range excludes guards that are inside the active window.
+        ((Buffer)direct).clear();
+        assertArrayEquals("direct byte buffer off len", eh, f.hashBytes(direct, 1, len));
+        assertEquals("direct range position unchanged", 0, direct.position());
+        assertEquals("direct range limit unchanged", len + 2, direct.limit());
+        ((Buffer)direct).position(1);
+        ((Buffer)direct).limit(len + 1);
 
         ((Buffer)bb.order(BIG_ENDIAN)).clear();
 
