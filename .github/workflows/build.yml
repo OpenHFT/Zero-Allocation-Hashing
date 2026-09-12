@@ -67,4 +67,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OpenHFT_Zero-Allocation-Hashing -Psonar
+        run: |
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.request
+
+          token = os.environ.get("SONAR_TOKEN", "")
+          if not token:
+              raise SystemExit("SONAR_TOKEN is not configured")
+          credential = base64.b64encode((token + ":").encode()).decode()
+          request = urllib.request.Request(
+              "https://sonarcloud.io/api/authentication/validate",
+              headers={"Authorization": "Basic " + credential})
+          with urllib.request.urlopen(request, timeout=30) as response:
+              if not json.load(response).get("valid"):
+                  raise SystemExit("SonarCloud rejected SONAR_TOKEN; replace the configured credential")
+          PY
+          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OpenHFT_Zero-Allocation-Hashing -Psonar
