@@ -203,6 +203,7 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <argLine>@{surefireArgLine} @{argLine} ${jvm.requiredArgs}</argLine>
                     <enableAssertions>true</enableAssertions>
                     <reuseForks>false</reuseForks>
                 </configuration>
@@ -359,7 +360,7 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
+                                    <argLine>@{surefireArgLine} @{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
@@ -392,7 +393,7 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>@{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
+                                    <argLine>@{surefireArgLine} @{argLine} -XX:-CompactStrings ${jvm.requiredArgs}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
