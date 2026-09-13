@@ -15,6 +15,7 @@ import java.util.jar.Manifest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class AutomaticModuleNameIT {
@@ -52,6 +53,18 @@ public class AutomaticModuleNameIT {
                 input.readUnsignedShort();
                 assertEquals("Descriptor should target Java 9 class files", 53, input.readUnsignedShort());
             }
+        }
+    }
+
+    @Test
+    public void packagedJarDoesNotContainJdkCompilationStub() throws IOException {
+        final String packagedJarPath = System.getProperty("packaged.jar");
+        assertNotNull("packaged.jar system property", packagedJarPath);
+
+        try (JarFile jarFile = new JarFile(new File(packagedJarPath))) {
+            assertNull("The JDK supplies sun.nio.ch.DirectBuffer at runtime; the compile-time stub "
+                            + "must not be packaged",
+                    jarFile.getJarEntry("sun/nio/ch/DirectBuffer.class"));
         }
     }
 }

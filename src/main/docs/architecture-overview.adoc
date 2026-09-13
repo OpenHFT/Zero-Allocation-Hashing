@@ -36,7 +36,9 @@ It currently delivers 128-bit MurmurHash3 and XXH3 outputs and mirrors the singl
 * `net.openhft.hashing.Util.VALID_STRING_HASH` selects the correct `StringHash` strategy at JVM initialisation time by inspecting `java.vm.name` and `java.version`, covering HotSpot, OpenJ9, Zing, and unknown VMs (`Util.java:29-63`).
 * `ModernHotSpotStringHash`, `ModernCompactStringHash`, and `HotSpotPrior7u6StringHash` encode the memory layout differences between pre-compact, compact-string, and legacy HotSpot builds.
 When the VM cannot be recognised, `UnknownJvmStringHash` provides a defensive fallback.
-* Direct buffer hashing uses `sun.nio.ch.DirectBuffer` addresses pulled via `LongHashFunction.hashBytes(ByteBuffer)` and `LongHashFunction.hashMemory(long, long)`; `Util.getDirectBufferAddress` centralises the address extraction (`Util.java:65-68`).
+* Direct buffer hashing calls `sun.nio.ch.DirectBuffer.address()` and passes the native address to the allocation-free `Unsafe` path (`LongHashFunction.hashByteBuffer`, `LongTupleHashFunction.hashByteBuffer`, and `Util.getDirectBufferAddress`).
+The invocation is deliberately direct rather than reflective because this is a performance-sensitive path.
+On Java 9 and newer, the application must export `java.base/sun.nio.ch` to the library as described in `unsafe-and-platform-notes.adoc`.
 
 === Supporting Utilities
 
