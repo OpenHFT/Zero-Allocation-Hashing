@@ -55,7 +55,7 @@ The library must implement the following non-cryptographic hash algorithms:
 
 === 3.3. Compatibility (NF-O)
 * **NF-O-001:** **JDK Version:** The library must support JDK 8 through the current LTS (JDK 21+).
-* **NF-O-002:** **Module System:** The library must function in Java 9+ environments. Tests and runtime require `--add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED` for `sun.misc.Unsafe` and `sun.nio.ch.DirectBuffer` access (see `unsafe-and-platform-notes.adoc`).
+* **NF-O-002:** **Module System:** The library must function in Java 9+ environments as explicit module `net.openhft.hashing`. The descriptor declares the runtime dependency on `jdk.unsupported`. Direct-buffer hashing additionally requires the application to export `java.base/sun.nio.ch` to `net.openhft.hashing`; this preserves the direct, allocation-free `DirectBuffer.address()` call (see `unsafe-and-platform-notes.adoc`).
 * **NF-O-003:** **VM Support:** The library must support major JVMs including HotSpot, OpenJDK, and OpenJ9/IBM J9.
 
 == 4. Interface Constraints
