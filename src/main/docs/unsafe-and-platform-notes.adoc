@@ -18,6 +18,8 @@ Older HotSpot builds and other JVMs fall back to UTF-16 behaviour through `Moder
 === JVM Configuration
 
 * The explicit module descriptor declares `requires jdk.unsupported` for `sun.misc.Unsafe`.
+* `requires static jsr305` declares the optional nullability-annotation dependency.
+Applications inspecting those annotations must supply and resolve `jsr305`; ordinary hashing does not require it at runtime.
 * On Java 9 and newer, direct-buffer hashing also requires one of the following runtime options:
 ** Named-module use: `--add-exports java.base/sun.nio.ch=net.openhft.hashing`
 ** Class-path use: `--add-exports java.base/sun.nio.ch=ALL-UNNAMED`

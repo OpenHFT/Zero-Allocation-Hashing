@@ -35,6 +35,8 @@ public class AutomaticModuleNameIT {
             assertNotNull("Packaged JAR has no manifest: " + packagedJar, manifest);
             final Attributes attributes = manifest.getMainAttributes();
             assertEquals(EXPECTED_MODULE_NAME, attributes.getValue("Automatic-Module-Name"));
+            assertEquals("Versioned descriptor must be enabled", "true",
+                    attributes.getValue("Multi-Release"));
         }
     }
 

@@ -3,5 +3,6 @@
  */
 module net.openhft.hashing {
     requires jdk.unsupported;
+    requires static jsr305;
     exports net.openhft.hashing;
 }

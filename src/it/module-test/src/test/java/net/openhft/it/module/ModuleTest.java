@@ -66,6 +66,14 @@ public class ModuleTest {
                 .orElseThrow(() -> new AssertionError("Descriptor must require jdk.unsupported"));
         assertFalse("jdk.unsupported must be available at runtime",
                 unsupported.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+
+        ModuleDescriptor.Requires annotations = descriptor.requires().stream()
+                .filter(requirement -> requirement.name().equals("jsr305"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "Descriptor must declare jsr305 annotations"));
+        assertTrue("Annotations should remain optional at runtime",
+                annotations.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
     }
 
     @Test

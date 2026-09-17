@@ -1,0 +1,107 @@
+name: Java 8 artefact compatibility
+on:
+  push:
+    branches: [ea, develop]
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  package:
+    name: Package on Java 8 and repeat without clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: zulu
+          java-version: '8'
+          cache: maven
+      - name: Verify and retain the Java 8 binary
+        run: |
+          mvn -B -ntp verify -l java8-verify.log
+          mkdir -p target/java8-artifact
+          python3 - <<'PY'
+          import shutil
+          import xml.etree.ElementTree as ET
+
+          pom = ET.parse('pom.xml').getroot()
+          ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
+          name = pom.findtext('m:artifactId', namespaces=ns)
+          version = pom.findtext('m:version', namespaces=ns)
+          shutil.copyfile('target/' + name + '-' + version + '.jar',
+                          'target/java8-artifact/library.jar')
+          PY
+          sha256sum target/java8-artifact/library.jar > target/java8-artifact/SHA256SUMS
+          git rev-parse HEAD > target/java8-artifact/revision.txt
+          java -version 2> target/java8-artifact/build-jdk.txt
+      - name: Repeat package without cleaning generated modules
+        run: mvn -B -ntp -DskipTests package -l repeat-package.log
+      - uses: actions/upload-artifact@v7
+        with:
+          name: java8-library
+          path: target/java8-artifact
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: java8-build-evidence
+          path: |
+            java8-verify.log
+            repeat-package.log
+            target/surefire-reports
+            target/failsafe-reports
+            target/invoker-reports
+            target/it/**/build.log
+            target/it/**/target/surefire-reports
+  consumers:
+    name: Java 8 binary on JDK ${{ matrix.java }}
+    needs: package
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['8', '9', '10', '11', '17', '21', '25']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: zulu
+          java-version: ${{ matrix.java }}
+          cache: maven
+      - uses: actions/download-artifact@v8
+        with:
+          name: java8-library
+          path: target/java8-artifact
+      - name: Install the retained binary without rebuilding the library
+        run: |
+          sha256sum --check target/java8-artifact/SHA256SUMS
+          test "$(cat target/java8-artifact/revision.txt)" = "$(git rev-parse HEAD)"
+          mvn -B -ntp org.apache.maven.plugins:maven-install-plugin:3.1.4:install-file \
+            -Dfile=target/java8-artifact/library.jar -DpomFile=pom.xml \
+            -DlocalRepositoryPath=target/local-repo -DgeneratePom=false
+      - name: Run class-path and module-path consumers
+        run: |
+          mvn -B -ntp invoker:run invoker:verify -Dinvoker.failIfNoProjects=true -l consumers.log
+          installed=(target/local-repo/net/openhft/zero-allocation-hashing/*/zero-allocation-hashing-*.jar)
+          test "${#installed[@]}" = 1
+          cmp target/java8-artifact/library.jar "${installed[0]}"
+      - name: Check annotation and JDK dependencies
+        if: matrix.java == '21'
+        run: |
+          mvn -B -ntp dependency:copy -Dartifact=com.google.code.findbugs:jsr305:3.0.2 \
+            -DoutputDirectory=target/jdeps
+          jdeps --multi-release 9 -verbose:class --add-modules jsr305 \
+            --module-path target/jdeps/jsr305-3.0.2.jar \
+            target/java8-artifact/library.jar | tee jdeps.log
+          ! grep -F 'not found' jdeps.log
+          grep -E 'net.openhft.hashing.* -> javax.annotation.ParametersAreNonnullByDefault +jsr305$' jdeps.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: consumers-jdk-${{ matrix.java }}
+          path: |
+            consumers.log
+            jdeps.log
+            target/java8-artifact/SHA256SUMS
+            target/invoker-reports
+            target/it/**/build.log
+            target/it/**/target/surefire-reports

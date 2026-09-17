@@ -318,6 +318,7 @@
                         </goals>
                         <configuration>
                             <jvmVersion>9</jvmVersion>
+                            <overwriteExistingFiles>true</overwriteExistingFiles>
                             <module>
                                 <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
                             </module>
@@ -351,7 +352,6 @@
                 <configuration>
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <settingsFile>src/it/settings.xml</settingsFile>
                     <postBuildHookScript>verify</postBuildHookScript>
                     <streamLogs>false</streamLogs>
                     <streamLogsOnFailures>true</streamLogsOnFailures>
@@ -413,6 +413,14 @@
             </properties>
             <build>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <additionalOptions>
+                                <additionalOption>-html5</additionalOption>
+                            </additionalOptions>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <executions>
