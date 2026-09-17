@@ -17,7 +17,7 @@ jobs:
           cache: maven
       - name: Verify and retain the Java 8 binary
         run: |
-          mvn -B -ntp verify -l java8-verify.log
+          ./mvnw -B -ntp verify -l java8-verify.log
           mkdir -p target/java8-artifact
           python3 - <<'PY'
           import shutil
@@ -34,7 +34,7 @@ jobs:
           git rev-parse HEAD > target/java8-artifact/revision.txt
           java -version 2> target/java8-artifact/build-jdk.txt
       - name: Repeat package without cleaning generated modules
-        run: mvn -B -ntp -DskipTests package -l repeat-package.log
+        run: ./mvnw -B -ntp -DskipTests package -l repeat-package.log
       - uses: actions/upload-artifact@v7
         with:
           name: java8-library
@@ -75,19 +75,19 @@ jobs:
         run: |
           sha256sum --check target/java8-artifact/SHA256SUMS
           test "$(cat target/java8-artifact/revision.txt)" = "$(git rev-parse HEAD)"
-          mvn -B -ntp org.apache.maven.plugins:maven-install-plugin:3.1.4:install-file \
+          ./mvnw -B -ntp org.apache.maven.plugins:maven-install-plugin:3.1.4:install-file \
             -Dfile=target/java8-artifact/library.jar -DpomFile=pom.xml \
             -DlocalRepositoryPath=target/local-repo -DgeneratePom=false
       - name: Run class-path and module-path consumers
         run: |
-          mvn -B -ntp invoker:run invoker:verify -Dinvoker.failIfNoProjects=true -l consumers.log
+          ./mvnw -B -ntp invoker:run invoker:verify -Dinvoker.failIfNoProjects=true -l consumers.log
           installed=(target/local-repo/net/openhft/zero-allocation-hashing/*/zero-allocation-hashing-*.jar)
           test "${#installed[@]}" = 1
           cmp target/java8-artifact/library.jar "${installed[0]}"
       - name: Check annotation and JDK dependencies
         if: matrix.java == '21'
         run: |
-          mvn -B -ntp dependency:copy -Dartifact=com.google.code.findbugs:jsr305:3.0.2 \
+          ./mvnw -B -ntp dependency:copy -Dartifact=com.google.code.findbugs:jsr305:3.0.2 \
             -DoutputDirectory=target/jdeps
           jdeps --multi-release 9 -verbose:class --add-modules jsr305 \
             --module-path target/jdeps/jsr305-3.0.2.jar \
