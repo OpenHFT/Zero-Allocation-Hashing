@@ -240,9 +240,22 @@ public abstract class LongHashFunction implements Serializable {
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm with the given seed value
+     * <p>The C++ {@code MurmurHash3_x64_128} function accepts a {@code uint32_t} seed. For the same
+     * input byte sequence, seed values from {@code 0L} through {@code 0xffffffffL} initialise the
+     * same state as the C++ reference implementation. This overload is a 64-bit-seed extension: it
+     * copies all 64 bits of the supplied {@code long} into both initial state words. Values outside
+     * that range have no corresponding C++ seed and initialise a different state from their
+     * low-32-bit value.
+     *
+     * <p>To interpret a Java {@code int} as the corresponding unsigned C++ seed, use
+     * {@link Integer#toUnsignedLong(int) Integer.toUnsignedLong(seed)}. For a seed in the C++
+     * domain, this function returns the first 64-bit output word ({@code h1}) of the C++ 128-bit
+     * result.
+     *
+     * @param seed the seed value; all 64 bits initialise both internal state words
+     * @return a {@code LongHashFunction} returning the first word of the MurmurHash3 128-bit result
      * @see #murmur_3()
+     * @see LongTupleHashFunction#murmur_3(long)
      */
     @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3(long seed) {

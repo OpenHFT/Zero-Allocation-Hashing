@@ -35,4 +35,6 @@ The source programs used to generate those vectors are embedded in each test for
 === Build and Verification
 
 * Run `mvn -q verify` from the repository root before publishing changes; the goal invokes unit tests under the appropriate JVM profiles and ensures multi-version compatibility.
+* GitHub Actions reports Maven verification and SonarCloud analysis as separate jobs on JDK 21. The Maven compiler still targets Java 8. Analysis consumes the compiled classes and JaCoCo XML produced by verification.
+* `mvn -Psonar verify` collects coverage from both string-layout executions through the JaCoCo-prepared `surefireArgLine` property. The SonarCloud job requires a `SONAR_TOKEN` with analysis permission for project `OpenHFT_Zero-Allocation-Hashing` in organisation `openhft`.
 * Include new regression cases alongside the code change so future automated runs catch behavioural drift without manual intervention.
