@@ -33,6 +33,9 @@ Integration tests run automatically during the build with:
 ./mvnw verify
 ----
 
+The build requires Maven 3.9.6 or newer; the wrapper selects Maven 3.9.11.
+ModiTect stays on the Java-8-compatible 1.2.x line because 1.3 requires Java 11.
+
 This packages and installs the library in `target/local-repo` before running the consumers.
 `invoker:run` alone cannot run on a fresh checkout because that repository does not yet
 contain the project JAR. Invoker inherits the invoking Maven process's settings, including

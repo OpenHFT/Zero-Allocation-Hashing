@@ -29,7 +29,7 @@
         <project.target.release>8</project.target.release>
 
         <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
-        <project.maven.min-version>3.5.0</project.maven.min-version>
+        <project.maven.min-version>3.9.6</project.maven.min-version>
 
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>
@@ -39,7 +39,8 @@
 
         <doclint>all,-missing</doclint>
         <jmh.version>1.37</jmh.version>
-        <moditect.version>1.3.0.Final</moditect.version>
+        <!-- ModiTect 1.3 requires Java 11; this build must also run on Java 8. -->
+        <moditect.version>1.2.2.Final</moditect.version>
         <sonar.organization>openhft</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
