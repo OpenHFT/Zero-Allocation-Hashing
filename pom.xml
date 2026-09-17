@@ -29,7 +29,7 @@
         <project.target.release>8</project.target.release>
 
         <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
-        <project.maven.min-version>3.9.6</project.maven.min-version>
+        <project.maven.min-version>3.5.0</project.maven.min-version>
 
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>

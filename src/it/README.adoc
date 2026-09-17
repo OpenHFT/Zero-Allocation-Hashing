@@ -33,7 +33,7 @@ Integration tests run automatically during the build with:
 ./mvnw verify
 ----
 
-The build requires Maven 3.9.6 or newer; the wrapper selects Maven 3.9.11.
+The wrapper selects Maven 3.9.11, satisfying ModiTect's declared Maven 3.9.6 prerequisite.
 ModiTect stays on the Java-8-compatible 1.2.x line because 1.3 requires Java 11.
 
 This packages and installs the library in `target/local-repo` before running the consumers.
