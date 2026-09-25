@@ -1,0 +1,94 @@
+= Integration Tests
+
+This directory contains integration tests for the Zero-Allocation-Hashing library using the Maven Invoker Plugin and JUnit 4.
+
+== Test Cases
+
+=== 1. simple-usage
+
+Tests basic usage of the hashing library without modules, targeting Java 8.
+
+- Tests various hash functions (XxHash, CityHash, MurmurHash3, FarmHash)
+- Verifies hash consistency across byte arrays, ByteBuffers, and CharSequences
+- Ensures public API is accessible
+- Uses JUnit 4 assertions
+
+=== 2. module-test
+
+Tests proper module encapsulation on Java 9+ with `--release 9`.
+This fixture selection does not change the library's Java 8 target or its Java 9 module descriptor.
+
+- Uses `module-info.java` to require the `net.openhft.hashing` module
+- Verifies that only exported packages are accessible
+- Tests are compiled and run with module path
+- Demonstrates module system working correctly
+- Uses JUnit 4 assertions
+
+== Running Integration Tests
+
+Integration tests run automatically during the build with:
+
+[source,bash]
+----
+./mvnw verify
+----
+
+The wrapper selects Maven 3.9.11, satisfying ModiTect's declared Maven 3.9.6 prerequisite.
+ModiTect stays on the Java-8-compatible 1.2.x line because 1.3 requires Java 11.
+
+This packages and installs the library in `target/local-repo` before running the consumers.
+`invoker:run` alone cannot run on a fresh checkout because that repository does not yet
+contain the project JAR. Invoker inherits the invoking Maven process's settings, including
+mirrors, proxies and repository credentials, while keeping its local repository isolated.
+
+=== One Java 8 binary on later JDKs
+
+The `Java 8 artefact compatibility` workflow retains the JAR, SHA-256, source revision
+and build-JDK identity from a Java 8 `verify`. It then repeats `package` without `clean`
+to catch failures when ModiTect's output already exists.
+
+Independent jobs install that retained JAR using `install:install-file` and run
+`invoker:run invoker:verify`, without rebuilding the library. The class-path consumer
+runs on JDK 8, 9, 10, 11, 17, 21 and 25; the explicit-module consumer runs on all of
+those except JDK 8. Each job compares the installed JAR with the retained binary and
+keeps its consumer reports. The JDK 21 job also runs `jdeps` with JSR-305 available
+and rejects unresolved annotation references. These jobs establish compatibility for the retained
+binary, rather than for a separately rebuilt JAR on each JVM.
+
+== Module Encapsulation
+
+The library exports only the `net.openhft.hashing` package via module-info.java:
+
+[source,java]
+----
+module net.openhft.hashing {
+    requires jdk.unsupported;
+    requires static jsr305;
+    exports net.openhft.hashing;
+}
+----
+
+No implementation packages from this library are exported.
+JSR-305 supplies the runtime-visible nullability annotations. It remains an optional
+dependency: applications that inspect those annotations must supply and resolve the
+`jsr305` module (for example, with `--add-modules jsr305`); hashing does not require it.
+The direct-buffer runtime test supplies `--add-exports java.base/sun.nio.ch=net.openhft.hashing` because the performance-sensitive implementation calls `DirectBuffer.address()` directly.
+For class-path use, the corresponding target is `ALL-UNNAMED`.
+
+== Multi-Release JAR
+
+The library is built as a multi-release JAR with module-info.class in META-INF/versions/9/:
+
+- Java 8: Works as a regular JAR without module system
+- Java 9+: Works as a named module with proper encapsulation
+
+== Test Framework
+
+All integration tests use JUnit 4 (same as the main project tests) and do not print to System.out.
+Test results are reported through Maven Surefire plugin output only.
+
+The library unit tests also check direct-buffer ranges independently of the active cursor window.
+`LongHashFunctionTest` and `LongTupleHashFunctionTest` put distinct guard bytes around the payload,
+then request only the payload while position and limit cover the complete buffer. They verify the
+hash and unchanged cursor, then restore the payload window before the whole-buffer byte-order check.
+Replacing the direct-buffer range with `position()` and `remaining()` must fail these assertions.
