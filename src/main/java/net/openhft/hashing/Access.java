@@ -66,6 +66,8 @@ public abstract class Access<T> {
      *
      * @param <T> the type of objects to access
      * @return the unsafe memory {@code Access}
+     * @throws UnsupportedOperationException on JDK 25+ (or with
+     *         {@code -Dnet.openhft.hashing.useUnsafe=false}), where Unsafe is never instantiated
      */
     @SuppressWarnings("unchecked")
     public static <T> Access<T> unsafe() {

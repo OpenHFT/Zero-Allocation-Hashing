@@ -601,6 +601,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      *                                  or {@code len < 0}
+     * @throws UnsupportedOperationException on JDK 25+ (or with
+     *         {@code -Dnet.openhft.hashing.useUnsafe=false}), where raw memory is unavailable
      */
     public void hashMemory(final long address, final long len, final long[] result) {
         unsafeHash(this, null, address, len, result);
@@ -989,12 +991,14 @@ public abstract class LongTupleHashFunction implements Serializable {
     // Internal helper
     //
     @NotNull
+    // Unsafe based below JDK 25, SafeHeapAccess otherwise.
     private static final Access<Object> OBJECT_ACCESS = HeapAccess.ACCESS;
     @NotNull
     private static final Access<CharSequence> CHAR_SEQ_ACCESS = nativeCharSequenceAccess();
     @NotNull
     private static final Access<ByteBuffer> BYTE_BUF_ACCESS = ByteBufferAccess.INSTANCE;
 
+    // Historical name, see LongHashFunction#unsafeHash: Unsafe is only used below JDK 25.
     private static void unsafeHash(final LongTupleHashFunction f, @Nullable final Object input,
                                    final long off, final long len, final long[] result) {
         if (input == null) {

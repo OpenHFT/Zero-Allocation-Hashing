@@ -499,6 +499,11 @@ public abstract class LongHashFunction implements Serializable {
      */
     public abstract <T> long hash(T input, Access<T> access, long off, long len);
 
+    /*
+     * Historical name: this hashes through HeapAccess.ACCESS, which is Unsafe based only below
+     * JDK 25. On JDK 25+ (or useUnsafe=false) it is the Unsafe-free SafeHeapAccess; only the
+     * null-input (raw address) case needs real Unsafe and then fails fast.
+     */
     private long unsafeHash(Object input, long off, long len) {
         if (input == null) {
             HeapAccess.requireRawMemory();
@@ -625,6 +630,9 @@ public abstract class LongHashFunction implements Serializable {
      * @param address the address of the first byte to hash
      * @param len     length of the byte sequence to hash
      * @return hash code for the specified byte sequence
+     * @throws UnsupportedOperationException on JDK 25+ (or with
+     *         {@code -Dnet.openhft.hashing.useUnsafe=false}); hash a direct {@link ByteBuffer}
+     *         via {@link #hashBytes(ByteBuffer)} instead
      */
     public long hashMemory(long address, long len) {
         return unsafeHash(null, address, len);
