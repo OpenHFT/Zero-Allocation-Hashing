@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
-import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.HeapAccess.*;
 import static net.openhft.hashing.Util.*;
 
 /**
@@ -989,7 +989,7 @@ public abstract class LongTupleHashFunction implements Serializable {
     // Internal helper
     //
     @NotNull
-    private static final Access<Object> OBJECT_ACCESS = UnsafeAccess.INSTANCE;
+    private static final Access<Object> OBJECT_ACCESS = HeapAccess.ACCESS;
     @NotNull
     private static final Access<CharSequence> CHAR_SEQ_ACCESS = nativeCharSequenceAccess();
     @NotNull
@@ -997,6 +997,9 @@ public abstract class LongTupleHashFunction implements Serializable {
 
     private static void unsafeHash(final LongTupleHashFunction f, @Nullable final Object input,
                                    final long off, final long len, final long[] result) {
+        if (input == null) {
+            HeapAccess.requireRawMemory();
+        }
         f.hash(input, OBJECT_ACCESS, off, len, result);
     }
 
@@ -1004,7 +1007,7 @@ public abstract class LongTupleHashFunction implements Serializable {
                                        final int off, final int len, final long[] result) {
         if (input.hasArray()) {
             unsafeHash(f, input.array(), BYTE_BASE + input.arrayOffset() + off, len, result);
-        } else if (input instanceof DirectBuffer) {
+        } else if (UNSAFE_ENABLED && input instanceof DirectBuffer) {
             unsafeHash(f, null, ((DirectBuffer) input).address() + off, len, result);
         } else {
             f.hash(input, BYTE_BUF_ACCESS, off, len, result);

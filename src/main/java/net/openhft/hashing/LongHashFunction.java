@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
-import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.HeapAccess.*;
 import static net.openhft.hashing.Util.VALID_STRING_HASH;
 import static net.openhft.hashing.Util.checkArrayOffs;
 
@@ -500,7 +500,10 @@ public abstract class LongHashFunction implements Serializable {
     public abstract <T> long hash(T input, Access<T> access, long off, long len);
 
     private long unsafeHash(Object input, long off, long len) {
-        return hash(input, UnsafeAccess.INSTANCE, off, len);
+        if (input == null) {
+            HeapAccess.requireRawMemory();
+        }
+        return hash(input, HeapAccess.ACCESS, off, len);
     }
 
     /**
@@ -606,7 +609,7 @@ public abstract class LongHashFunction implements Serializable {
     private long hashByteBuffer(@NotNull ByteBuffer input, int off, int len) {
         if (input.hasArray()) {
             return unsafeHash(input.array(), BYTE_BASE + input.arrayOffset() + off, len);
-        } else if (input instanceof DirectBuffer) {
+        } else if (UNSAFE_ENABLED && input instanceof DirectBuffer) {
             return unsafeHash(null, ((DirectBuffer) input).address() + off, len);
         } else {
             return hash(input, ByteBufferAccess.INSTANCE, off, len);

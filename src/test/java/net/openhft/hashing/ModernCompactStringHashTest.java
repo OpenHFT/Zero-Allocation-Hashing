@@ -10,6 +10,11 @@ import static org.junit.Assert.*;
 
 public class ModernCompactStringHashTest {
 
+    @org.junit.BeforeClass
+    public static void requireUnsafe() {
+        org.junit.Assume.assumeTrue(RuntimeSupport.useUnsafeAccess());
+    }
+
     private static boolean isCompactStringsVm() {
         return System.getProperty("java.version").compareTo("1.9") >= 0;
     }

@@ -32,3 +32,10 @@ Hash outputs therefore match across architectures, but big-endian CPUs incur add
 This ensures correctness at the cost of potential performance; review the decision log before altering the detection logic (`Util.java:29-63`).
 * Passing invalid pointers to `hashMemory` or misreporting `Access` byte order is undefined and can crash the JVM.
 Always validate foreign memory addresses and keep access strategies consistent with the underlying storage layout.
+
+=== JDK 25+ and the Unsafe-free backend
+
+* `RuntimeSupport.useUnsafeAccess()` is false on JDK 25+ (and when `-Dnet.openhft.hashing.useUnsafe=false` is set); `UnsafeAccess` then throws `IllegalStateException` if touched, so `sun.misc.Unsafe` is never instantiated.
+* `HeapAccess` supplies array base offsets and the `Access` used by `LongHashFunction`, `LongTupleHashFunction` and `XXH3`; the safe variant (`SafeHeapAccess`) uses base offset 0 and native byte order, so big-endian hosts (AIX ppc64) still normalise through `Access.byteOrder`.
+* Raw-memory APIs (`hashMemory`, `Access.unsafe()`) throw `UnsupportedOperationException` on this backend; direct `ByteBuffer`s are hashed through `ByteBufferAccess`.
+* Strings use `UnknownJvmStringHash`; this applies equally to HotSpot and IBM Semeru/OpenJ9.

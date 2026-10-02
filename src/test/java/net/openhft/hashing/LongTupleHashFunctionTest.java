@@ -100,7 +100,7 @@ class LongTupleHashFunctionTest {
             long[] single = f.hashBoolean(b);
             long[] array = f.hashBooleans(a);
             assertArrayEquals("testBoolean array", single, array);
-            assertArrayEquals("testBoolean unsafe", single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
+            assertArrayEquals("testBoolean unsafe", single, f.hash(a, HeapAccess.ACCESS, HeapAccess.BOOLEAN_BASE, 1L));
         }
     }
 
@@ -248,7 +248,11 @@ class LongTupleHashFunctionTest {
     private static void testMemory(LongTupleHashFunction f, long[] eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        ((Buffer)directBB).clear();
+        assertArrayEquals("direct buffer", eh, f.hashBytes(directBB));
+        if (HeapAccess.UNSAFE_ENABLED) {
+            assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        }
         ((Buffer)bb).clear();
     }
 

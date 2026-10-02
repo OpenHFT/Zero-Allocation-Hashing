@@ -82,3 +82,20 @@ Chronicle Software
 * **Positive:** Supports >64-bit hashes without allocating an Object wrapper (like `BigInteger` or a custom class).
 * **Negative:** The `long[]` result array must be managed/reused by the caller to maintain the "zero-allocation" promise.
 |===
+
+== ADR-007: Unsafe-free heap access on JDK 25+
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Date | 2025-11-01
+| Context | `sun.misc.Unsafe` memory access is being phased out. JDK 25+ should never instantiate it, while JDK 8-24 (HotSpot, IBM Semeru/OpenJ9, AIX ppc64, Linux ppc64le) keep today's fast path. The feature version is constant for the lifetime of a JVM.
+| Decision |
+* `RuntimeSupport` caches the feature version once (static final); `useUnsafeAccess()` is true below 25. The system property `net.openhft.hashing.useUnsafe=false` forces the safe backend on older JDKs for testing.
+* `HeapAccess` selects the array backend once: `UnsafeAccess` (real base offsets) or `SafeHeapAccess` (base offset 0, native-order byte view built on array indexing, no allocation).
+* `UnsafeAccess` refuses to initialise when the safe backend is selected, so Unsafe is never instantiated on JDK 25+.
+* On JDK 25+, strings use `UnknownJvmStringHash` (`CharSequence` reads), `ByteBuffer` uses `ByteBufferAccess`, and raw-address APIs (`hashMemory`, `Access.unsafe()`) throw `UnsupportedOperationException`.
+| Consequences |
+* **Positive:** Hash values are identical on every backend; zero allocation is retained; no behaviour change below JDK 25.
+* **Negative:** The safe backend composes wide reads from bytes and is slower; raw-memory hashing is unavailable on JDK 25+.
+|===

@@ -69,6 +69,7 @@ public abstract class Access<T> {
      */
     @SuppressWarnings("unchecked")
     public static <T> Access<T> unsafe() {
+        HeapAccess.requireRawMemory();
         return (Access<T>) UnsafeAccess.INSTANCE;
     }
 

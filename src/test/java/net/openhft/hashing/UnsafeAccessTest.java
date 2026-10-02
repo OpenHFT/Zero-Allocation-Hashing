@@ -21,7 +21,15 @@ public class UnsafeAccessTest {
 
     @Parameters
     public static Object[] data() {
+        if (!RuntimeSupport.useUnsafeAccess()) {
+            return new Object[] { null };
+        }
         return new Object[] { UnsafeAccess.INSTANCE, UnsafeAccess.OLD_INSTANCE };
+    }
+
+    @org.junit.BeforeClass
+    public static void requireUnsafe() {
+        assumeTrue(RuntimeSupport.useUnsafeAccess());
     }
 
     @Parameter
