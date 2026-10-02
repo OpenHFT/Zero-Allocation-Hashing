@@ -505,10 +505,7 @@ public abstract class LongHashFunction implements Serializable {
      * null-input (raw address) case needs real Unsafe and then fails fast.
      */
     private long unsafeHash(Object input, long off, long len) {
-        if (input == null) {
-            HeapAccess.requireRawMemory();
-        }
-        return hash(input, HeapAccess.ACCESS, off, len);
+        return hash(input, input == null ? HeapAccess.rawMemoryAccess() : HeapAccess.ACCESS, off, len);
     }
 
     /**

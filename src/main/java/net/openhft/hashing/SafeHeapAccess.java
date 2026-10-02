@@ -38,7 +38,7 @@ final class SafeHeapAccess extends Access<Object> {
         // Defensive guard; fail loudly rather than return a wrong hash. The library's own calls
         // only pass the six array types above:
         // - null (raw address): only reachable by a direct hash(null, access, addr, len) call
-        //   with this access; the hashMemory entry points are stopped by requireRawMemory().
+        //   with this access; the hashMemory entry points are routed to ForeignRawAccess.
         // - arbitrary objects (Pair-style, see Access#unsafe()): need Unsafe field offsets, so
         //   they can only arrive through such direct calls as well.
         // - float[]/double[]: no hashFloats/hashDoubles exist today. If they are added, extend

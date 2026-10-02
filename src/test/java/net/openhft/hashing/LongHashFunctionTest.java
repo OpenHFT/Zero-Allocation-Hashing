@@ -198,7 +198,7 @@ class LongHashFunctionTest {
         directBB.put(bb);
         ((Buffer)directBB).clear();
         assertEquals("direct buffer", eh, f.hashBytes(directBB));
-        if (HeapAccess.UNSAFE_ENABLED) {
+        if (HeapAccess.RAW_MEMORY_AVAILABLE) {
             assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         }
         ((Buffer)bb).clear();

@@ -15,6 +15,10 @@ final class HeapAccess {
 
     static final Access<Object> ACCESS;
 
+    /** Access for absolute native addresses, or {@code null} if raw memory is unsupported. */
+    static final Access<Object> RAW_MEMORY_ACCESS;
+    static final boolean RAW_MEMORY_AVAILABLE;
+
     static final long BOOLEAN_BASE;
     static final long BYTE_BASE;
     static final long CHAR_BASE;
@@ -28,6 +32,7 @@ final class HeapAccess {
     static {
         if (UNSAFE_ENABLED) {
             ACCESS = UnsafeAccess.INSTANCE;
+            RAW_MEMORY_ACCESS = UnsafeAccess.INSTANCE;
             BOOLEAN_BASE = UnsafeAccess.BOOLEAN_BASE;
             BYTE_BASE = UnsafeAccess.BYTE_BASE;
             CHAR_BASE = UnsafeAccess.CHAR_BASE;
@@ -38,6 +43,7 @@ final class HeapAccess {
             FALSE_BYTE_VALUE = UnsafeAccess.FALSE_BYTE_VALUE;
         } else {
             ACCESS = SafeHeapAccess.INSTANCE;
+            RAW_MEMORY_ACCESS = ForeignRawAccess.INSTANCE;
             BOOLEAN_BASE = 0L;
             BYTE_BASE = 0L;
             CHAR_BASE = 0L;
@@ -49,12 +55,27 @@ final class HeapAccess {
         }
     }
 
+    static {
+        RAW_MEMORY_AVAILABLE = RAW_MEMORY_ACCESS != null;
+    }
+
     private HeapAccess() {}
 
-    static void requireRawMemory() {
+    /** Returns the access for {@code hashMemory}; fails fast if no raw memory backend exists. */
+    static Access<Object> rawMemoryAccess() {
+        if (RAW_MEMORY_ACCESS == null) {
+            throw new UnsupportedOperationException(
+                "Raw memory access needs sun.misc.Unsafe (JDK < 25) or the FFM API (JDK 22+), "
+                    + "neither is usable on this JVM");
+        }
+        return RAW_MEMORY_ACCESS;
+    }
+
+    /** Guards {@link Access#unsafe()}: object plus field-offset access needs real Unsafe. */
+    static void requireUnsafe() {
         if (!UNSAFE_ENABLED) {
             throw new UnsupportedOperationException(
-                "Raw memory access requires sun.misc.Unsafe, which is not used on this JVM");
+                "Access.unsafe() requires sun.misc.Unsafe, which is not used on this JVM");
         }
     }
 }

@@ -1001,10 +1001,7 @@ public abstract class LongTupleHashFunction implements Serializable {
     // Historical name, see LongHashFunction#unsafeHash: Unsafe is only used below JDK 25.
     private static void unsafeHash(final LongTupleHashFunction f, @Nullable final Object input,
                                    final long off, final long len, final long[] result) {
-        if (input == null) {
-            HeapAccess.requireRawMemory();
-        }
-        f.hash(input, OBJECT_ACCESS, off, len, result);
+        f.hash(input, input == null ? HeapAccess.rawMemoryAccess() : OBJECT_ACCESS, off, len, result);
     }
 
     private static void hashByteBuffer(final LongTupleHashFunction f, final ByteBuffer input,

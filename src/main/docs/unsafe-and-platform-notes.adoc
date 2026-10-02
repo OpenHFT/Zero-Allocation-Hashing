@@ -37,5 +37,6 @@ Always validate foreign memory addresses and keep access strategies consistent w
 
 * `RuntimeSupport.useUnsafeAccess()` is false on JDK 25+ (and when `-Dnet.openhft.hashing.useUnsafe=false` is set); `UnsafeAccess` then throws `IllegalStateException` if touched, so `sun.misc.Unsafe` is never instantiated.
 * `HeapAccess` supplies array base offsets and the `Access` used by `LongHashFunction`, `LongTupleHashFunction` and `XXH3`; the safe variant (`SafeHeapAccess`) uses base offset 0 and native byte order, so big-endian hosts (AIX ppc64) still normalise through `Access.byteOrder`.
-* Raw-memory APIs (`hashMemory`, `Access.unsafe()`) throw `UnsupportedOperationException` on this backend; direct `ByteBuffer`s are hashed through `ByteBufferAccess`.
+* `hashMemory` uses `ForeignRawAccess` (FFM, JDK 22+). It calls the restricted `MemorySegment.reinterpret`; JDK 24+ warns once unless `--enable-native-access=ALL-UNNAMED` is set. Without FFM it throws `UnsupportedOperationException`.
+* `Access.unsafe()` throws `UnsupportedOperationException` on this backend; direct `ByteBuffer`s are hashed through `ByteBufferAccess`.
 * Strings use `UnknownJvmStringHash`; this applies equally to HotSpot and IBM Semeru/OpenJ9.

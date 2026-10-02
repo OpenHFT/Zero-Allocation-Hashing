@@ -94,7 +94,9 @@ Chronicle Software
 * `RuntimeSupport` caches the feature version once (static final); `useUnsafeAccess()` is true below 25. The system property `net.openhft.hashing.useUnsafe=false` forces the safe backend on older JDKs for testing.
 * `HeapAccess` selects the array backend once: `UnsafeAccess` (real base offsets) or `SafeHeapAccess` (base offset 0, native-order byte view built on array indexing, no allocation).
 * `UnsafeAccess` refuses to initialise when the safe backend is selected, so Unsafe is never instantiated on JDK 25+.
-* On JDK 25+, strings use `UnknownJvmStringHash` (`CharSequence` reads), `ByteBuffer` uses `ByteBufferAccess`, and raw-address APIs (`hashMemory`, `Access.unsafe()`) throw `UnsupportedOperationException`.
+* On JDK 25+, strings use `UnknownJvmStringHash` (`CharSequence` reads) and `ByteBuffer` uses `ByteBufferAccess`.
+* `hashMemory` uses `ForeignRawAccess`, a direct translation of `Unsafe.getX(null, address)` to the FFM API (JDK 22+, via method handles so the Java 8 build is unchanged). If FFM is unavailable it throws `UnsupportedOperationException`.
+* `Access.unsafe()` throws on the safe backend: object plus field-offset access cannot be expressed without Unsafe.
 | Consequences |
 * **Positive:** Hash values are identical on every backend; zero allocation is retained; no behaviour change below JDK 25.
 * **Negative:** The safe backend composes wide reads from bytes and is slower; raw-memory hashing is unavailable on JDK 25+.

@@ -250,7 +250,7 @@ class LongTupleHashFunctionTest {
         directBB.put(bb);
         ((Buffer)directBB).clear();
         assertArrayEquals("direct buffer", eh, f.hashBytes(directBB));
-        if (HeapAccess.UNSAFE_ENABLED) {
+        if (HeapAccess.RAW_MEMORY_AVAILABLE) {
             assertArrayEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
         }
         ((Buffer)bb).clear();
