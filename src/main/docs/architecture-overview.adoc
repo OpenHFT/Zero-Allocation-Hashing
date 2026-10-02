@@ -43,3 +43,7 @@ When the VM cannot be recognised, `UnknownJvmStringHash` provides a defensive fa
 * `net.openhft.hashing.Primitives` houses byte-order normalisation helpers and unsigned conversions so algorithms can expect canonical little-endian operands even on big-endian hardware (`Primitives.java`).
 * `net.openhft.hashing.Maths` provides low-level arithmetic helpers such as `unsignedLongMulXorFold` used by wyHash and XXH3 for 128-bit cross-products (`Maths.java`).
 * Tests under `src/test/java/net/openhft/hashing` validate the API contract across arrays, primitives, buffers, and custom access strategies, and serve as reference snippets for typical `Access` usage.
+
+== Backend selection
+
+`RuntimeSupport` caches the JVM feature version; `HeapAccess` then chooses `UnsafeAccess` (JDK < 25) or `SafeHeapAccess` (JDK 25+) once at class initialisation. See ADR-007 in the decision log.

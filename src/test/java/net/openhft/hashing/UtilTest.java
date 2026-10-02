@@ -13,6 +13,7 @@ public class UtilTest {
     public void testStringHash() {
         // This is a sentinel test to make sure that in all known VMs it will not fall back to use
         // native CharSequenceAccess
+        org.junit.Assume.assumeTrue(RuntimeSupport.useUnsafeAccess());
         assertNotSame(Util.VALID_STRING_HASH, UnknownJvmStringHash.INSTANCE);
     }
 }

@@ -48,7 +48,7 @@ class LongHashFunctionTest {
             long single = f.hashBoolean(b);
             long array = f.hashBooleans(a);
             assertEquals(single, array);
-            assertEquals(single, f.hash(a, UnsafeAccess.unsafe(), UnsafeAccess.BOOLEAN_BASE, 1L));
+            assertEquals(single, f.hash(a, HeapAccess.ACCESS, HeapAccess.BOOLEAN_BASE, 1L));
         }
     }
 
@@ -196,7 +196,11 @@ class LongHashFunctionTest {
     private static void testMemory(LongHashFunction f, long eh, int len, ByteBuffer bb) {
         ByteBuffer directBB = ByteBuffer.allocateDirect(len);
         directBB.put(bb);
-        assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        ((Buffer)directBB).clear();
+        assertEquals("direct buffer", eh, f.hashBytes(directBB));
+        if (HeapAccess.RAW_MEMORY_AVAILABLE) {
+            assertEquals("memory", eh, f.hashMemory(Util.getDirectBufferAddress(directBB), len));
+        }
         ((Buffer)bb).clear();
     }
 

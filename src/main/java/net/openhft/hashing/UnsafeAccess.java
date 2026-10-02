@@ -31,6 +31,9 @@ public class UnsafeAccess extends Access<Object> {
     static final byte FALSE_BYTE_VALUE;
 
     static {
+        if (!RuntimeSupport.useUnsafeAccess()) {
+            throw new IllegalStateException("sun.misc.Unsafe must not be used on this JVM");
+        }
         try {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);

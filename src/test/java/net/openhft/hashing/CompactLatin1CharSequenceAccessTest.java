@@ -12,7 +12,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
 public class CompactLatin1CharSequenceAccessTest {
-    static private final Access<byte[]> access = CompactLatin1CharSequenceAccess.INSTANCE;
+    @org.junit.BeforeClass
+    public static void requireUnsafe() {
+        assumeTrue(RuntimeSupport.useUnsafeAccess());
+    }
+
+    static private final Access<byte[]> access =
+        RuntimeSupport.useUnsafeAccess() ? CompactLatin1CharSequenceAccess.INSTANCE : null;
     static private final byte[] b = { (byte)0xF1, (byte)0xE2, (byte)0xD3, (byte)0xC4, (byte)0xB5 };
 
     @Test
