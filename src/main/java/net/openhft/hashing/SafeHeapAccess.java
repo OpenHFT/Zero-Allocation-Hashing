@@ -35,6 +35,14 @@ final class SafeHeapAccess extends Access<Object> {
         } else if (input instanceof boolean[]) {
             return ((boolean[]) input)[(int) offset] ? 1 : 0;
         }
+        // Defensive guard; fail loudly rather than return a wrong hash. The library's own calls
+        // only pass the six array types above:
+        // - null (raw address): only reachable by a direct hash(null, access, addr, len) call
+        //   with this access; the hashMemory entry points are stopped by requireRawMemory().
+        // - arbitrary objects (Pair-style, see Access#unsafe()): need Unsafe field offsets, so
+        //   they can only arrive through such direct calls as well.
+        // - float[]/double[]: no hashFloats/hashDoubles exist today. If they are added, extend
+        //   this method (via Float.floatToRawIntBits/Double.doubleToRawLongBits).
         throw new IllegalArgumentException("Unsupported input without Unsafe: "
             + (input == null ? "null (raw memory)" : input.getClass().getName()));
     }
