@@ -1,0 +1,119 @@
+/*
+ * Copyright 2013-2025 chronicle.software; SPDX-License-Identifier: Apache-2.0
+ */
+package net.openhft.it.module;
+
+import net.openhft.hashing.LongHashFunction;
+import net.openhft.hashing.LongTupleHashFunction;
+import org.junit.Test;
+
+import java.lang.module.ModuleDescriptor;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+
+/**
+ * Integration test verifying proper module encapsulation.
+ * This test ensures that only exported packages are accessible.
+ */
+public class ModuleTest {
+    
+    private static final String TEST_DATA = "Module Test Data";
+    private static final byte[] TEST_BYTES = TEST_DATA.getBytes(StandardCharsets.UTF_8);
+    
+    @Test
+    public void testPublicAPIAccessible() {
+        long xxHash = LongHashFunction.xx().hashBytes(TEST_BYTES);
+        long cityHash = LongHashFunction.city_1_1().hashBytes(TEST_BYTES);
+        long murmurHash = LongHashFunction.murmur_3().hashBytes(TEST_BYTES);
+        
+        assertTrue("XxHash should produce non-zero result", xxHash != 0);
+        assertTrue("CityHash should produce non-zero result", cityHash != 0);
+        assertTrue("MurmurHash should produce non-zero result", murmurHash != 0);
+    }
+    
+    @Test
+    public void testMainAPIClassAccessible() {
+        try {
+            Class.forName("net.openhft.hashing.LongHashFunction");
+        } catch (ClassNotFoundException e) {
+            fail("Public API net.openhft.hashing.LongHashFunction should be accessible");
+        }
+    }
+
+    @Test
+    public void testExplicitDescriptorContract() {
+        Module module = LongHashFunction.class.getModule();
+        assertTrue("Library should be a named module", module.isNamed());
+        assertEquals("net.openhft.hashing", module.getName());
+
+        ModuleDescriptor descriptor = module.getDescriptor();
+        assertNotNull("Named module should have a descriptor", descriptor);
+        assertFalse("Library should not resolve as an automatic module", descriptor.isAutomatic());
+
+        Set<ModuleDescriptor.Exports> exports = descriptor.exports();
+        assertEquals("Only the public API package should be exported", 1, exports.size());
+        ModuleDescriptor.Exports publicApi = exports.iterator().next();
+        assertEquals("net.openhft.hashing", publicApi.source());
+        assertFalse("Public API export should be unqualified", publicApi.isQualified());
+
+        ModuleDescriptor.Requires unsupported = descriptor.requires().stream()
+                .filter(requirement -> requirement.name().equals("jdk.unsupported"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Descriptor must require jdk.unsupported"));
+        assertFalse("jdk.unsupported must be available at runtime",
+                unsupported.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+
+        ModuleDescriptor.Requires annotations = descriptor.requires().stream()
+                .filter(requirement -> requirement.name().equals("jsr305"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "Descriptor must declare jsr305 annotations"));
+        assertTrue("Annotations should remain optional at runtime",
+                annotations.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+    }
+
+    @Test
+    public void testPublicRuntimePathsWithRequiredDirectBufferExport() {
+        LongHashFunction[] functions = {
+                LongHashFunction.city_1_1(),
+                LongHashFunction.farmNa(),
+                LongHashFunction.farmUo(),
+                LongHashFunction.murmur_3(),
+                LongHashFunction.xx(),
+                LongHashFunction.xx3(),
+                LongHashFunction.xx128low(),
+                LongHashFunction.wy_3(),
+                LongHashFunction.metro()
+        };
+
+        for (LongHashFunction function : functions) {
+            long expected = function.hashBytes(TEST_BYTES);
+            assertEquals(expected, function.hashBytes(ByteBuffer.wrap(TEST_BYTES)));
+
+            ByteBuffer direct = ByteBuffer.allocateDirect(TEST_BYTES.length);
+            direct.put(TEST_BYTES).flip();
+            assertEquals(expected, function.hashBytes(direct));
+            assertEquals("Direct buffer position should be unchanged", 0, direct.position());
+            assertEquals("Direct buffer limit should be unchanged", TEST_BYTES.length, direct.limit());
+
+            assertEquals(function.hashChars(TEST_DATA),
+                    function.hashChars(new StringBuilder(TEST_DATA)));
+            int[] integers = {1, 2, 3, 4};
+            ByteBuffer integerBytes = ByteBuffer.allocate(integers.length * Integer.BYTES)
+                    .order(ByteOrder.nativeOrder());
+            for (int value : integers)
+                integerBytes.putInt(value);
+            // Primitive-array hashing uses the bytes as laid out in native memory.
+            assertEquals(function.hashBytes(integerBytes.array()), function.hashInts(integers));
+        }
+
+        LongTupleHashFunction tuple = LongTupleHashFunction.xx128();
+        ByteBuffer direct = ByteBuffer.allocateDirect(TEST_BYTES.length);
+        direct.put(TEST_BYTES).flip();
+        assertArrayEquals(tuple.hashBytes(TEST_BYTES), tuple.hashBytes(direct));
+    }
+}

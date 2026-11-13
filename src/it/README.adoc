@@ -1,0 +1,53 @@
+= Integration Tests
+
+The Maven Invoker fixtures use JUnit 4:
+
+* `simple-usage` targets Java 8 and checks public hash functions across arrays,
+  buffers and character sequences.
+* `module-test` targets Java 9 and checks the explicit descriptor, public API,
+  runtime paths and encapsulation. Invoker skips it on Java 8.
+
+== Build and repeat packaging
+
+[source,bash]
+----
+./mvnw -B -ntp verify -l java8-verify.log
+./mvnw -B -ntp -DskipTests package -l repeat-package.log
+----
+
+The wrapper pins Maven 3.9.11; ModiTect 1.2.2.Final supports Java 8 and requires
+Maven 3.9.6 or later. Ordinary classes target Java 8; the multi-release JAR places
+its Java 9 descriptor in `META-INF/versions/9/module-info.class`.
+The second command retains generated output to exercise `overwriteExistingFiles`.
+`AutomaticModuleNameIT` checks the finished JAR, not the repeated lifecycle.
+With Java 8 selected, `python3 src/it/repeat-package.py ../repeat-package-proof`
+runs this sequence in fresh enabled/disabled-overwrite copies, retaining logs and
+requiring the disabled second package to fail specifically on existing output.
+
+`verify` installs the library in `target/local-repo` before running the fixtures.
+A fresh checkout cannot start with `invoker:run` alone. Invoker inherits Maven
+settings (including mirrors, proxies and credentials), with its own local repository.
+Reports remain under `target`; tests use assertions rather than console output.
+
+== Retained Java 8 binary
+
+The `Java 8 artefact compatibility` workflow retains the JAR, SHA-256, source
+revision and build-JDK identity from `verify`, then repeats `package` without
+cleaning. Separate jobs install that retained binary with `install:install-file`
+and run `invoker:run invoker:verify`, without rebuilding it. They compare installed
+and retained JAR bytes and retain logs/reports on JDK 8/9/10/11/17/21/25.
+The JDK 21 job also resolves JSR-305 with `jdeps` and rejects unresolved annotations.
+These source-compiled fixtures do not establish compatibility for old binaries.
+
+== Runtime contract
+
+The explicit `net.openhft.hashing` module exports only its public hashing package,
+requires `jdk.unsupported` at runtime and declares optional `requires static jsr305`.
+See link:../main/docs/unsafe-and-platform-notes.adoc[Unsafe and platform notes]
+for annotation resolution and the required direct-buffer exports for named and
+class-path consumers; the modular fixture supplies the named-module export.
+
+The library's `LongHashFunctionTest` and `LongTupleHashFunctionTest` put guard bytes
+around direct-buffer payloads and request a range different from the cursor window.
+They assert the hash and unchanged cursor, then restore the payload window before
+the whole-buffer byte-order check. Substituting position/remaining must fail them.
