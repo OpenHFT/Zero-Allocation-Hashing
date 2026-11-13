@@ -322,6 +322,29 @@
 
     <profiles>
         <profile>
+            <id>sonar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>report</id>
+                                <configuration>
+                                    <!-- Compile-only JDK stubs are outside the runtime hashing implementation. -->
+                                    <excludes>
+                                        <exclude>java/lang/Math.class</exclude>
+                                        <exclude>sun/misc/Unsafe.class</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>jdk7-profile</id>
             <activation>
                 <jdk>[1.7,1.8)</jdk>
