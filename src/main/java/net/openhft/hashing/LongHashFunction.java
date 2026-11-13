@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
-import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.HeapAccess.*;
 import static net.openhft.hashing.Util.VALID_STRING_HASH;
 import static net.openhft.hashing.Util.checkArrayOffs;
 
@@ -499,8 +499,13 @@ public abstract class LongHashFunction implements Serializable {
      */
     public abstract <T> long hash(T input, Access<T> access, long off, long len);
 
+    /*
+     * Historical name: this hashes through HeapAccess.ACCESS, which is Unsafe based only below
+     * JDK 25. On JDK 25+ (or useUnsafe=false) it is the Unsafe-free SafeHeapAccess; only the
+     * null-input (raw address) case needs real Unsafe and then fails fast.
+     */
     private long unsafeHash(Object input, long off, long len) {
-        return hash(input, UnsafeAccess.INSTANCE, off, len);
+        return hash(input, input == null ? HeapAccess.rawMemoryAccess() : HeapAccess.ACCESS, off, len);
     }
 
     /**
@@ -606,7 +611,7 @@ public abstract class LongHashFunction implements Serializable {
     private long hashByteBuffer(@NotNull ByteBuffer input, int off, int len) {
         if (input.hasArray()) {
             return unsafeHash(input.array(), BYTE_BASE + input.arrayOffset() + off, len);
-        } else if (input instanceof DirectBuffer) {
+        } else if (UNSAFE_ENABLED && input instanceof DirectBuffer) {
             return unsafeHash(null, ((DirectBuffer) input).address() + off, len);
         } else {
             return hash(input, ByteBufferAccess.INSTANCE, off, len);
@@ -622,6 +627,9 @@ public abstract class LongHashFunction implements Serializable {
      * @param address the address of the first byte to hash
      * @param len     length of the byte sequence to hash
      * @return hash code for the specified byte sequence
+     * @throws UnsupportedOperationException on JDK 25+ (or with
+     *         {@code -Dnet.openhft.hashing.useUnsafe=false}); hash a direct {@link ByteBuffer}
+     *         via {@link #hashBytes(ByteBuffer)} instead
      */
     public long hashMemory(long address, long len) {
         return unsafeHash(null, address, len);

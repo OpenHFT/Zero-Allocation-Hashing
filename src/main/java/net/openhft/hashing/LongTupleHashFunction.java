@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import static net.openhft.hashing.CharSequenceAccess.nativeCharSequenceAccess;
-import static net.openhft.hashing.UnsafeAccess.*;
+import static net.openhft.hashing.HeapAccess.*;
 import static net.openhft.hashing.Util.*;
 
 /**
@@ -601,6 +601,8 @@ public abstract class LongTupleHashFunction implements Serializable {
      * @throws IllegalArgumentException if {@code result.length < newResultArray().length}
      * @throws IllegalArgumentException if {@code off < 0} or {@code off + len > input.length}
      *                                  or {@code len < 0}
+     * @throws UnsupportedOperationException on JDK 25+ (or with
+     *         {@code -Dnet.openhft.hashing.useUnsafe=false}), where raw memory is unavailable
      */
     public void hashMemory(final long address, final long len, final long[] result) {
         unsafeHash(this, null, address, len, result);
@@ -989,22 +991,24 @@ public abstract class LongTupleHashFunction implements Serializable {
     // Internal helper
     //
     @NotNull
-    private static final Access<Object> OBJECT_ACCESS = UnsafeAccess.INSTANCE;
+    // Unsafe based below JDK 25, SafeHeapAccess otherwise.
+    private static final Access<Object> OBJECT_ACCESS = HeapAccess.ACCESS;
     @NotNull
     private static final Access<CharSequence> CHAR_SEQ_ACCESS = nativeCharSequenceAccess();
     @NotNull
     private static final Access<ByteBuffer> BYTE_BUF_ACCESS = ByteBufferAccess.INSTANCE;
 
+    // Historical name, see LongHashFunction#unsafeHash: Unsafe is only used below JDK 25.
     private static void unsafeHash(final LongTupleHashFunction f, @Nullable final Object input,
                                    final long off, final long len, final long[] result) {
-        f.hash(input, OBJECT_ACCESS, off, len, result);
+        f.hash(input, input == null ? HeapAccess.rawMemoryAccess() : OBJECT_ACCESS, off, len, result);
     }
 
     private static void hashByteBuffer(final LongTupleHashFunction f, final ByteBuffer input,
                                        final int off, final int len, final long[] result) {
         if (input.hasArray()) {
             unsafeHash(f, input.array(), BYTE_BASE + input.arrayOffset() + off, len, result);
-        } else if (input instanceof DirectBuffer) {
+        } else if (UNSAFE_ENABLED && input instanceof DirectBuffer) {
             unsafeHash(f, null, ((DirectBuffer) input).address() + off, len, result);
         } else {
             f.hash(input, BYTE_BUF_ACCESS, off, len, result);

@@ -38,6 +38,10 @@ final class Util {
     static  {
         StringHash stringHash = null;
         try {
+            if (!RuntimeSupport.useUnsafeAccess()) {
+                // CharSequence based and allocation free; never touches String internals or Unsafe
+                stringHash = UnknownJvmStringHash.INSTANCE;
+            } else {
             final String vmName = System.getProperty("java.vm.name");
             if (isHotSpotVM(vmName) || isJ9VM(vmName) || isZing(vmName)) {
                 final String javaVersion = System.getProperty("java.version");
@@ -56,6 +60,7 @@ final class Util {
             } else {
                 // try to initialize this version anyway
                 stringHash = HotSpotPrior7u6StringHash.INSTANCE;
+            }
             }
         } catch (final Throwable ignore) {
         } finally {
