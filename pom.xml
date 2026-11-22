@@ -283,9 +283,10 @@
                             !java.*,
                             !sun.*
                         </Private-Package>
+                        <!-- Hashing requires Unsafe and DirectBuffer. Missing JDK packages
+                             must fail bundle resolution rather than a later hash operation. -->
                         <Import-Package>
                             javax.annotation;resolution:=optional;bundle-symbolic-name="${@bundlesymbolicname}",
-                            sun.*;resolution:=optional,
                             *
                         </Import-Package>
                     </instructions>
