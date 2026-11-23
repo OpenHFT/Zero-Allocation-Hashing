@@ -27,7 +27,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Maven verification and coverage
         run: |
-          mvn -B verify -Psonar
+          mvn --show-version -B verify -Psonar
           test -s target/site/jacoco/jacoco.xml
       - name: Retain classes and coverage for analysis
         uses: actions/upload-artifact@v7
@@ -85,4 +85,4 @@ jobs:
               if not json.load(response).get("valid"):
                   raise SystemExit("SonarCloud rejected SONAR_TOKEN; replace the configured credential")
           PY
-          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OpenHFT_Zero-Allocation-Hashing -Psonar
+          mvn --show-version -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OpenHFT_Zero-Allocation-Hashing -Psonar
