@@ -151,6 +151,18 @@
                         <arg>-XDignore.symbol.file</arg>
                     </compilerArgs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <configuration>
+                            <!-- Clear the parent's -proc:none for the test-scoped JMH processor. -->
+                            <proc combine.self="override"/>
+                            <annotationProcessors>
+                                <annotationProcessor>org.openjdk.jmh.generators.BenchmarkProcessor</annotationProcessor>
+                            </annotationProcessors>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

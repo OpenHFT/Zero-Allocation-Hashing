@@ -46,7 +46,7 @@ The library must implement the following non-cryptographic hash algorithms:
 
 === 3.1. Performance (NF-P)
 * **NF-P-001:** **Zero Allocation:** Steady-state hashing operations must not allocate objects on the Java Heap. Heap-array entry points validate offsets via `Util.checkArrayOffs`; raw-memory entry points assume the caller has validated addresses.
-* **NF-P-002:** **Throughput:** Algorithms should demonstrate multi-GB/s throughput on modern hardware (Baseline: Core i7-4870HQ benchmarks).
+* **NF-P-002:** **Throughput:** Algorithms should demonstrate multi-GB/s throughput on modern hardware (link:performance-benchmarks.adoc#long-hash-benchmark[measured baseline]).
 * **NF-P-003:** **Bootstrap:** Static initialisation overhead should be minimised, though one-time allocation during class loading is permitted.
 
 === 3.2. Reliability and Safety (NF-S, NF-O)
