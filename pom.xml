@@ -29,7 +29,8 @@
         <project.target.release>8</project.target.release>
 
         <project.jdk.min-version>${project.target.release}</project.jdk.min-version>
-        <project.maven.min-version>3.5.0</project.maven.min-version>
+        <!-- The managed clean/install/site/release plugins require Maven 3.6.3. -->
+        <project.maven.min-version>3.6.3</project.maven.min-version>
 
         <maven.compiler.source>${project.target.release}</maven.compiler.source>
         <maven.compiler.target>${project.target.release}</maven.compiler.target>
@@ -79,18 +80,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.5.0</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.4</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.1</version>
-                </plugin>
                <plugin>
                   <groupId>org.sonarsource.scanner.maven</groupId>
                   <artifactId>sonar-maven-plugin</artifactId>
@@ -367,14 +356,7 @@
     
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-			<version>1.11.2</version> <!-- this version should be sync with the scmVersion of maven-release-plugin -->
-                    </dependency>
-                </dependencies>
+                <!-- Use the managed release version and its matching SCM provider. -->
             </plugin>
 
             <plugin>
