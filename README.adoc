@@ -50,25 +50,24 @@ Other non-LTS JDKs from 9 should also work, but they will not be tested from hal
 
 === Performance
 
-For recent single-thread measurements across nine algorithms, see the
-link:src/main/docs/performance-benchmarks.adoc#long-hash-benchmark[8 KiB JMH throughput results and reproduction command].
+Single-thread JMH results on an AMD Ryzen 9 9955HX3D with Ubuntu OpenJDK 21.0.13.1, measured on 23 November 2026.
+Throughput is for a repeatedly hashed 8 KiB byte array. The final column is average time per call on an 8-byte array after warm-up.
 
-Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
-
+[cols="2,>1,>1",options="header"]
 |===
-|Algorithm |Speed, GB/s |Bootstrap, ns
-
-|xxHash |9.5 |6
-|FarmHash `na` |9.0 |6
-|FarmHash `uo` |7.2 |7
-|CityHash |7.0 |7
-|MurmurHash |5.3 |12
-|MetroHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] | https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
-|WyHash |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??] |https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[??]
-
+|Function |8 KiB throughput (GB/s) |8-byte time (ns/op)
+|`metro()` |29.76 |2.381
+|`xx()` |26.91 |2.616
+|`city_1_1()` |24.74 |2.664
+|`farmNa()` |23.99 |2.651
+|`farmUo()` |21.87 |2.479
+|`xx3()` |19.53 |2.457
+|`xx128low()` |19.20 |3.091
+|`wy_3()` |16.90 |2.804
+|`murmur_3()` |13.81 |2.861
 |===
 
-To sum up,
+See the link:src/main/docs/performance-benchmarks.adoc#long-hash-benchmark[benchmark setup, confidence intervals and raw measurements].
 
 === When to use Zero-Allocation Hashing
 

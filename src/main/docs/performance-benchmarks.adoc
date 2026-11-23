@@ -5,54 +5,53 @@
 
 Chronicle Software
 
-=== Current Baseline
-
-* The published README table reports throughput (GB/s) and bootstrap latency (ns) per algorithm.
-MetroHash and wyHash entries are currently marked TODO pending refreshed measurements (`README.adoc:53-66`).
-* The test sources include JMH benchmarks for the nine hash functions below and a separate XXH3 benchmark for a 128-byte array.
-
 [[long-hash-benchmark]]
-=== Single-thread throughput on an 8 KiB byte array
+=== Single-thread byte-array hashing
 
-Each invocation hashes the same 8,192-byte array and returns the 64-bit result to JMH.
-Each fork initialises its array from the same fixed seed before warm-up.
-For XXH128, the benchmark measures the API returning the low 64 bits.
+Each invocation hashes a reused byte array and returns the result to JMH.
+The 8 KiB run measures throughput. A separate 8-byte run measures average time per call after warm-up.
+Each fork fills its array from the same fixed seed. The `xx128low()` method returns the low 64 bits of XXH128.
 
-Run from the repository root on Linux with Maven and a JDK.
-Choose a CPU in your process's affinity mask for the optional `taskset` command.
+Measured on 23 November 2026 with JMH 1.37 and Ubuntu OpenJDK 21.0.13.1 on an AMD Ryzen 9 9955HX3D, Ubuntu 24.04.5 LTS (Linux x86-64).
+The JVM and its one benchmark thread were pinned to isolated logical CPU 4 on the chiplet with 96 MiB of shared L3.
+The CPU frequency governor was `performance`, with boost enabled and a reported maximum of 5.46 GHz. No additional JVM options were set.
+Each function and input size used three fresh JVM forks, each with three 1-second warm-up iterations and five 1-second measurements.
+Errors are JMH's 99.9% confidence interval half-widths. Multiply 8 KiB ops/ms by 0.008192 to obtain decimal GB/s.
+
+[cols="2,>1,>1,>1,>1,>1",options="header"]
+|===
+|Function |8 KiB ops/ms |+/- ops/ms |GB/s |8-byte ns/op |+/- ns/op
+|`metro()` |3,633.0 |17.2 |29.76 |2.381 |0.005
+|`xx()` |3,284.6 |3.8 |26.91 |2.616 |0.011
+|`city_1_1()` |3,019.7 |31.3 |24.74 |2.664 |0.016
+|`farmNa()` |2,929.1 |5.0 |23.99 |2.651 |0.009
+|`farmUo()` |2,670.0 |94.5 |21.87 |2.479 |0.007
+|`xx3()` |2,384.4 |2.1 |19.53 |2.457 |0.015
+|`xx128low()` |2,344.2 |26.4 |19.20 |3.091 |0.016
+|`wy_3()` |2,063.5 |6.3 |16.90 |2.804 |0.003
+|`murmur_3()` |1,685.5 |2.0 |13.81 |2.861 |0.004
+|===
+
+The link:ryzen-9955hx3d-jmh.csv[per-iteration JMH scores] give the five measurements from each fork in their original units.
+
+Run from the repository root on Linux with Maven and a JDK. Select an available logical CPU on the host.
 
 [source,bash]
 ----
 mvn test-compile dependency:build-classpath -Dmdep.includeScope=test -Dmdep.outputFile=target/jmh-classpath
-taskset -c 14 java -cp "target/test-classes:target/classes:$(cat target/jmh-classpath)" \
-  org.openjdk.jmh.Main 'net\.openhft\.hashing\.LongHashFunctionBenchmark\..*' \
+cpu=4
+classpath="target/test-classes:target/classes:$(cat target/jmh-classpath)"
+benchmark='net\.openhft\.hashing\.LongHashFunctionBenchmark\..*'
+taskset -c "$cpu" java -cp "$classpath" org.openjdk.jmh.Main "$benchmark" -p inputBytes=8192 \
   -t 1 -foe true -rf json -rff target/long-hash-results.json
+taskset -c "$cpu" java -cp "$classpath" org.openjdk.jmh.Main "$benchmark" -p inputBytes=8 \
+  -bm avgt -tu ns -t 1 -foe true -rf json -rff target/short-hash-results.json
 ----
-
-Measured on 23 November 2026 with JMH 1.37 and Ubuntu OpenJDK 21.0.13.1 on an AMD Ryzen 9 5950X running Linux x86-64.
-One worker thread was pinned to logical CPU 14 on a shared host.
-Each of three fresh JVM forks ran three 1-second warm-up iterations and five 1-second measurement iterations.
-The error column is JMH's 99.9% confidence interval half-width.
-GB/s uses decimal gigabytes and 8,192 bytes per operation.
-
-[cols="2,>1,>1,>1",options="header"]
-|===
-|Function |ops/ms |Error (+/- ops/ms) |GB/s
-|`xx()` |1,890.1 |1.2 |15.48
-|`farmNa()` |1,678.7 |28.2 |13.75
-|`city_1_1()` |1,678.2 |0.8 |13.75
-|`metro()` |1,668.8 |49.4 |13.67
-|`farmUo()` |1,614.1 |113.6 |13.22
-|`xx128low()` |1,545.7 |1.7 |12.66
-|`xx3()` |1,537.0 |2.2 |12.59
-|`wy_3()` |1,241.4 |5.7 |10.17
-|`murmur_3()` |876.2 |12.8 |7.18
-|===
 
 === Measurement Protocol
 
 * Build the library in release mode (`mvn -q verify`) before running any benchmarks to ensure all classes are compiled and tests have passed.
-* Pin tests to an isolated core and disable extraneous system load; past measurements targeted Intel Core i7-4870HQ @ 2.50 GHz, and new numbers should quote the exact CPU model and frequency.
+* Pin tests to an isolated core, minimise other system load and report the CPU model and frequency configuration.
 * Use a harness that exercises each `LongHashFunction` via the public API (for example, `hashBytes(byte[])`) over representative buffer sizes.
 Warm up the JVM until results stabilise before sampling throughput.
 * Record:
@@ -63,6 +62,6 @@ Warm up the JVM until results stabilise before sampling throughput.
 === Reporting Guidelines
 
 * Update `README.adoc` with the latest benchmark table, noting the hardware, JVM version, and any JVM flags used during the run.
-* Flag missing data as TODO (as done for MetroHash and wyHash) rather than leaving stale values in place.
+* Mark missing measurements explicitly.
 * When an optimisation changes algorithm behaviour or memory access, include before/after data in the pull request description so reviewers can confirm the impact.
 * Archive raw benchmark logs alongside the pull request or link to them from the decision log to ease future regression analysis.

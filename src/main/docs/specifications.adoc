@@ -23,7 +23,7 @@ Chronicle Software
 * Hashing calls must avoid heap allocations during steady-state use; initial static initialisation may allocate.
 * Hot-path hashing should remain branch-light to minimise CPU misprediction on modern x86 and ARM cores.
 * Benchmark coverage to include `xxHash`, `FarmHash na`, `FarmHash uo`, `CityHash`, `MurmurHash3`, `MetroHash`, and `wyHash`.
-* TODO Gather refreshed MetroHash and wyHash throughput and bootstrap metrics (tracked in https://github.com/OpenHFT/Zero-Allocation-Hashing/issues/28[]).
+* The link:performance-benchmarks.adoc#long-hash-benchmark[8 KiB throughput and 8-byte timings] include MetroHash and wyHash.
 
 === NF-O-301 Operability Expectations
 

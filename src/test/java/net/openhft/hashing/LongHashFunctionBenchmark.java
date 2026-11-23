@@ -9,6 +9,7 @@ import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -17,7 +18,7 @@ import org.openjdk.jmh.annotations.Warmup;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/** Steady-state throughput on a repeatedly hashed 8 KiB byte array. */
+/** Steady-state hashing of a fixed-seed byte array. */
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -25,10 +26,14 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(3)
 public class LongHashFunctionBenchmark {
-    private final byte[] data = new byte[8192];
+    @Param("8192")
+    public int inputBytes;
+
+    private byte[] data;
 
     @Setup
     public void prepareInput() {
+        data = new byte[inputBytes];
         new Random(79L).nextBytes(data);
     }
 
