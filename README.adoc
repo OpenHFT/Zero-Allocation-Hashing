@@ -50,6 +50,9 @@ Other non-LTS JDKs from 9 should also work, but they will not be tested from hal
 
 === Performance
 
+For recent single-thread measurements across nine algorithms, see the
+link:src/main/docs/performance-benchmarks.adoc#long-hash-benchmark[8 KiB JMH throughput results and reproduction command].
+
 Tested on Intel Core i7-4870HQ CPU @ 2.50GHz
 
 |===

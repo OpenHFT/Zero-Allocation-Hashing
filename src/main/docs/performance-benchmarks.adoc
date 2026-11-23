@@ -9,8 +9,45 @@ Chronicle Software
 
 * The published README table reports throughput (GB/s) and bootstrap latency (ns) per algorithm.
 MetroHash and wyHash entries are currently marked TODO pending refreshed measurements (`README.adoc:53-66`).
-* No automated benchmarking harness ships with the repository today.
-Bench figures are captured offline and copied into the documentation.
+* The test sources include JMH benchmarks for the nine hash functions below and a separate XXH3 benchmark for a 128-byte array.
+
+[[long-hash-benchmark]]
+=== Single-thread throughput on an 8 KiB byte array
+
+Each invocation hashes the same 8,192-byte array and returns the 64-bit result to JMH.
+Each fork initialises its array from the same fixed seed before warm-up.
+For XXH128, the benchmark measures the API returning the low 64 bits.
+
+Run from the repository root on Linux with Maven and a JDK.
+Choose a CPU in your process's affinity mask for the optional `taskset` command.
+
+[source,bash]
+----
+mvn test-compile dependency:build-classpath -Dmdep.includeScope=test -Dmdep.outputFile=target/jmh-classpath
+taskset -c 14 java -cp "target/test-classes:target/classes:$(cat target/jmh-classpath)" \
+  org.openjdk.jmh.Main 'net\.openhft\.hashing\.LongHashFunctionBenchmark\..*' \
+  -t 1 -foe true -rf json -rff target/long-hash-results.json
+----
+
+Measured on 23 November 2026 with JMH 1.37 and Ubuntu OpenJDK 21.0.13.1 on an AMD Ryzen 9 5950X running Linux x86-64.
+One worker thread was pinned to logical CPU 14 on a shared host.
+Each of three fresh JVM forks ran three 1-second warm-up iterations and five 1-second measurement iterations.
+The error column is JMH's 99.9% confidence interval half-width.
+GB/s uses decimal gigabytes and 8,192 bytes per operation.
+
+[cols="2,>1,>1,>1",options="header"]
+|===
+|Function |ops/ms |Error (+/- ops/ms) |GB/s
+|`xx()` |1,890.1 |1.2 |15.48
+|`farmNa()` |1,678.7 |28.2 |13.75
+|`city_1_1()` |1,678.2 |0.8 |13.75
+|`metro()` |1,668.8 |49.4 |13.67
+|`farmUo()` |1,614.1 |113.6 |13.22
+|`xx128low()` |1,545.7 |1.7 |12.66
+|`xx3()` |1,537.0 |2.2 |12.59
+|`wy_3()` |1,241.4 |5.7 |10.17
+|`murmur_3()` |876.2 |12.8 |7.18
+|===
 
 === Measurement Protocol
 
