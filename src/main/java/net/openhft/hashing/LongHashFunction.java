@@ -290,7 +290,7 @@ public abstract class LongHashFunction implements Serializable {
      * produces equal results for equal input on platforms with different {@link
      * ByteOrder}, but is slower on big-endian platforms than on little-endian.
      *
-     * @deprecated use {link #xx()} instead; this method exists for backwards compatibility.
+     * @deprecated use {@link #xx()} instead; this method exists for backwards compatibility.
      */
     @Deprecated
     public static LongHashFunction xx_r39() {
@@ -303,7 +303,7 @@ public abstract class LongHashFunction implements Serializable {
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
-     * @deprecated use {link #xx(long)} instead; this method exists for backwards compatibility.
+     * @deprecated use {@link #xx(long)} instead; this method exists for backwards compatibility.
      */
     @Deprecated
     public static LongHashFunction xx_r39(long seed) {

@@ -1,0 +1,26 @@
+= Legacy alias linkage check
+
+This fixture checks both `LongHashFunction.xx_r39()` binary signatures.
+It compiles the consumer once against the released `zero-allocation-hashing:0.7` API,
+then runs that unchanged class against the built candidate JAR.
+For five fixed byte inputs, each legacy call must agree with the corresponding modern `xx` call.
+The modern name is looked up reflectively because it is not part of the old compile-time contract.
+
+The released `zero-allocation-hashing:0.16` JAR is a negative control: each legacy signature
+must fail with `NoSuchMethodError`. An unrelated exception or a successful control is a failure.
+The control is run separately for seeded and unseeded calls so both descriptors are checked.
+
+After building the project, obtain the two unmodified released JARs from Maven Central and run:
+
+[source,shell]
+----
+sh src/it/legacy-alias/verify.sh \
+  /path/to/zero-allocation-hashing-0.7.jar \
+  target/zero-allocation-hashing-0.17-SNAPSHOT.jar \
+  /path/to/zero-allocation-hashing-0.16.jar
+----
+
+Use `JAVA_HOME` to select the JDK for both compilation and execution.
+The fixture was checked on Linux with JDK 17; it emits Java 7 class files and does not change
+the library's supported Java versions. A temporary directory is removed when the script exits.
+This is an explicit compatibility check, separate from the normal Maven unit suite.
