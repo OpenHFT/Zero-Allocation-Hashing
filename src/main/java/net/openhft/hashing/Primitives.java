@@ -44,9 +44,9 @@ final class Primitives {
         char adjustByteOrder(final char v) { return v; }
     }
     private static class ByteOrderHelperReverse extends ByteOrderHelper {
-        long adjustByteOrder(final long v) { return Long.reverseBytes(v); }
-        int adjustByteOrder(final int v) { return Integer.reverseBytes(v); }
-        short adjustByteOrder(final short v) { return Short.reverseBytes(v); }
-        char adjustByteOrder(final char v) { return Character.reverseBytes(v); }
+        @Override long adjustByteOrder(final long v) { return Long.reverseBytes(v); }
+        @Override int adjustByteOrder(final int v) { return Integer.reverseBytes(v); }
+        @Override short adjustByteOrder(final short v) { return Short.reverseBytes(v); }
+        @Override char adjustByteOrder(final char v) { return Character.reverseBytes(v); }
     }
 }

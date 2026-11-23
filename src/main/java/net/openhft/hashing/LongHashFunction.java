@@ -67,6 +67,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1(long)
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1() {
         return CityAndFarmHash_1_1.asLongHashFunctionWithoutSeed();
     }
@@ -83,6 +84,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long, long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithSeed(seed);
     }
@@ -100,6 +102,7 @@ public abstract class LongHashFunction implements Serializable {
      * @see #city_1_1()
      * @see #city_1_1(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction city_1_1(long seed0, long seed1) {
         return CityAndFarmHash_1_1.asLongHashFunctionWithTwoSeeds(seed0, seed1);
     }
@@ -225,6 +228,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm without seed values
      * @see #murmur_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3() {
         return MurmurHash_3.asLongHashFunctionWithoutSeed();
     }
@@ -236,10 +240,24 @@ public abstract class LongHashFunction implements Serializable {
      * input on platforms with different {@link ByteOrder}, but is slower on big-endian platforms
      * than on little-endian.
      *
-     * @param seed the seed value to be used for hashing
-     * @return a {@code LongHashFunction} implementing the MurmurHash3 algorithm with the given seed value
+     * <p>The C++ {@code MurmurHash3_x64_128} function accepts a {@code uint32_t} seed. For the same
+     * input byte sequence, seed values from {@code 0L} through {@code 0xffffffffL} initialise the
+     * same state as the C++ reference implementation. This overload is a 64-bit-seed extension: it
+     * copies all 64 bits of the supplied {@code long} into both initial state words. Values outside
+     * that range have no corresponding C++ seed and initialise a different state from their
+     * low-32-bit value.
+     *
+     * <p>To interpret a Java {@code int} as the corresponding unsigned C++ seed, use
+     * {@link Integer#toUnsignedLong(int) Integer.toUnsignedLong(seed)}. For a seed in the C++
+     * domain, this function returns the first 64-bit output word ({@code h1}) of the C++ 128-bit
+     * result.
+     *
+     * @param seed the seed value; all 64 bits initialise both internal state words
+     * @return a {@code LongHashFunction} returning the first word of the MurmurHash3 128-bit result
      * @see #murmur_3()
+     * @see LongTupleHashFunction#murmur_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction murmur_3(long seed) {
         return MurmurHash_3.asLongHashFunctionWithSeed(seed);
     }
@@ -335,6 +353,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, without a seed value
      * @see #wy_3(long)
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3() {
         return WyHash.asLongHashFunctionWithoutSeed();
     }
@@ -350,6 +369,7 @@ public abstract class LongHashFunction implements Serializable {
      * @return a {@code LongHashFunction} implementing the wyhash algorithm, version 3, with the given seed value
      * @see #wy_3()
      */
+    @SuppressWarnings("checkstyle:MethodName")
     public static LongHashFunction wy_3(long seed) {
         return WyHash.asLongHashFunctionWithSeed(seed);
     }
@@ -669,9 +689,9 @@ public abstract class LongHashFunction implements Serializable {
 
     /**
      * Shortcut for {@link #hashChars(StringBuilder, int, int) hashChars(input, 0, input.length())}.
- *
- * @param input the StringBuilder to be hashed
- * @return the hash code for the given StringBuilder
+     *
+     * @param input the StringBuilder to be hashed
+     * @return the hash code for the given StringBuilder
      */
     public long hashChars(@NotNull StringBuilder input) {
         return hashNativeChars(input);
@@ -697,33 +717,33 @@ public abstract class LongHashFunction implements Serializable {
         return hashNativeChars(input, off, len);
     }
 
-/**
- * Returns the hash code for the entire CharSequence.
- *
- * @param input the CharSequence to be hashed
- * @return the hash code for the given CharSequence
- */
+    /**
+     * Returns the hash code for the entire CharSequence.
+     *
+     * @param input the CharSequence to be hashed
+     * @return the hash code for the given CharSequence
+     */
     long hashNativeChars(CharSequence input) {
         return hashNativeChars(input, 0, input.length());
     }
 
-/**
- * Returns the hash code for a subsequence of the given CharSequence.
- *
- * @param input the CharSequence to be hashed
- * @param off   the index of the first char in the subsequence
- * @param len   the length of the subsequence
- * @return the hash code for the specified subsequence of the given CharSequence
- */
+    /**
+     * Returns the hash code for a subsequence of the given CharSequence.
+     *
+     * @param input the CharSequence to be hashed
+     * @param off   the index of the first char in the subsequence
+     * @param len   the length of the subsequence
+     * @return the hash code for the specified subsequence of the given CharSequence
+     */
     long hashNativeChars(CharSequence input, int off, int len) {
         return hash(input, nativeCharSequenceAccess(), off * 2L, len * 2L);
     }
 
     /**
      * Shortcut for {@link #hashShorts(short[], int, int) hashShorts(input, 0, input.length)}.
- *
- * @param input the short array to be hashed
- * @return the hash code for the given short array
+     *
+     * @param input the short array to be hashed
+     * @return the hash code for the given short array
      */
     public long hashShorts(@NotNull short[] input) {
         return unsafeHash(input, SHORT_BASE, input.length * 2L);
